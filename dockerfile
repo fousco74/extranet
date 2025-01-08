@@ -1,51 +1,44 @@
-# Utiliser une image PHP avec Composer et Node.js préinstallés
-FROM php:8.2-fpm
+# Utilisation de l'image PHP-FPM avec Nginx
+FROM wyveo/nginx-php-fpm:latest
 
-# Installer des dépendances système
+# Copie des fichiers du projet dans le répertoire Nginx
+COPY . /usr/share/nginx/html
+
+# Copie de la configuration Nginx personnalisée
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Définition du répertoire de travail
+WORKDIR /usr/share/nginx/html
+
+# Installation des dépendances PHP (Composer)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     zip \
     unzip \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    && docker-php-ext-install \
-    pdo_mysql \
-    mbstring \
-    gd \
-    zip \
-    opcache \
-    bcmath \
-    sockets
+    libjpeg-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Installer Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Installer Node.js et npm
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+# Installation des dépendances Node.js (pour Inertia.js et Vue.js)
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs \
-    && npm install -g npm@latest
+    && npm install --global npm
 
-# Configurer le répertoire de travail
-WORKDIR /var/www
-
-# Copier les fichiers du projet
-COPY . .
-
-# Installer les dépendances PHP
+# Installation des dépendances de l'application Laravel (PHP)
 RUN composer install --no-dev --optimize-autoloader
 
-# Installer les dépendances Node.js
-RUN npm install && npm run build
+# Installation des dépendances de l'application Vue.js et Inertia.js
+RUN npm install
 
-# Configurer les permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+# Lien symbolique pour le dossier public de Laravel
+RUN ln -s public html
 
-# Exposer le port 9000 pour PHP-FPM
-EXPOSE 9000
+# Expose le port 80 pour Nginx
+EXPOSE 80
 
-# Commande par défaut
-CMD ["php-fpm"]
+# Commande par défaut pour exécuter l'application Laravel et Vue.js
+CMD ["sh", "-c", "php artisan migrate --force && npm run dev & php artisan serve --host=0.0.0.0 --port=8000"]
