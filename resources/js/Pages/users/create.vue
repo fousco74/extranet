@@ -44,15 +44,18 @@
             inputClass="w-full"
           />
 
-          <InputComponent
-            name="team"
-            type="text"
-            :errors="$page.props.errors.team"
-            placeholder="equipe"
-            v-model="form.team"
-            divClass="mb-4 w-full"
-            inputClass="w-full"
-          />
+          <div class="mb-4">
+                <select name="team" v-model="form.team" class="border rounded w-full p-2" required>
+                    <option value="" >Sélectionnez une equipe</option>
+                    <option value="interne">Interne</option>
+                    <option value="externe">Externe</option>
+                </select>
+                <div v-if="$page.props.errors.team" class="text-red-500">
+                  {{ $page.props.errors.team }}
+                </div>
+            </div>
+
+
           <InputComponent
             name="phone_number"
             type="tel"
@@ -130,7 +133,7 @@ const form = useForm({
   last_name: null,
   email: null,
   poste: null,
-  team: null,
+  team: "",
   phone_number: null,
   profile_link: null,
   linkedin_link: null,

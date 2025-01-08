@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SuggestionMail;
+use App\Mail\UserCreate;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\OneDriveLink;
@@ -98,6 +99,9 @@ class UserController extends Controller implements HasMiddleware
 
         $user = User::create($validated);
 
+        // Envoyer l'email
+        Mail::to($user->email)->send(new UserCreate($validated));
+
         return redirect()->route('users.index')->with('message', 'User created successfully.');
     }
 
@@ -109,9 +113,8 @@ class UserController extends Controller implements HasMiddleware
     }
 
     // Affichage du formulaire d'édition d'utilisateur
-    public function edit()
+    public function edit(User $user)
     {
-        $user = Auth::user();
         return inertia('users/edit', [
             'user' => $user,
         ]);
@@ -286,7 +289,7 @@ public function updateRoles(Request $request, $id)
         ]);
 
         // Envoyer l'email
-        Mail::to('acnzi2@amoaman.com')->send(new SuggestionMail($validated));
+        Mail::to('nkakou@amoaman.com')->send(new SuggestionMail($validated));
 
         // Retour avec un message de succès
         return back()->with('message', 'Votre suggestion a été envoyée avec succès.');
