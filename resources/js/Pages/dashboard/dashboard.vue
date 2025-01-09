@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import InputComponent from '../Components/InputComponent.vue';
+import InputComponent from '../components/InputComponent.vue';
 import ButtonComponent from '../components/ButtonComponent.vue';
 import logoUrl from '/public/icons/lineLogoutBlack.png';
 

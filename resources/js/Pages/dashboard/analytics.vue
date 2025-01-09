@@ -1,5 +1,3 @@
-
-
 <template>
   <Dashboard>
     <div class="border shadow-md w-[80%] p-10 bg-white">
