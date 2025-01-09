@@ -45,7 +45,7 @@
   </template>
 <script setup>
 import { ref } from 'vue';
-import paginateComponent from './paginateComponent.vue';
+import paginateComponent from './PaginateComponent.vue';
 
 // Liste des applications (peut être récupérée dynamiquement via une API)
 const props = defineProps(["apps"]);
