@@ -52,7 +52,7 @@
   <script setup>
   import { ref } from "vue";
   import { usePage } from "@inertiajs/vue3";
-  import ReservationModal from "../components/reservationModal.vue";
+  import ReservationModal from "../components/ReservationModal.vue";
   const { props } = usePage();
   const { reservations, day, month, year } = props;
   
