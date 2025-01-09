@@ -54,7 +54,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
     <!-- Colonne de droite -->
     <div class="flex flex-col max-sm:justify-center gap-4 w-full lg:w-auto">
       <!-- Cartes en ligne -->
-      <div class="flex w-full flex-wrap lg:flex-nowrap gap-4 px-0">
+      <div class="flex w-full flex-wrap lg:flex-nowrap gap-4 px-0 max-md:pr-4 mt-4">
         <!-- Tronbinoscope & Règlement intérieur -->
         <div class="flex flex-col gap-4 w-full">
           <Link :href="route('membersList')" method="get">
@@ -87,7 +87,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
         </div>
 
         <!-- Carte Suggestion -->
-        <Link :href="route('suggestion')" method="get">
+        <Link :href="route('suggestion')" method="get" class="max-md:ml-8">
           <CardComponent 
             imgWiddth="w-[100px] max-sm-[200px]" 
             customClass="sm:h-[320px] sm:w-[150px] border w-[250%] border" 
@@ -108,7 +108,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
           >
           </CardComponent>
         </Link>
-        <Link :href="route('our.app')" method="get">
+        <Link :href="route('our.app')" method="get" class="max-sm:mb-10">
           <div class="app rounded-lg">
             <CardComponent 
               customClass="h-[100px] w-[320px] lg:w-[200px] border"
