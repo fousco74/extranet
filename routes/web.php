@@ -20,11 +20,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->namespace('admin')->group(function () {
 
 
 //dashboard
-Route::get('/admin/dashboard', [DashboardAnalyticsController::class, 'index'])->name('dashboard.analytics');
+Route::get('/dashboard', [DashboardAnalyticsController::class, 'index'])->name('dashboard.analytics');
 
 
 //notification
@@ -60,11 +60,6 @@ route::resource('permissions', PermissionController::class);
 
 
 Route::middleware(['auth'])->group(function () {
-
-
-
-
-
 
 //Frontend 
 Route::post('/logout',[UserController::class,'logout'])->name('logout');
