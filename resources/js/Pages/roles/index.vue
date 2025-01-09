@@ -51,7 +51,7 @@
 <script setup>
 import { ref } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 import dashboard from "../dashboard/dashboard.vue";
 const { props } = usePage();
 const roles = ref(props.roles);
