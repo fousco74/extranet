@@ -1,4 +1,3 @@
-# Utilisation de l'image PHP-FPM avec Nginx
 FROM wyveo/nginx-php-fpm:latest
 
 # Copie des fichiers du projet dans le répertoire Nginx
@@ -32,23 +31,23 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
 RUN node -v && npm -v
 
 # Installation des dépendances de l'application Laravel (PHP)
-RUN composer install --no-dev --optimize-autoloader && \ 
-    npm install && \ 
+RUN composer install --no-dev --optimize-autoloader && \
+    npm install && \
     npm run build
 
-# Installation de Tailwind CSS avec npm
-RUN npm install tailwindcss postcss autoprefixer
+# Installation de Tailwind CSS et autres dépendances côté client
+RUN npm install -D tailwindcss postcss autoprefixer && npx tailwindcss init
 
-# Création de la configuration de Tailwind CSS (si nécessaire)
-RUN npx tailwindcss init
+# Installation d'Inertia.js côté client pour Vue 3
+RUN npm install @inertiajs/vue3
 
-# Installation des dépendances de l'application Vue.js et Inertia.js
-RUN npm install
+# Installation de Inertia.js côté serveur pour Laravel
+RUN composer require inertiajs/inertia-laravel
 
 # Lien symbolique pour le dossier public de Laravel
 RUN ln -s public html
 
-# Expose le port 80 pour Nginx
+# Expose le port 8080 pour Nginx
 EXPOSE 8080
 
 # Commande par défaut pour exécuter l'application Laravel et Vue.js
