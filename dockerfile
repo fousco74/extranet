@@ -47,6 +47,9 @@ RUN composer require inertiajs/inertia-laravel
 
 RUN php artisan inertia:middleware
 
+RUN php artisan storage:link
+
+
 
 # Installation d'Inertia.js côté client pour Vue 3
 RUN npm install @inertiajs/vue3
