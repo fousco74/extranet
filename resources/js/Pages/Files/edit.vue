@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import InputComponent from '../Components/InputComponent.vue';
+import InputComponent from './../components/InputComponent.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import SelectComponent from '../Components/SelectComponent.vue';
