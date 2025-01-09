@@ -10,5 +10,5 @@
     version = "8.2"
 
   [resources.database]
-    type = "postgresql"
+    type = "mysql"
     version = "15"
