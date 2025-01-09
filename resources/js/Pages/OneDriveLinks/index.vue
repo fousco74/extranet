@@ -54,7 +54,7 @@
 <script setup>
 import Dashboard from '../dashboard/dashboard.vue';
 import { useForm } from '@inertiajs/vue3';
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 
 const props = defineProps({
   links: Object
