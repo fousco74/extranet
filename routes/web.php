@@ -123,3 +123,6 @@ Route::get('/', function (Request $request) {
 // Authentification
 Route::get('/login',[UserController::class,'login'])->name('login');
 Route::post('/login',[UserController::class,'authenticate'])->name('authenticate');
+Route::get('/test', function () {
+    return 'kone fousseni';
+});

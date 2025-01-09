@@ -33,7 +33,9 @@ RUN node -v && npm -v
 # Installation des dépendances de l'application Laravel (PHP)
 RUN composer install --no-dev --optimize-autoloader && \
     npm install && \
-    npm run build
+    npm run build && \
+    php artisan optimize:clear && \
+    php artisan storage:link
 
 # Installation de Tailwind CSS et autres dépendances côté client
 RUN npm install -D tailwindcss postcss autoprefixer && npx tailwindcss init
