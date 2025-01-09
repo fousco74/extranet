@@ -108,7 +108,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
           >
           </CardComponent>
         </Link>
-        <Link :href="route('our.app')" method="get">
+        <Link :href="route('our.app')" method="get" class="max-md:mb-10">
           <div class="app rounded-lg">
             <CardComponent 
               customClass="h-[100px] w-[320px] lg:w-[200px] border"
