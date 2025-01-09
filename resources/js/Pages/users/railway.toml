@@ -1,0 +1,14 @@
+[service]
+  name = "extranet"
+  start = "php artisan serve --host=0.0.0.0 --port=8000"
+  healthcheck_path = "/"
+  watch_paths = ["composer.json", "package.json"]
+
+[resources]
+  [resources.php]
+    engine = "php"
+    version = "8.2"
+
+  [resources.database]
+    type = "postgresql"
+    version = "15"
