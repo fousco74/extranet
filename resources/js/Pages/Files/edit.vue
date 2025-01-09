@@ -34,11 +34,11 @@
 </template>
 
 <script setup>
-import InputComponent from '../Components/InputComponent.vue';
+import InputComponent from '../components/InputComponent.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import SelectComponent from '../Components/SelectComponent.vue';
-import ButtonComponent from '../Components/ButtonComponent.vue';
+import SelectComponent from '../components/SelectComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
 import Dashboard from '../dashboard/dashboard.vue';
 
 const props = defineProps(["file", "folders"]) 
