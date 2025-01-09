@@ -35,7 +35,7 @@ if(props.routeName){
 
 
 const menubar = ref(false);
-import notificationComponent from './notificationComponent.vue';
+import notificationComponent from './NotificationComponent.vue';
 import { throttle } from 'lodash';
 const showNotify = ref(false)
 </script>
