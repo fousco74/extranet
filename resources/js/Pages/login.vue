@@ -9,7 +9,9 @@ const form = useForm({
     password: null
 })
 const submit = ()=>{
-    form.post(route('authenticate'))
+    form.post(route('authenticate',{
+        _token: page.props.csrf_token,
+    }))
 }
 
 
