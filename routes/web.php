@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
-Route::middleware(['auth', 'role:admin'])->namespace('admin')->group(function () {
+Route::middleware(['auth', 'role:admin']) ->prefix('admin')->group(function () {
 
 
 //dashboard
