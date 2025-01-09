@@ -28,8 +28,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs \
     && npm install --global npm
 
+# Vérification de l'installation de npm
+RUN node -v && npm -v
+
 # Installation des dépendances de l'application Laravel (PHP)
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader && \ npm install && \ npm run build
 
 # Installation des dépendances de l'application Vue.js et Inertia.js
 RUN npm install
