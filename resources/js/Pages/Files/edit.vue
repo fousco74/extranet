@@ -37,9 +37,9 @@
 import InputComponent from './../components/InputComponent.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import SelectComponent from '../Components/SelectComponent.vue';
-import ButtonComponent from '../Components/ButtonComponent.vue';
-import Dashboard from '../dashboard/dashboard.vue';
+import SelectComponent from './../Components/SelectComponent.vue';
+import ButtonComponent from './../Components/ButtonComponent.vue';
+import Dashboard from './../dashboard/dashboard.vue';
 
 const props = defineProps(["file", "folders"]) 
 
