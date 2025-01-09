@@ -8,14 +8,9 @@ const form = useForm({
     email: null,
     password: null
 })
-const submit = () => {
-    form.post(route('authenticate'), {
-        headers: {
-            'X-CSRF-TOKEN': page.props.csrf_token, // Ajoutez explicitement le token CSRF ici
-        },
-    });
-};
-
+const submit = ()=>{
+    form.post(route('authenticate'))
+}
 
 
 </script>

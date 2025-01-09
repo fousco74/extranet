@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'success' => fn () => $request->session()->get('success')
             ],
+            'csrf_token' => fn () => csrf_token(),
             'auth.user' => fn () => $request->user()
                 ? $request->user()->only('id', 'first_name', 'last_name', 'team', 'poste', 'email', 'phone_number', 'profile_link')
                 : null,
