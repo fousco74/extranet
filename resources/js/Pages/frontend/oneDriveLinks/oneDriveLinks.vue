@@ -2,7 +2,7 @@
 import logoUrl from '/public/icons/lineLogoutBlack.png';
 import InputComponent from '../../components/InputComponent.vue';
 import ButtonComponent from '../../components/ButtonComponent.vue';
-import PaginateComponent from '../../components/paginateComponent.vue';
+import PaginateComponent from '../../components/PaginateComponent.vue';
 
 import NavBarComponent from '../../components/NavBarComponent.vue';
 </script>

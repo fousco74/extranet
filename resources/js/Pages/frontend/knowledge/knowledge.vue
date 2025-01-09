@@ -5,7 +5,7 @@ import ButtonComponent from '../../components/ButtonComponent.vue';
 
 import { Link } from '@inertiajs/vue3';
 import NavBarComponent from '../../components/NavBarComponent.vue';
-import PaginateComponent from '../../components/paginateComponent.vue';
+import PaginateComponent from '../../components/PaginateComponent.vue';
 
 </script>
 
