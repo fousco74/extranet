@@ -37,14 +37,22 @@ RUN composer install --no-dev --optimize-autoloader && \
     php artisan optimize:clear && \
     php artisan storage:link
 
+RUN npm install    
+
 # Installation de Tailwind CSS et autres dépendances côté client
 RUN npm install -D tailwindcss postcss autoprefixer && npx tailwindcss init
+
+# Installation de Inertia.js côté serveur pour Laravel
+RUN composer require inertiajs/inertia-laravel
+
+RUN php artisan inertia:middleware
+
 
 # Installation d'Inertia.js côté client pour Vue 3
 RUN npm install @inertiajs/vue3
 
-# Installation de Inertia.js côté serveur pour Laravel
-RUN composer require inertiajs/inertia-laravel
+
+
 
 # Lien symbolique pour le dossier public de Laravel
 RUN ln -s public html
