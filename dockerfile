@@ -64,4 +64,4 @@ RUN ln -s public html
 EXPOSE 8080
 
 # Commande par défaut pour exécuter l'application Laravel et Vue.js
-CMD ["sh", "-c", "php artisan migrate --force && npm run dev & php artisan serve --host=0.0.0.0 --port=8080"]
+CMD ["sh", "-c", "php artisan storage:link && php artisan migrate --force && npm run dev & php artisan serve --host=0.0.0.0 --port=8080"]
