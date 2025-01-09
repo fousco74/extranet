@@ -41,7 +41,7 @@ RUN npm install
 RUN ln -s public html
 
 # Expose le port 80 pour Nginx
-EXPOSE 9000
+EXPOSE 8080
 
 # Commande par défaut pour exécuter l'application Laravel et Vue.js
-CMD ["sh", "-c", "php artisan migrate --force && npm run dev & php artisan serve --host=0.0.0.0 --port=9000"]
+CMD ["sh", "-c", "php artisan migrate --force && npm run dev & php artisan serve --host=0.0.0.0 --port=8080"]
