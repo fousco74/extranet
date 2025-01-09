@@ -35,7 +35,7 @@
 import { defineProps } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import dashboard from '../dashboard/dashboard.vue';
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 
 
 const props = defineProps({
