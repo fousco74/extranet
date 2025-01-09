@@ -13,7 +13,7 @@ const toggleSidebar = () => {
 
 import { Link } from '@inertiajs/vue3';
 import Notification from '../users/notification.vue';
-import NotificationComponent from '../components/notificationComponent.vue';
+import NotificationComponent from '../components/NotificationComponent.vue';
 import NavBarComponent from '../components/NavBarComponent.vue';
 
 const menu = ref([
