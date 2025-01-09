@@ -32,7 +32,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
 RUN node -v && npm -v
 
 # Installation des dépendances de l'application Laravel (PHP)
-RUN composer install --no-dev --optimize-autoloader && \ npm install && \ npm run build
+RUN composer install --no-dev --optimize-autoloader && \ 
+    npm install && \ 
+    npm run build
+
+# Installation de Tailwind CSS avec npm
+RUN npm install tailwindcss postcss autoprefixer
+
+# Création de la configuration de Tailwind CSS (si nécessaire)
+RUN npx tailwindcss init
 
 # Installation des dépendances de l'application Vue.js et Inertia.js
 RUN npm install
