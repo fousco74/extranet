@@ -46,6 +46,8 @@ Route::put('/users/{user}/onedrive', [UserController::class, 'updateOneDriveLink
 Route::get('users/{user}/roles', [UserController::class, 'showRoles'])->name('user.roles');
 Route::put('users/{id}/roles', [UserController::class, 'updateRoles'])->name('user.updateRoles');
 Route::resource('users', UserController::class);
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
 
 

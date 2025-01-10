@@ -4,7 +4,13 @@
     <h1 class="text-2xl font-bold mb-5 text-start my-6">My Profile</h1>
 
     <form @submit.prevent="submit" class="flex justify-center">
+     
       <div class="my-4 w-full sm:w-[80%] md:w-[70%] lg:w-[60%]">
+        <div class="flex justify-center items-center mb-4">
+        <span v-if="$page.props.flash.message" class="text-center bg-orange-700 bg-opacity-25">
+          {{ $page.props.flash.message }}
+        </span>
+      </div>
         <div class="flex flex-col justify-center items-center">
           <!-- Zone d'aperçu de l'image -->
           <div
@@ -157,7 +163,7 @@ const form = ref({
   password: "",
   password_confirmation: "",
 });
-const imagePreview = ref(`storage/${props.user.profile_link}`);
+const imagePreview = ref(`/storage/${props.user.profile_link}`);
 
 const handleFile = (e) => {
   const file = e.target.files[0];
@@ -179,7 +185,12 @@ const submit = () => {
   formData.append("_method", "put");
 
   router.post(`/profile/${props.user.id}`, formData, {
-    forceFormData: true,
-  });
+  forceFormData: true,
+  onSuccess: () => {
+    alert('Utilisateur mis à jour avec succès !');
+  }
+});
+
 };
+
 </script>

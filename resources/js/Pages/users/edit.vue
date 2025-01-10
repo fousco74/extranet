@@ -161,7 +161,7 @@ const form = ref({
   ordre_team: props.user.ordre_team
 });
 
-const imagePreview = ref(`storage/${props.user.profile_link}`)
+const imagePreview = ref(`/storage/${props.user.profile_link}`)
 console.log(imagePreview.value)
 
 const fileChange = (e) => {

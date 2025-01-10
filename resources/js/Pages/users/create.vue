@@ -147,7 +147,6 @@ const fileChange = (file) => {
 }
 
 const submit = () => {
-  console.log(form)
   form.post(route('users.store'));
 };
 </script>
