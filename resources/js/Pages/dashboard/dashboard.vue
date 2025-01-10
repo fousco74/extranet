@@ -110,6 +110,14 @@ const showNotify = ref(false);
           <span class="text-lg font-semibold text-gray-800 dark:text-white">Amoaman & Associés</span>
         </div>
         <ul>
+          <li>
+            <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-left text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+              <span class="flex items-center gap-2">
+                <span class="iconify text-4xl" data-icon="mdi-view-dashboard"></span>
+                <a :href="route('dashboard.analytics')"><span>Dashboard</span></a>
+              </span>
+            </button>
+          </li>
           <li v-for="(item, index) in menu" :key="index">
             <button
               @click="toggleMenu(index)"
