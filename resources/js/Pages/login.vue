@@ -23,7 +23,7 @@ const submit = ()=>{
                     <div class="w-[247px] max-md:w-[100px]  max-lg:ml-6  max-lg:mt-6 object-contain">
                         <img src="/public/logos/AMOAMAN.png" alt="logo" class="size-full">
                     </div>
-                    <div class="py-4">
+                    <div class="py-4 mx-sm:mb-8">
                         <h2 class="font-semibold text-6xl max-lg:text-2xl">One Team Spirit.</h2>
                         <p class="font-semibold text-lg max-lg:text-[12px]">Audace. Confiance. Créativité. <br> Engagement. Excellence.</p>
                         <h6 class="font-semibold text-sm mt-10 mb-3 max-lg:text-[8px]">Amoaman & Associés</h6>
