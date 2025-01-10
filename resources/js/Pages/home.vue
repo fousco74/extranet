@@ -24,15 +24,15 @@ import NavBarComponent from './components/NavBarComponent.vue';
 
 <template>
     <NavBarComponent></NavBarComponent>
-    <div class="w-full flex justify-center">
-  <div class="space-x-4 flex mt-8 flex-wrap lg:flex-nowrap">
+    <div class="w-full flex justify-center sm:mt-32 md:mt-10">
+  <div class="space-x-4 flex mt-8 flex-wrap sm:flex-nowrap">
     <!-- Colonne de gauche -->
-    <div class="flex flex-col w-full lg:w-[350px] space-y-4">
+    <div class="flex flex-col w-full sm:w-[350px] space-y-4">
       <!-- Première ligne -->
-      <div class="flex w-full justify-center lg:justify-between gap-4">
+      <div class="flex w-full justify-center sm:justify-between gap-4">
         <Link :href="route('organigramme')" method="get">
           <CardComponent 
-            imgWiddth="lg:w-[100px] max-sm-[200px]" 
+            imgWiddth="sm:w-[100px] max-sm-[200px]" 
             content="Organigramme" 
             customClass="h-[150px] w-[180px] border" 
             :logoUrl="logoUrlOrganigramme"
@@ -52,9 +52,9 @@ import NavBarComponent from './components/NavBarComponent.vue';
     </div>
 
     <!-- Colonne de droite -->
-    <div class="flex flex-col max-sm:justify-center gap-4 w-full lg:w-auto">
+    <div class="flex flex-col max-md:justify-center gap-4 w-full sm:w-auto">
       <!-- Cartes en ligne -->
-      <div class="flex w-full flex-wrap lg:flex-nowrap gap-4 px-0">
+      <div class="flex w-full flex-wrap sm:flex-nowrap gap-4 px-0 max-sm:pr-4 mt-4">
         <!-- Tronbinoscope & Règlement intérieur -->
         <div class="flex flex-col gap-4 w-full">
           <Link :href="route('membersList')" method="get">
@@ -77,7 +77,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
         </div>
 
         <!-- Composant Météo -->
-        <div class="sm:h-full flex justify-center w-full">
+        <div class="sm:h-full flex justify-center w-full ">
           <WeatherComponent 
             :city="$page.props.city" 
             :weatherData="$page.props[1]" 
@@ -86,32 +86,39 @@ import NavBarComponent from './components/NavBarComponent.vue';
           </WeatherComponent>
         </div>
 
-        <!-- Carte Suggestion -->
-        <Link :href="route('suggestion')" method="get">
-          <CardComponent 
-            imgWiddth="w-[100px] max-sm-[200px]" 
-            customClass="sm:h-[320px] sm:w-[150px] border w-[250%] border" 
-            content="Suggestion" 
-            :logoUrl="logoUrluseFullBox"
-          >
-          </CardComponent>
-        </Link>
+        <div class="w-full  relative">
+            <!-- Carte Suggestion -->
+          <Link :href="route('suggestion')" method="get" class="abosolute">
+            <CardComponent 
+              imgWiddth="w-[100px] max-sm-[200px]" 
+              customClass="sm:h-[320px] sm:w-[150px] border w-[100%] border" 
+              content="Suggestion" 
+              :logoUrl="logoUrluseFullBox"
+            >
+            </CardComponent>
+          </Link>
+        </div>
+        
       </div>
 
       <!-- OneDrive et Application -->
-      <div class="w-full flex max-sm:flex-col gap-6 flex-wrap lg:gap-2 items-center justify-center lg:justify-start">
+      <div class="w-full flex max-sm:flex-col gap-6 lg:flex-wrap sm:gap-2 items-center justify-center sm:justify-start">
         <Link :href="route('oneDriveLinks')" method="get">
           <CardComponent
             imgWiddth="w-[100%] max-sm-[200px]" 
-            customClass="h-[100px] w-[320px] lg:w-[360px] bg-gradient-to-buttom border" 
+            customClass="h-[100px] w-[320px] sm:w-[360px] bg-gradient-to-buttom border" 
             :logoUrl="logoUrlOnedrive"
           >
           </CardComponent>
         </Link>
+<<<<<<< HEAD
         <Link :href="route('our.app')" method="get" class="max-md:mb-10">
+=======
+        <Link :href="route('our.app')" method="get" class="max-sm:mb-10">
+>>>>>>> preprod
           <div class="app rounded-lg">
             <CardComponent 
-              customClass="h-[100px] w-[320px] lg:w-[200px] border"
+              customClass="h-[100px] w-[320px] sm:w-[200px] border"
             >
             </CardComponent>
           </div>

@@ -1,6 +1,6 @@
 <template>
   <NavBarComponent></NavBarComponent>
-  <div class="flex">
+  <div class="flex justify-center items-center pl-7">
     <div class="w-full">
       <div class="w-full h-screen overflow-y-auto">
         <!-- Filtrage par type d'équipe -->

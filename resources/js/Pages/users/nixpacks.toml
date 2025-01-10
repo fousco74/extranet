@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> preprod
 [phases.setup]
 commands = [
   "composer install --optimize-autoloader --no-dev",
