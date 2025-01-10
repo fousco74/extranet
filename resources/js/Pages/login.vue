@@ -16,8 +16,8 @@ const submit = ()=>{
 </script>
 
 <template>
-    <div class="w-screen rounded-sm flex  p-0 max-lg:flex-col ">
-        <div class="w-1/2 h-screen left-login  px-0 max-lg:w-full max-lg:h-[10%]">
+    <div class="w-screen rounded-sm flex  pr-[-10px] max-lg:flex-col max-md:h-screen max-lg:border-2">
+        <div class="w-1/2 h-screen left-login  px-0 max-lg:w-screen max-lg:h-[50%] ">
             <div class="p-0 m-0 flex flex-col justify-end h-full">
                 <div class="space-x-8 text-white">
                     <div class="w-[247px] max-md:w-[100px]  max-lg:ml-6  max-lg:mt-6 object-contain">

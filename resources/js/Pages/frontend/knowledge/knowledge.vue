@@ -14,7 +14,7 @@ import PaginateComponent from '../../components/paginateComponent.vue';
 
   <div class="p-8 bg-gray-50 min-h-screen">
     <h1 class="text-xl font-bold text-gray-700 mb-6">Vos dossiers </h1>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <div v-if=" $page.props.folders.length === 0" class="text-center text-gray-500">
         <p>Aucun dossier trouvé.</p>
       </div>
@@ -25,7 +25,7 @@ import PaginateComponent from '../../components/paginateComponent.vue';
       >
 
       <Link :href="route('folder.files',folder.id)" method="get">
-        <div class="w-24bg-blue-100 rounded-full flex justify-center items-center mb-4">
+        <div class="w-24 bg-blue-100 rounded-full flex justify-center items-center mb-4">
           <img src="/public/icons/folders.png" alt="Folder Icon" class="w-16 h-16">
         </div>
       </Link>

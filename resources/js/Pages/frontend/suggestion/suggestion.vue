@@ -1,6 +1,6 @@
 <template>
   <NavBarComponent></NavBarComponent>
-  <div class="container mx-auto mt-10">
+  <div class="container mx-auto mt-16  p-10">
     <h1 class="text-2xl font-bold mb-5">Envoyer une suggestion</h1>
     <form @submit.prevent="submit">
       <!-- Champ Objet -->
