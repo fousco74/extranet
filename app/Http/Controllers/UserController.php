@@ -162,7 +162,7 @@ class UserController extends Controller implements HasMiddleware
     $user->update($validated);
 
 
-    return redirect()->route('home')->with('message', 'Utilisateur mis à jour avec succès.');
+    return redirect()->route('users.index')->with('message', 'Utilisateur mis à jour avec succès.');
 }
     
 
