@@ -183,7 +183,7 @@ const submit = () => {
 
   formData.append("_method", "put");
 
-  router.post(`/users/${props.user.id}`, formData, {
+  router.post(`/admin/users/${props.user.id}`, formData, {
     forceFormData: true,
   });
 };

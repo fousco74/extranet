@@ -81,7 +81,7 @@ for (const key in form.value) {
 
 formData.append("_method", "put");
 
-router.post(`/applications/${props.application.id}`, formData, {
+router.post(route('applications.update',props.application.id), formData, {
 forceFormData: true
 });
 

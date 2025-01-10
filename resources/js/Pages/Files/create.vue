@@ -56,6 +56,6 @@ const fileChange = (file) => {
 };
 
 const submit = () => {
-  form.post('/files');
+  form.post(route('files.store'));
 };
 </script>

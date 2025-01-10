@@ -38,6 +38,6 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post('/folders');
+  form.post(route('folders.store'));
 };
 </script>

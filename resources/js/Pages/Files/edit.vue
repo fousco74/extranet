@@ -69,7 +69,7 @@ const submit = () => {
 
   formData.append("_method", "put");
 
-router.post(`/files/${props.file.id}`, formData, {
+router.post(`/admin/files/${props.file.id}`, formData, {
   forceFormData: true
 });
 

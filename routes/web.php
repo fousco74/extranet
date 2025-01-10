@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
+Route::middleware(['web'])->group(function () {
+
 Route::middleware(['auth', 'role:admin']) ->prefix('admin')->group(function () {
 
 
@@ -121,4 +123,7 @@ Route::get('/login',[UserController::class,'login'])->name('login');
 Route::post('/login',[UserController::class,'authenticate'])->name('authenticate');
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
+});
+
+
 });
