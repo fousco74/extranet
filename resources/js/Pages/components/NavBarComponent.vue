@@ -41,7 +41,7 @@ const showNotify = ref(false)
 </script>
 
 <template>
-  <nav  class="w-screen flex items-center  gap-4 sm:gap-10 lg:pl-10 border p-4 lg:py-3 lg:pr-3 sm:p-0">
+  <nav  class="w-full flex items-center  gap-4 sm:gap-10 lg:pl-10 border p-4 lg:py-3 lg:pr-3 sm:p-0">
   <!-- Logo -->
   <div :class="{'hidden' : dashboard}" class="w-16   sm:w-60 ml-4 sm:ml-16 flex flex-col justify-center items-center">
     <Link :href="route('home')">
