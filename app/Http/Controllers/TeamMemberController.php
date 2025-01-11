@@ -39,20 +39,22 @@ class TeamMemberController extends Controller
                 'equipe' => $equipe
             ]);
         } elseif ($equipe === 'externe') {
-            $membersFird = User::where('team', 'externe')
+            $membersFird = User::where('team', 'interne')
                 ->whereBetween('ordre_team', [1, 3])
                 ->orderBy('ordre_team', 'asc')
                 ->get();
     
-            $memberFour = User::where('team', 'externe')
+            $memberFour = User::where('team', 'interne')
                 ->where('ordre_team', 4)
                 ->orderBy('ordre_team', 'asc')
-                ->first();
+                ->get()[0];
     
             $membersRest = User::where('team', 'externe')
-                ->where('ordre_team', '>=', 5)
                 ->orderBy('ordre_team', 'asc')
                 ->get();
+
+                dd($membersRest);
+
     
             return inertia('frontend/trombinoscope/trombinoscope', [
                 'membersFird' => $membersFird,
