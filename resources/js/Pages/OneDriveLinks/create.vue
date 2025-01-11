@@ -46,6 +46,6 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post('/one-drive-links');
+  form.post('/admin/one-drive-links');
 };
 </script>

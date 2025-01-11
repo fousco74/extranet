@@ -23,7 +23,7 @@ import NavBarComponent from '../../components/NavBarComponent.vue';
         class="group bg-white border py-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow  flex flex-col items-center"
       >
 
-      <a :href="oneDrive.link" >
+      <a target="_blank" :href="oneDrive.link" >
         <div class="w-32 bg-blue-100 rounded-full flex justify-center items-center mb-4">
           <img src="/public/icons/oneDriveIcon.png" alt="Folder Icon" class="w-16 h-16">
         </div>

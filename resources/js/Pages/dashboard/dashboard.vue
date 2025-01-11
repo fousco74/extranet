@@ -45,7 +45,7 @@ const menu = ref([
     name: 'Liens OneDrives',
     icon: 'mdi-microsoft-onedrive',
     submenu: [
-      { name: 'Créer un lien oneDrive', link: 'one-drive-links.create' },
+      { name: 'ajouter un lien  onedrive', link: 'one-drive-links.create' },
       { name: 'Liste des liens oneDrives', link: 'one-drive-links.index' },
     ],
   },
@@ -86,6 +86,17 @@ const toggleMenu = (index) => {
 };
 
 
+const getLastWord = (str) => {
+  // Supprimer les espaces en début et fin de chaîne
+  str = str.trim();
+  
+  // Diviser la chaîne en mots en utilisant les espaces comme séparateurs
+  const words = str.split(' ');
+  
+  // Renvoyer le dernier mot du tableau
+  return words[words.length - 1];
+}
+
 
 const showNotify = ref(false);
 </script>
@@ -97,19 +108,19 @@ const showNotify = ref(false);
     <!-- Sidebar -->
     <aside
       :class="[
-        'fixed top-0 left-0 z-40 w-64 h-screen bg-white border-r dark:bg-gray-800 dark:border-gray-700 transition-transform duration-300',
+        'fixed top-0 left-0 z-40 w-64  h-screen bg-white border-r dark:bg-gray-800 dark:border-gray-700 transition-transform duration-300',
         isSidebarVisible ? 'translate-x-0' : '-translate-x-full',
         'sm:translate-x-0',
       ]"
     >
-      <div class="h-full px-4 py-6 overflow-hidden">
+      <div class="h-full px-4 py-4 overflow-hidden">
         <div class="flex flex-col items-center mb-6">
           <a :href="route('dashboard.analytics')">
             <img src="/public/logos/amoamanBlack.png" class="h-12 mb-3" alt="Logo" />
           </a>
           <span class="text-lg font-semibold text-gray-800 dark:text-white">Amoaman & Associés</span>
         </div>
-        <ul>
+        <ul class="h-[500px] overflow-scroll scrollbar-hide">
           <li>
             <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-left text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
               <span class="flex items-center gap-2">
@@ -171,3 +182,15 @@ const showNotify = ref(false);
     </div>
   </div>
 </template>
+
+<style>
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+</style>

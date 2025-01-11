@@ -65,7 +65,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
             >
             </CardComponent>
           </Link>
-          <a download :href="pdfUrl">
+          <a target="_blank" :href="route('reglement')">
             <CardComponent 
               imgWiddth="w-[100px] max-sm-[200px]" 
               content="Réglement interieur" 
@@ -103,7 +103,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
 
       <!-- OneDrive et Application -->
       <div class="w-full flex max-sm:flex-col gap-6 lg:flex-wrap sm:gap-2 items-center justify-center sm:justify-start">
-        <Link :href="route('oneDriveLinks')" method="get">
+        <Link  :href="route('oneDriveLinks')" method="get">
           <CardComponent
             imgWiddth="w-[100%] max-sm-[200px]" 
             customClass="h-[100px] w-[320px] sm:w-[360px] bg-gradient-to-buttom border" 
@@ -113,7 +113,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
         </Link>
 
 
-        <Link :href="route('our.app')" method="get" class="max-sm:mb-10">
+        <Link  :href="route('our.app')" method="get" class="max-sm:mb-10">
 
           <div class="app rounded-lg">
             <CardComponent 

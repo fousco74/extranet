@@ -69,7 +69,7 @@ $permissionsByCategory = [
     'Utilisateurs' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'utilisateur')),
     'Dossiers' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'dossier')),
     'Fichiers' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'fichier')),
-    'Liens OneDrives' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'liens onedrive')),
+    'Liens OneDrives' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'onedrive')),
     'Applications' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'application')),
     'Reservations' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'reservation')),
     'Notifications' => $permissions->filter(fn($permission) => Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'notification')),
@@ -77,7 +77,7 @@ $permissionsByCategory = [
     'Autres' => $permissions->filter(fn($permission) => !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'utilisateur')
         && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'dossier')
         && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'fichier')
-        && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'liens onedrive')
+        && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'onedrive')
         && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'application')
         && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'reservation')
         && !Str::contains(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $permission->name)), 'notification')

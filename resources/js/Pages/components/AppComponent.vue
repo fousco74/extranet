@@ -50,9 +50,8 @@ import paginateComponent from './PaginateComponent.vue';
 // Liste des applications (peut être récupérée dynamiquement via une API)
 const props = defineProps(["apps"]);
 
-// Fonction pour rediriger vers l'application
 const goToApp = (link) => {
-  window.location.href = link;
+  window.open(link, '_blank');  // Ouvre le lien dans un nouvel onglet
 };
 </script>
   

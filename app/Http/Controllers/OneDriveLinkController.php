@@ -15,7 +15,6 @@ class OneDriveLinkController extends Controller implements HasMiddleware
     {
         return [
             // Middleware pour les actions spécifiques
-            new Middleware('permission:ajouter un lien onedrive', only: ['create']),
             new Middleware('permission:liste des liens onedrives', only: ['index']),
             new Middleware('permission:modifier onedrive', only: ['edit']),
             new Middleware('permission:supprimer onedrive', only: ['destroy']),

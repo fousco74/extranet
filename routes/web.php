@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::middleware(['web'])->group(function () {
 
-Route::middleware(['auth', 'role:admin']) ->prefix('admin')->group(function () {
+    Route::middleware(['auth', 'role:admin|direction'])->prefix('admin')->group(function () {
 
 
 //dashboard
