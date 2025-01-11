@@ -53,7 +53,6 @@ class TeamMemberController extends Controller
                 ->orderBy('ordre_team', 'asc')
                 ->get();
 
-                dd($membersRest);
 
     
             return inertia('frontend/trombinoscope/trombinoscope', [
