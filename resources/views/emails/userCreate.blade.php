@@ -9,7 +9,7 @@
     <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg mt-10 p-6">
         {{-- En-tête avec le logo et le nom de l’entreprise --}}
         <div class="text-center mb-5">
-            <img src="{{ asset('logos/amoamanBlack.png') }}" alt="AMOAMAN et ASSOCIE" class="mx-auto w-36">
+            <img src="{{ asset('logos/LogoAMOAMANnew.png') }}" alt="AMOAMAN et ASSOCIE" class="mx-auto w-36">
             <h1 class="text-2xl font-bold text-gray-800 mt-2">AMOAMAN et ASSOCIE</h1>
         </div>
 
@@ -38,7 +38,7 @@
 
             <p class="mb-4">
                 Pour vous connecter, veuillez cliquer sur le lien suivant : 
-                <a href="http://127.0.0.1:8000/" class="text-blue-600 underline">Accéder à mon espace</a>.
+                <a href="https://extranet-production.up.railway.app" class="text-blue-600 underline">Accéder à mon espace</a>.
             </p>
 
             <p class="mb-4">
