@@ -1,6 +1,6 @@
 <template>
   <Dashboard>
-    <div class="border shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-[60%] xl:w-[50%] p-6 bg-white mx-auto">
+    <div class="border shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-[80%] p-6 bg-white mx-auto">
       <div class="flex justify-between mb-6">
         <h1 class="text-blue text-3xl">Liste des Liens OneDrive</h1>
         <a href="/admin/one-drive-links/create" class="bg-blue text-white px-4 py-2 rounded text-sm sm:text-base">Ajouter un Lien OneDrive</a>
@@ -37,7 +37,7 @@
                 </a>
               </td>
               <td class="border border-gray-300 px-4 py-2 text-sm sm:text-base">
-                <a :href="`/one-drive-links/${link.id}/edit`" class="text-yellow-500 text-sm sm:text-base">Modifier</a> |
+                <a :href="`/admin/one-drive-links/${link.id}/edit`" class="text-yellow-500 text-sm sm:text-base">Modifier</a> |
                 <a href="#" class="text-red-500 text-sm sm:text-base" @click.prevent="deleteLink(link.id)">Supprimer</a>
               </td>
             </tr>

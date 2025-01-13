@@ -1,6 +1,6 @@
 <template>
   <dashboard>
-    <div class="border shadow-md w-[80%] p-10 bg-white">
+    <div class="border shadow-md w-[80%] max-sm:w-full p-10 bg-white">
       <div class="flex justify-between mb-6">
         <h1 class="text-blue text-3xl">Liste des Applications</h1>
         <Link :href="route('applications.create')" class="bg-blue text-white px-4 py-2 rounded">Ajouter une application</Link>
@@ -16,7 +16,6 @@
             <img :src="'/storage/' + application.logo" alt="Logo" class="w-12 h-12 mr-4" />
             <div>
               <h2 class="font-semibold">{{ application.name }}</h2>
-              <p class="text-sm text-gray-600">{{ application.description }}</p>
             </div>
           </div>
           <div class="space-x-4">

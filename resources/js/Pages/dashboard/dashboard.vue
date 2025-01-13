@@ -113,13 +113,17 @@ const showNotify = ref(false);
         'sm:translate-x-0',
       ]"
     >
+    <div class="absolute sm:hidden right-3 top-6" @click="isSidebarVisible=false">
+      <span  class="iconify text-4xl " data-icon="mdi-arrow-left"></span>
+    </div>
+
       <div class="h-full px-4 py-4 overflow-hidden">
-        <div class="flex flex-col items-center mb-6">
-          <a :href="route('dashboard.analytics')">
-            <img src="/public/logos/amoamanBlack.png" class="h-12 mb-3" alt="Logo" />
-          </a>
-          <span class="text-lg font-semibold text-gray-800 dark:text-white">Amoaman & Associés</span>
-        </div>
+            <div class="flex flex-col items-center mb-6">
+              <a :href="route('dashboard.analytics')">
+                <img src="/public/logos/amoamanBlack.png" class="h-12 mb-3" alt="Logo" />
+              </a>
+              <span class="text-lg font-semibold text-gray-800 dark:text-white">Amoaman & Associés</span>
+           </div>
         <ul class="h-[500px] overflow-scroll scrollbar-hide">
           <li>
             <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-left text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">

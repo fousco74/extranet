@@ -48,7 +48,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.put(`/one-drive-links/${props.link.id}`);
+  form.put(`/admin/one-drive-links/${props.link.id}`);
 };
 
 </script>

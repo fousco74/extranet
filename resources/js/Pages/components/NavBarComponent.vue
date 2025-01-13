@@ -50,7 +50,6 @@ const showNotify = ref(false)
     <span class="hidden sm:block text-[12px]">AMOAMAN & ASSOCIES</span>
   </div>
 
-   <!-- Bouton pour ouvrir/fermer la sidebar sur mobile -->
    <button
       @click="toggleSidebar"
       v-if="dashboard"
