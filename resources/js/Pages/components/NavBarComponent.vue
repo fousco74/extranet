@@ -45,9 +45,8 @@ const showNotify = ref(false)
   <!-- Logo -->
   <div :class="{'hidden' : dashboard}" class="w-16   sm:w-60 ml-4 sm:ml-16 flex flex-col justify-center items-center">
     <Link :href="$page.props.routePath.includes('admin') ? route('dashboard.analytics') : route('home')">
-      <img src="/public/logos/amoamanBlack.png" alt="Logo" class="w-10 sm:w-full">
+      <img src="/public/logos/amoaman.png" alt="Logo" class="size-16 object-cover sm:w-full">
     </Link>
-    <span class="hidden sm:block text-[12px]">AMOAMAN & ASSOCIES</span>
   </div>
 
    <button

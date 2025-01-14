@@ -21,7 +21,7 @@ const submit = ()=>{
             <div class="p-0 m-0 flex flex-col justify-end h-full">
                 <div class="space-x-8 text-white">
                     <div class="w-[247px] max-md:w-[100px]  max-lg:ml-6  max-lg:mt-6 object-contain">
-                        <img src="/public/logos/AMOAMAN.png" alt="logo" class="size-full">
+                        <img src="/public/logos/amoamanWhite.png" alt="logo" class="size-full">
                     </div>
                     <div class="py-4 mx-sm:mb-8">
                         <h2 class="font-semibold text-6xl max-lg:text-2xl">One Team Spirit.</h2>

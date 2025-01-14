@@ -120,9 +120,8 @@ const showNotify = ref(false);
       <div class="h-full px-4 py-4 overflow-hidden">
             <div class="flex flex-col items-center mb-6">
               <a :href="route('dashboard.analytics')">
-                <img src="/public/logos/amoamanBlack.png" class="h-12 mb-3" alt="Logo" />
+                <img src="/public/logos/amoaman.png" class="h-20 mb-3" alt="Logo" />
               </a>
-              <span class="text-lg font-semibold text-gray-800 dark:text-white">Amoaman & Associés</span>
            </div>
         <ul class="h-[500px] overflow-scroll scrollbar-hide">
           <li>
