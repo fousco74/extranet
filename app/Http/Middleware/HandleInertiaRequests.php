@@ -62,13 +62,6 @@ class HandleInertiaRequests extends Middleware
                 'name' => config('app.name'),
                 'locale' => app()->getLocale(),
             ],
-            'urlPrev'	=> function() {
-                if (url()->previous() !== route('login') && url()->previous() !== '' && url()->previous() !== url()->current()) {
-		    		return url()->previous();
-		    	}else {
-		    		return 'empty'; 
-		    	}
-		    },
         ]);
     }
 }
