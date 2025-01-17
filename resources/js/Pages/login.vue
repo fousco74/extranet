@@ -17,7 +17,7 @@ const submit = ()=>{
 
 <template>
     <div class="w-screen rounded-sm flex  p-0 max-lg:flex-col ">
-        <div class="w-1/2 h-screen left-login  px-0 max-lg:w-full max-lg:h-[10%] max-lg:mr-10">
+        <div class="w-1/2 h-screen left-login  px-0 max-sm:w-[420px] max-sm:h-[330px] max-lg:w-[950px] max-lg:h-[650px]">
             <div class="p-0 m-0 flex flex-col justify-end h-full">
                 <div class="space-x-8 text-white">
                     <div class="w-[247px] max-md:w-[100px]  max-lg:ml-6  max-lg:mt-6 object-contain">
@@ -32,7 +32,7 @@ const submit = ()=>{
             </div>
 
         </div>
-        <div class="w-1/2 h-full flex justify-center items-center max-lg:w-full max-lg:h-[70%]">
+        <div class="w-1/2 h-full flex justify-center max-sm:h-[330px] max-lg:h-[650px] items-center max-lg:w-full">
            <form @submit.prevent="submit" class="w-[90%] mt-24 flex flex-col pb-4 items-center justify-center max-lg:mt-8">
                 <div class="flex flex-col text-center justify-center items-center w-[300px] space-y-2">
                     <span class=" font-semibold text-purple">Connexion</span>

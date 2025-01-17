@@ -10,11 +10,11 @@
   
    
       <!-- Applications Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 max-sm:gap-5">
+      <div class="grid sm:grid-cols-3 lg:grid-cols-4 max-sm:gap-5 place-self-center border">
         <div
           v-for="app in apps.data"
           :key="app.id"
-          class="bg-white shadow-lg flex flex-col size-[250px] rounded-lg justify-center items-center overflow-hidden hover:shadow-xl transition-shadow"
+          class="bg-white  shadow-lg flex flex-col size-[250px] rounded-lg justify-center items-center overflow-hidden hover:shadow-xl transition-shadow"
         >
 
           <div class="flex justify-center w-48  items-center">

@@ -28,6 +28,10 @@ Route::middleware(['web'])->group(function () {
 //dashboard
 Route::get('/dashboard', [DashboardAnalyticsController::class, 'index'])->name('dashboard.analytics');
 
+Route::delete('/notification/{id}',[UserController::class,'notificationDestroy'])->name('notification.destroy');
+Route::get('/notifications',[UserController::class,'notificationList'])->name('notifications.index');
+
+
 
 //notification
 Route::get('/users/notification',[UserController::class, 'notification'])->name('vue.notification');

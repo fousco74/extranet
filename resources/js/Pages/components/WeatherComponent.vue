@@ -1,5 +1,5 @@
 <template>
-     <div class="bg-gradient-to-weather space-y-4  border w-[230px] flex flex-col items-center  h-full  py-3 gap-2    rounded-lg cursor-pointer">
+     <div class="bg-gradient-to-weather space-y-4 sm:space-y-28 lg:space-y-4   border w-[230px] sm:w-[550px] lg:w-[230px] flex flex-col items-center  h-full sm:sm:h-[650px] lg:h-full  py-3 gap-2    rounded-lg cursor-pointer">
             <div class="flex items-center text-[10px]">
                 <img src="/public/icons/localisation.png" alt="localisation">
                 <form @submit="applyCity" class="text-white">

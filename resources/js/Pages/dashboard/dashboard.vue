@@ -68,6 +68,7 @@ const menu = ref([
     name: 'Notifications',
     icon: 'mdi-bell-ring',
     submenu: [
+      { name: 'Notifications', link: 'notifications.index' },
       { name: 'Envoyer une notification', link: 'vue.notification' },
     ],
   },
