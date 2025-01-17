@@ -4,11 +4,12 @@ import InputComponent from './InputComponent.vue';
 import ButtonComponent from './ButtonComponent.vue';
 import { ref, watch } from 'vue';
 
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
+
 
 const emit = defineEmits(['toggleSidebar']);
 
-const props = defineProps(['search', 'dashboard', 'routeName', 'id']);
+const props = defineProps(['search', 'dashboard', 'routeName', 'id', 'urlPrev']);
 
 const searchPasse = ref(props.search)
 
@@ -33,6 +34,12 @@ if(props.routeName){
 }, 2000
 ))
 
+const urlPrev = props.urlPrev
+			
+const back = () => {
+  window.history.back(); // Native browser back navigation
+}
+
 
 const menubar = ref(false);
 import notificationComponent from './NotificationComponent.vue';
@@ -42,8 +49,12 @@ const showNotify = ref(false)
 
 <template>
   <nav  class="w-full flex items-center  gap-4 sm:gap-10 lg:pl-10 border p-4 lg:py-3 lg:pr-3 sm:p-0">
+    <div v-if="$page.props.routeName !='home' && !$page.props.routePath.includes('admin') " @click="back" class="flex justify-center items-center">
+      <span  class="iconify absolute text-3xl cursor-pointer" data-icon="mdi-arrow-left"></span>
+    </div>
+
   <!-- Logo -->
-  <div :class="{'hidden' : dashboard}" class="w-16   sm:w-60 ml-4 sm:ml-16 flex flex-col justify-center items-center">
+  <div :class="{'hidden' : dashboard}" class="w-16   sm:w-60 ml-4 sm:ml-16 flex  justify-center items-center">
     <Link :href="$page.props.routePath.includes('admin') ? route('dashboard.analytics') : route('home')">
       <img src="/public/logos/amoaman.png" alt="Logo" class="size-16 object-cover sm:w-full">
     </Link>

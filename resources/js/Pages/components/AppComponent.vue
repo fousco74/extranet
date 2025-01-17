@@ -10,7 +10,7 @@
   
    
       <!-- Applications Grid -->
-      <div class="grid sm:grid-cols-3 lg:grid-cols-4 max-sm:gap-5 place-self-center border">
+      <div class="grid sm:grid-cols-3 lg:grid-cols-4 gap-4 max-sm:gap-5 place-self-center ">
         <div
           v-for="app in apps.data"
           :key="app.id"

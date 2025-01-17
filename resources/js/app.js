@@ -16,4 +16,6 @@ createInertiaApp({
       .use(ZiggyVue)
       .mount(el)
   },
+
+  progress: false,
 })
