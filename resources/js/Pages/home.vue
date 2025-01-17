@@ -106,7 +106,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
         <Link  :href="route('oneDriveLinks')" method="get">
           <CardComponent
             imgWiddth="w-[100%]" 
-            customClass="lg:h-[320px] sm:h-[250px] sm:w-[720px] lg:w-[150px] max-sm:w-[320px] max-sm:h-[150px] border w-[100%] bg-gradient-to-buttom border" 
+            customClass="lg:h-[100px] sm:h-[330px] sm:w-[720px] lg:w-[360px] max-sm:w-[320px] max-sm:h-[150px] bg-gradient-to-buttom border" 
             :logoUrl="logoUrlOnedrive"
           >
           </CardComponent>
@@ -117,7 +117,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
 
           <div class="app rounded-lg">
             <CardComponent 
-              customClass="lg:h-[320px] sm:h-[330px] sm:w-[720px] lg:w-[150px] max-sm:w-[320px] max-sm:h-[150px] border">
+              customClass="lg:h-[100px] sm:h-[330px] sm:w-[720px] lg:w-[200px] max-sm:w-[320px] max-sm:h-[150px] border">
             </CardComponent>
           </div>
         </Link>
