@@ -39,7 +39,7 @@
   <script setup>
   import { computed, ref } from "vue";
   import { usePage } from "@inertiajs/vue3";
-  import ReservationModal from "../components/reservationModal.vue";
+  import ReservationModal from "../components/ReservationModal.vue";
   import DateReservationDetail from "../components/DateReservationDetail.vue";
 import NavBarComponent from "../components/NavBarComponent.vue";
 import FullCalandarComponent from "../components/FullCalandarComponent.vue";

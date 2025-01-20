@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\OneDriveLink;
 use App\Notifications\InformationNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -161,8 +162,9 @@ class UserController extends Controller implements HasMiddleware
     // Mise à jour de l'utilisateur
     $user->update($validated);
 
+
     return redirect()->route('users.index')->with('message', 'Utilisateur mis à jour avec succès.');
-    }
+}
     
 
 
@@ -324,7 +326,31 @@ public function updateRoles(Request $request, $id)
         Notification::sendNow($users, new InformationNotification($user, $validated));
         return redirect()->back()->with('success', 'la notification a été envoyé avec succès');
     }
+
+    public function notificationList()
+    {
+        $notifications = DatabaseNotification::Paginate(10);
+
+        return inertia('Notifications/NotificationList', [
+            'notifications' => $notifications
+        ]);
+    }
+
+    public function notificationDestroy($id)
+    {
+        $notification = DatabaseNotification::findOrFail($id);
+
+        $notification->delete();
+
+       return redirect()->route('notifications.index')->with('message','Notification supprimée avec succès');
+    }
+
 }
+
+
+
+
+
 
 
 

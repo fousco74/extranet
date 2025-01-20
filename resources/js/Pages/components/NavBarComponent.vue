@@ -4,11 +4,12 @@ import InputComponent from './InputComponent.vue';
 import ButtonComponent from './ButtonComponent.vue';
 import { ref, watch } from 'vue';
 
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
+
 
 const emit = defineEmits(['toggleSidebar']);
 
-const props = defineProps(['search', 'dashboard', 'routeName', 'id']);
+const props = defineProps(['search', 'dashboard', 'routeName', 'id', 'urlPrev']);
 
 const searchPasse = ref(props.search)
 
@@ -33,24 +34,33 @@ if(props.routeName){
 }, 2000
 ))
 
+const urlPrev = props.urlPrev
+			
+const back = () => {
+  window.history.back(); // Native browser back navigation
+}
+
 
 const menubar = ref(false);
-import notificationComponent from './notificationComponent.vue';
+import notificationComponent from './NotificationComponent.vue';
 import { throttle } from 'lodash';
 const showNotify = ref(false)
 </script>
 
 <template>
   <nav  class="w-full flex items-center  gap-4 sm:gap-10 lg:pl-10 border p-4 lg:py-3 lg:pr-3 sm:p-0">
+    
+    <div v-if="$page.props.routeName !='home' && !$page.props.routePath.includes('admin') " @click="back" class="flex justify-center items-center">
+      <span  class="iconify absolute text-3xl cursor-pointer" data-icon="mdi-arrow-left"></span>
+    </div>
+
   <!-- Logo -->
-  <div :class="{'hidden' : dashboard}" class="w-16   sm:w-60 ml-4 sm:ml-16 flex flex-col justify-center items-center">
-    <Link :href="route('home')">
-      <img src="/public/logos/amoamanBlack.png" alt="Logo" class="w-10 sm:w-full">
+  <div :class="{'hidden' : dashboard}" class="w-16   sm:w-60 ml-4 sm:ml-16 flex  justify-center items-center">
+    <Link :href="$page.props.routePath.includes('admin') ? route('dashboard.analytics') : route('home')">
+      <img src="/public/logos/amoaman.png" alt="Logo" class="size-16 object-cover sm:w-full">
     </Link>
-    <span class="hidden sm:block text-[12px]">AMOAMAN & ASSOCIES</span>
   </div>
 
-   <!-- Bouton pour ouvrir/fermer la sidebar sur mobile -->
    <button
       @click="toggleSidebar"
       v-if="dashboard"
@@ -88,14 +98,14 @@ const showNotify = ref(false)
 
     <!-- Profile -->
     <div class="inline-flex items-center">
-      <div @click="menubar = !menubar" class="rounded-full w-8 sm:w-[40px]">
+      <div @click="menubar = !menubar" class="rounded-full cursor-pointer w-8 sm:w-[40px]">
         <img 
           :src="$page.props.auth.user.profile_link ? `/storage/${$page.props.auth.user.profile_link}` : '/icons/profile.png'" 
           alt="profile" 
           class="size object-cover rounded-full"
         >
       </div>
-      <div class="hidden sm:flex flex-col justify-center space-x-0 ml-2">
+      <div   class="hidden sm:flex flex-col justify-center space-x-0 ml-2">
         <span class="text-[13px] text-nowrap text-blue font-sans">
           {{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name }}
         </span>
@@ -107,7 +117,7 @@ const showNotify = ref(false)
       >
         <ul class="px-5 space-y-1 py-2 border-t border-opacity-25 border-t-color">
           <li>
-            <a href="/profile" class="flex gap-3">
+            <a :href="$page.props.routePath.includes('admin') ? '/admin/profile' : '/profile'" class="flex gap-3">
               <span class="iconify size-5" data-icon="mdi-account"></span>
               <span>My profile</span>
             </a>

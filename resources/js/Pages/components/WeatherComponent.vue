@@ -1,5 +1,5 @@
 <template>
-     <div class="bg-gradient-to-weather space-y-4  border w-[230px] flex flex-col items-center  h-full  py-3 gap-2    rounded-lg cursor-pointer">
+     <div class="bg-gradient-to-weather space-y-4 sm:space-y-28 lg:space-y-4   border w-[230px] sm:w-[550px] lg:w-[230px] flex flex-col items-center  h-full sm:sm:h-[650px] lg:h-full  py-3 gap-2    rounded-lg cursor-pointer">
             <div class="flex items-center text-[10px]">
                 <img src="/public/icons/localisation.png" alt="localisation">
                 <form @submit="applyCity" class="text-white">
@@ -11,7 +11,7 @@
             </div>
             <div class="flex items-center justify-center">
                 <div class="w-[120px]">
-                    <img :src="`/icons/${weatherTime}.png`" alt="temps-icon" class="size-full object-cover">
+                    <img :src="weather" alt="temps-icon" class="size-full object-cover">
                 </div>
             </div>
             <div class="flex flex-col  items-center justify-center">
@@ -66,12 +66,17 @@ const props = defineProps(["city", "weatherData", "weatherTime"]);
 
 
 
+
 const form = useForm({
     city: "abidjan", // Par défaut, Abidjan est sélectionnée
 });
 
+const weather = `./icons/${props.weatherTime}.png`
+
+
 onMounted(() => {
     form.city = props.city; // Définit Abidjan par défaut lors du montage
+
 });
 
 

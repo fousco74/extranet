@@ -28,8 +28,8 @@
 
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import InputComponent from '../Components/InputComponent.vue';
-import ButtonComponent from '../Components/ButtonComponent.vue';
+import InputComponent from '../components/InputComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
 import Dashboard from '../dashboard/dashboard.vue';
 
 const form = useForm({
@@ -38,6 +38,6 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post('/folders');
+  form.post(route('folders.store'));
 };
 </script>

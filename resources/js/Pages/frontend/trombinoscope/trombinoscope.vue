@@ -21,7 +21,7 @@
               class="w-[120px] max-sm:w-[90px] max-lg:w-[140px] relative group">
               <img :src="`/storage/${member.profile_link}`" alt="image" class="size-full object-cover" />
 
-              <a :href="member.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
+              <a target="_blank" :href="member.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
                 <!-- Conteneur pour les deux divs permutables -->
                 <div class="relative h-auto cursor-pointer">
                   <!-- div 1 (visible par défaut) -->
@@ -53,7 +53,7 @@
             <div class="w-[120px] max-sm:w-[90px] max-lg:w-[140px] relative group">
               <img :src="getImagePath($page.props.memberFour.profile_link)" alt="image"
                 class="size-full object-cover" />
-              <a :href="$page.props.memberFour.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
+              <a target="_blank" :href="$page.props.memberFour.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
                 <div class="relative h-auto cursor-pointer">
                   <div
                     class="absolute h-10 inset-0 transition-opacity duration-300 ease-in-out group-hover:opacity-0 py-2 text-center text-[7px] max-sm:text-[5px] leading-[10px]  p-1 rounded-xl border-2 bg-[#223451] text-white">
@@ -81,7 +81,7 @@
             <div v-for="(member, index) in $page.props.membersLeads" :key="'leads' + index"
               class="w-[120px] max-sm:w-[90px] max-lg:w-[140px] relative group">
               <img :src="getImagePath(member.profile_link)" alt="image" class="size-full object-cover" />
-              <a :href="member.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
+              <a target="_blank" :href="member.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
                 <div class="relative h-auto cursor-pointer">
                   <div :class="baseHoverClass + ' bg-[#223451] text-white'">
                     <span class="text-nowrap font-bold text-[7px]">{{ member.first_name + ' ' + member.last_name
@@ -109,7 +109,7 @@
               <!-- Image qui reste toujours visible -->
               <img :src="`/storage/${member.profile_link}`" alt="image" class="size-full object-cover" />
 
-              <a :href="member.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
+              <a target="_blank" :href="member.linkedin_link" title="Cliquez ici pour consulter son profil LinkedIn">
                 <!-- Conteneur pour les deux divs permutables -->
                 <div class="relative h-auto cursor-pointer">
                   <!-- div 1 (visible par défaut) -->

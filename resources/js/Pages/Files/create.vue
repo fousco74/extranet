@@ -37,9 +37,9 @@
 
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import InputComponent from '../Components/InputComponent.vue';
-import SelectComponent from '../Components/SelectComponent.vue';
-import ButtonComponent from '../Components/ButtonComponent.vue';
+import InputComponent from '../components/InputComponent.vue';
+import SelectComponent from '../components/SelectComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
 import Dashboard from '../dashboard/dashboard.vue';
 
 const props = defineProps({
@@ -56,6 +56,6 @@ const fileChange = (file) => {
 };
 
 const submit = () => {
-  form.post('/files');
+  form.post(route('files.store'));
 };
 </script>

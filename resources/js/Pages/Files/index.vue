@@ -5,7 +5,7 @@
       <div class="flex flex-col sm:flex-row justify-between mb-6">
         <h1 class="text-blue text-2xl sm:text-3xl mb-4 sm:mb-0">Liste des Fichiers</h1>
         <a
-          href="/files/create"
+          :href="route('files.create')"
           class="bg-blue text-white px-4 py-2 rounded text-center"
         >
           Ajouter un Fichier
@@ -46,7 +46,7 @@
                 {{ file.folder?.name || 'Aucun' }}
               </td>
               <td class="border border-gray-300 px-4 py-2">
-                <a :href="`/files/${file.id}/edit`" class="text-yellow-500">Modifier</a> |
+                <a :href="route('files.edit',file.id)" class="text-yellow-500">Modifier</a> |
                 <a href="#" class="text-red-500" @click.prevent="deleteFile(file.id)">Supprimer</a>
               </td>
             </tr>
@@ -65,7 +65,7 @@
 <script setup>
 import Dashboard from '../dashboard/dashboard.vue';
 import { useForm } from '@inertiajs/vue3';
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 
 const form = useForm({});
 

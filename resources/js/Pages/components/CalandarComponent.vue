@@ -1,6 +1,6 @@
 <template>
-    <div class="w-full pb-1">
-      <div class="flex justify-between text-center">
+    <div class="w-full  pb-1">
+      <div class="flex  justify-between text-center">
         <button @click="prevMonth" class="ml-5 w-auto">
            <img src="/public/icons/arrow-left.png" alt="" class="size-full object-cover">
         </button>

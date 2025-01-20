@@ -1,9 +1,9 @@
 <template>
   <Dashboard>
-    <div class="border shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-[60%] xl:w-[50%] p-6 bg-white mx-auto">
+    <div class="border shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-[80%] p-6 bg-white mx-auto">
       <div class="flex justify-between mb-6">
         <h1 class="text-blue text-3xl">Liste des Liens OneDrive</h1>
-        <a href="/one-drive-links/create" class="bg-blue text-white px-4 py-2 rounded text-sm sm:text-base">Ajouter un Lien OneDrive</a>
+        <a href="/admin/one-drive-links/create" class="bg-blue text-white px-4 py-2 rounded text-sm sm:text-base">Ajouter un Lien OneDrive</a>
       </div>
       <div class="flex justify-center items-center mb-4">
         <span v-if="$page.props.flash.message" class="text-center bg-orange-700 bg-opacity-25 text-sm sm:text-base">
@@ -37,7 +37,7 @@
                 </a>
               </td>
               <td class="border border-gray-300 px-4 py-2 text-sm sm:text-base">
-                <a :href="`/one-drive-links/${link.id}/edit`" class="text-yellow-500 text-sm sm:text-base">Modifier</a> |
+                <a :href="`/admin/one-drive-links/${link.id}/edit`" class="text-yellow-500 text-sm sm:text-base">Modifier</a> |
                 <a href="#" class="text-red-500 text-sm sm:text-base" @click.prevent="deleteLink(link.id)">Supprimer</a>
               </td>
             </tr>
@@ -54,7 +54,7 @@
 <script setup>
 import Dashboard from '../dashboard/dashboard.vue';
 import { useForm } from '@inertiajs/vue3';
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 
 const props = defineProps({
   links: Object

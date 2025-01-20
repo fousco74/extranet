@@ -47,8 +47,8 @@
 </template>
 
 <script setup>
-import InputComponent from '../Components/InputComponent.vue';
-import ButtonComponent from '../Components/ButtonComponent.vue';
+import InputComponent from '../components/InputComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
 import Dashboard from '../dashboard/dashboard.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -81,7 +81,7 @@ for (const key in form.value) {
 
 formData.append("_method", "put");
 
-router.post(`/applications/${props.application.id}`, formData, {
+router.post(route('applications.update',props.application.id), formData, {
 forceFormData: true
 });
 

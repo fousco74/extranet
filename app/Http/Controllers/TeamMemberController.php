@@ -20,15 +20,18 @@ class TeamMemberController extends Controller
         
         // Définir les requêtes de base pour les équipes interne et externe
         if ($equipe === 'interne') {
-            $membersFird = User::whereBetween('ordre_team', [1, 3])
+            $membersFird = User::where('team', 'interne')
+                ->whereBetween('ordre_team', [1, 3])
                 ->orderBy('ordre_team', 'asc')
                 ->get();
     
-            $memberFour = User::where('ordre_team', 4)
+            $memberFour = User::where('team', 'interne')
+                ->where('ordre_team', 4)
                 ->orderBy('ordre_team', 'asc')
                 ->first();
     
-            $membersRest = User::where('ordre_team', '>=', 5)
+            $membersRest = User::where('team', 'interne')
+                ->where('ordre_team', '>=', 5)
                 ->orderBy('ordre_team', 'asc')
                 ->get();
     
@@ -39,20 +42,21 @@ class TeamMemberController extends Controller
                 'equipe' => $equipe
             ]);
         } elseif ($equipe === 'externe') {
-            $membersFird = User::where('team', 'externe')
+            $membersFird = User::where('team', 'interne')
                 ->whereBetween('ordre_team', [1, 3])
                 ->orderBy('ordre_team', 'asc')
                 ->get();
     
-            $memberFour = User::where('team', 'externe')
+            $memberFour = User::where('team', 'interne')
                 ->where('ordre_team', 4)
                 ->orderBy('ordre_team', 'asc')
-                ->first();
+                ->get()[0];
     
             $membersRest = User::where('team', 'externe')
-                ->where('ordre_team', '>=', 5)
                 ->orderBy('ordre_team', 'asc')
                 ->get();
+
+
     
             return inertia('frontend/trombinoscope/trombinoscope', [
                 'membersFird' => $membersFird,

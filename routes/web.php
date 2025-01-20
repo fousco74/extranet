@@ -17,13 +17,20 @@ use App\Http\Controllers\TeamMemberController;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['web'])->group(function () {
+
+    Route::middleware(['auth', 'role:admin|direction'])->prefix('admin')->group(function () {
 
 
 //dashboard
-Route::get('/admin/dashboard', [DashboardAnalyticsController::class, 'index'])->name('dashboard.analytics');
+Route::get('/dashboard', [DashboardAnalyticsController::class, 'index'])->name('dashboard.analytics');
+
+Route::delete('/notification/{id}',[UserController::class,'notificationDestroy'])->name('notification.destroy');
+Route::get('/notifications',[UserController::class,'notificationList'])->name('notifications.index');
+
 
 
 //notification
@@ -43,6 +50,8 @@ Route::put('/users/{user}/onedrive', [UserController::class, 'updateOneDriveLink
 Route::get('users/{user}/roles', [UserController::class, 'showRoles'])->name('user.roles');
 Route::put('users/{id}/roles', [UserController::class, 'updateRoles'])->name('user.updateRoles');
 Route::resource('users', UserController::class);
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
 
 
@@ -59,11 +68,6 @@ route::resource('permissions', PermissionController::class);
 
 
 Route::middleware(['auth'])->group(function () {
-
-
-
-
-
 
 //Frontend 
 Route::post('/logout',[UserController::class,'logout'])->name('logout');
@@ -123,3 +127,9 @@ Route::get('/', function (Request $request) {
 // Authentification
 Route::get('/login',[UserController::class,'login'])->name('login');
 Route::post('/login',[UserController::class,'authenticate'])->name('authenticate');
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
+});
+
+
+});

@@ -82,7 +82,7 @@ class PageController extends Controller
 
    public function oneDriveLinks(Request $request){
 
-      $oneDriveLinks = Auth::user()->oneDriveLinks()->when($request->search, function ($query, $search) {
+      $oneDriveLinks = OneDriveLink::when($request->search, function ($query, $search) {
           $query->where('name', 'like', "%{$search}%");
       })
       ->paginate(10);
@@ -97,6 +97,7 @@ class PageController extends Controller
    }
 
    public function reglement(){
+
       
       return inertia('frontend/reglement/reglement');
    }

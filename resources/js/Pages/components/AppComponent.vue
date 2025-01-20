@@ -10,11 +10,11 @@
   
    
       <!-- Applications Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 max-sm:gap-5">
+      <div class="grid sm:grid-cols-3 lg:grid-cols-4 gap-4 max-sm:gap-5 place-self-center ">
         <div
           v-for="app in apps.data"
           :key="app.id"
-          class="bg-white shadow-lg flex flex-col size-[250px] rounded-lg justify-center items-center overflow-hidden hover:shadow-xl transition-shadow"
+          class="bg-white  shadow-lg flex flex-col size-[250px] rounded-lg justify-center items-center overflow-hidden hover:shadow-xl transition-shadow"
         >
 
           <div class="flex justify-center w-48  items-center">
@@ -45,14 +45,13 @@
   </template>
 <script setup>
 import { ref } from 'vue';
-import paginateComponent from './paginateComponent.vue';
+import paginateComponent from './PaginateComponent.vue';
 
 // Liste des applications (peut être récupérée dynamiquement via une API)
 const props = defineProps(["apps"]);
 
-// Fonction pour rediriger vers l'application
 const goToApp = (link) => {
-  window.location.href = link;
+  window.open(link, '_blank');  // Ouvre le lien dans un nouvel onglet
 };
 </script>
   

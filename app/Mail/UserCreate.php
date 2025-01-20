@@ -32,7 +32,7 @@ class UserCreate extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(env('CREATE_MAIL_FROM_ADDRESS'), 'Access Extranet - AMOAMAN'),
+            from: new Address('fkone@amoaman.com', 'Access Extranet - AMOAMAN'),
             subject: 'Bienvenue chez AMOAMAN et ASSOCIE !',
         );
     }

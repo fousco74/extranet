@@ -142,8 +142,8 @@
 <script setup>
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import InputComponent from '../Components/InputComponent.vue';
-import ButtonComponent from '../Components/ButtonComponent.vue';
+import InputComponent from '../components/InputComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
 import Dashboard from '../dashboard/dashboard.vue';
 
 const props = defineProps(["user"]);
@@ -161,7 +161,7 @@ const form = ref({
   ordre_team: props.user.ordre_team
 });
 
-const imagePreview = ref(`storage/${props.user.profile_link}`)
+const imagePreview = ref(`/storage/${props.user.profile_link}`)
 console.log(imagePreview.value)
 
 const fileChange = (e) => {
@@ -183,7 +183,7 @@ const submit = () => {
 
   formData.append("_method", "put");
 
-  router.post(`/users/${props.user.id}`, formData, {
+  router.post(`/admin/users/${props.user.id}`, formData, {
     forceFormData: true,
   });
 };

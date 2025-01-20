@@ -1,13 +1,19 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import path from 'path';
 
 export default defineConfig({
-    plugins: [
-        vue(),
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-    ],
+  plugins: [
+    vue(),
+    laravel({
+      input: ['resources/css/app.css', 'resources/js/app.js'],
+      refresh: true,
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@components': path.resolve(__dirname, 'resources/js/pages/components'),  // Met à jour l'alias ici
+    },
+  },
 });

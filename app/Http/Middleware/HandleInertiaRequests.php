@@ -56,6 +56,8 @@ class HandleInertiaRequests extends Middleware
                 ->pluck('name')
             : [],
             'routeName' => request()->route()->getName(), 
+            'routePath' => request()->route()->uri(),
+
             'app' => [
                 'name' => config('app.name'),
                 'locale' => app()->getLocale(),

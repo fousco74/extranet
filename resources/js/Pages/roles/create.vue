@@ -45,7 +45,7 @@ const form = useForm({ name: "" });
 const errors = ref([]);
 
 const submit = () => {
-  form.post("/roles", {
+  form.post(route('roles.store'), {
     onError: (errorBag) => {
       errors.value = Object.values(errorBag).flat();
     },

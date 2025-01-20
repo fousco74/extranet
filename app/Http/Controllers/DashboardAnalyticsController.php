@@ -14,7 +14,7 @@ class DashboardAnalyticsController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin', only: ['index']),
+            new Middleware('role:admin|direction', only: ['index']),
         ];
     }
     public function index()

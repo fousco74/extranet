@@ -6,7 +6,7 @@
       <div class="bg-white shadow-md rounded p-6">
         <div class="flex justify-between items-center mb-4">
           <h5 class="text-lg font-medium">Liste des rôles</h5>
-          <Link href="/roles/create" class="bg-blue text-white px-4 py-2 rounded shadow hover:bg-blue-600">
+          <Link :href="route('roles.create')" class="bg-blue text-white px-4 py-2 rounded shadow hover:bg-blue-600">
             Nouveau Rôle
           </Link>
         </div>
@@ -24,10 +24,10 @@
                 <td class="px-4 py-2 border-b">{{ role.name }}</td>
                 <td class="px-4 py-2 border-b">
                   <div class="flex space-x-2">
-                    <Link :href="`/roles/${role.id}/edit`" class="text-blue-600 hover:underline">
+                    <Link :href="route('roles.store',role.id)" class="text-blue-600 hover:underline">
                       Modifier
                     </Link>
-                    <Link :href="`/roles/${role.id}/permissions`" class="text-green-600 hover:underline">
+                    <Link :href="route('role.permissions',role.id)" class="text-green-600 hover:underline">
                       Permissions
                     </Link>
                     <button
@@ -51,7 +51,7 @@
 <script setup>
 import { ref } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 import dashboard from "../dashboard/dashboard.vue";
 const { props } = usePage();
 const roles = ref(props.roles);

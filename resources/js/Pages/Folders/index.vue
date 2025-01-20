@@ -3,7 +3,7 @@
     <div class="border shadow-md w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] p-6 sm:p-8 md:p-10 bg-white">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-blue text-2xl sm:text-3xl md:text-4xl">Liste des Dossiers</h1>
-        <a href="/folders/create" class="bg-blue text-white px-4 py-2 rounded text-sm sm:text-base">Ajouter un Dossier</a>
+        <a href="/admin/folders/create" class="bg-blue text-white px-4 py-2 rounded text-sm sm:text-base">Ajouter un Dossier</a>
       </div>
       <div class="flex justify-center items-center mb-4">
         <span v-if="$page.props.flash.message" class="text-center bg-green-100 text-green-800 px-4 py-2 rounded">
@@ -26,7 +26,7 @@
             <td class="border border-gray-300 px-4 py-2">{{ folder.id }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ folder.name }}</td>
             <td class="border border-gray-300 px-4 py-2">
-              <a :href="`/folders/${folder.id}/edit`" class="text-yellow-500 text-sm sm:text-base">Modifier</a> |
+              <a :href="`/admin/folders/${folder.id}/edit`" class="text-yellow-500 text-sm sm:text-base">Modifier</a> |
               <a href="#" class="text-red-500 text-sm sm:text-base" @click.prevent="deleteFolder(folder.id)">Supprimer</a>
             </td>
           </tr>
@@ -41,7 +41,7 @@
 import { ref } from 'vue';
 import Dashboard from '../dashboard/dashboard.vue';
 import { useForm } from '@inertiajs/vue3';
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 
 const props = defineProps({
   folders: Object

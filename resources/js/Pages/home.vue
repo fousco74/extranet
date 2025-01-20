@@ -24,52 +24,52 @@ import NavBarComponent from './components/NavBarComponent.vue';
 
 <template>
     <NavBarComponent></NavBarComponent>
-    <div class="w-full flex justify-center sm:mt-32 md:mt-10">
-  <div class="space-x-4 flex mt-8 flex-wrap sm:flex-nowrap">
+    <div class="w-full flex justify-center   md:mt-5">
+  <div class="space-x-4 flex mt-8 flex-wrap lg:flex-nowrap">
     <!-- Colonne de gauche -->
-    <div class="flex flex-col w-full sm:w-[350px] space-y-4">
+    <div class="flex  flex-col  w-full lg:w-[350px] space-y-4  sm:items-center sm:justify-center">
       <!-- Première ligne -->
-      <div class="flex w-full justify-center sm:justify-between gap-4">
+      <div class="flex w-full justify-center lg:justify-between gap-4">
         <Link :href="route('organigramme')" method="get">
           <CardComponent 
-            imgWiddth="sm:w-[100px] max-sm-[200px]" 
+            imgWiddth="lg:w-[100px]" 
             content="Organigramme" 
-            customClass="h-[150px] w-[180px] border" 
+            customClass="h-[150px] w-[180px] max-sm:h-[150px] max-sm:w-[180px] max-lg:w-[380px] max-lg:h-[350px] border" 
             :logoUrl="logoUrlOrganigramme"
           >
           </CardComponent>
         </Link>
         <Link :href="route('knowledges')" method="get">
-          <div class="size-[150px] know-ledge cursor-pointer"></div>
+          <div class="size-[150px] max-sm:size-[150px]  max-lg:w-[350px] max-lg:h-[350px] know-ledge cursor-pointer"></div>
         </Link>
       </div>
 
       <!-- Calendrier -->
-      <div class="w-full text-center max-sm:w-[90%] max-sm:mx-4 border">
+      <div class="w-full text-center max-lg:w-[90%] sm:w-[720px] lg:w-full   max-lg:mx-4 border">
         <h1 class="text-blue_white font-semibold py-1">Reservation de la salle</h1>
         <CalandarComponent></CalandarComponent>
       </div>
     </div>
 
     <!-- Colonne de droite -->
-    <div class="flex flex-col max-md:justify-center gap-4 w-full sm:w-auto">
+    <div class="flex flex-col max-md:justify-center  gap-4 w-full lg:w-auto">
       <!-- Cartes en ligne -->
-      <div class="flex w-full flex-wrap sm:flex-nowrap gap-4 px-0 max-sm:pr-4 mt-4">
+      <div class="flex w-full flex-wrap sm:justify-center lg:flex-nowrap gap-4 px-0 max-lg:pr-4 mt-4">
         <!-- Tronbinoscope & Règlement intérieur -->
-        <div class="flex flex-col gap-4 w-full">
+        <div class="flex max-sm:flex-col sm:justify-center lg:flex-col gap-4 w-full">
           <Link :href="route('membersList')" method="get">
             <CardComponent 
               content="Tronbinoscope" 
-              customClass="sm:size-[150px] w-full border" 
+              customClass="lg:size-[150px] sm:size-[350px] w-full border" 
               :logoUrl="logoUrlTeam"
             >
             </CardComponent>
           </Link>
-          <a download :href="pdfUrl">
+          <a target="_blank" :href="route('reglement')">
             <CardComponent 
-              imgWiddth="w-[100px] max-sm-[200px]" 
+              imgWiddth="w-[100px]" 
               content="Réglement interieur" 
-              customClass="sm:size-[150px] w-full border" 
+              customClass="lg:size-[150px] sm:size-[350px] w-full border" 
               :logoUrl="logoUrlReglement"
             >
             </CardComponent>
@@ -77,7 +77,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
         </div>
 
         <!-- Composant Météo -->
-        <div class="sm:h-full flex justify-center w-full ">
+        <div class="lg:h-full sm:h-[650px] flex justify-center w-full ">
           <WeatherComponent 
             :city="$page.props.city" 
             :weatherData="$page.props[1]" 
@@ -88,10 +88,10 @@ import NavBarComponent from './components/NavBarComponent.vue';
 
         <div class="w-full  relative">
             <!-- Carte Suggestion -->
-          <Link :href="route('suggestion')" method="get" class="abosolute">
+          <Link :href="route('suggestion')" method="get" class="abosolute sm:justify-center sm:flex lg:block">
             <CardComponent 
-              imgWiddth="w-[100px] max-sm-[200px]" 
-              customClass="sm:h-[320px] sm:w-[150px] border w-[100%] border" 
+              imgWiddth="w-[100px] " 
+              customClass="lg:h-[320px] sm:h-[250px] sm:w-[720px] lg:w-[150px] border w-[100%] border" 
               content="Suggestion" 
               :logoUrl="logoUrluseFullBox"
             >
@@ -102,20 +102,22 @@ import NavBarComponent from './components/NavBarComponent.vue';
       </div>
 
       <!-- OneDrive et Application -->
-      <div class="w-full flex max-sm:flex-col gap-6 lg:flex-wrap sm:gap-2 items-center justify-center sm:justify-start">
-        <Link :href="route('oneDriveLinks')" method="get">
+      <div class="w-full flex max-lg:flex-col gap-6 lg:flex-wrap lg:gap-2 items-center justify-center lg:justify-start">
+        <Link  :href="route('oneDriveLinks')" method="get">
           <CardComponent
-            imgWiddth="w-[100%] max-sm-[200px]" 
-            customClass="h-[100px] w-[320px] sm:w-[360px] bg-gradient-to-buttom border" 
+            imgWiddth="w-[100%]" 
+            customClass="lg:h-[100px] sm:h-[330px] sm:w-[720px] lg:w-[360px] max-sm:w-[320px] max-sm:h-[150px] bg-gradient-to-buttom border" 
             :logoUrl="logoUrlOnedrive"
           >
           </CardComponent>
         </Link>
-        <Link :href="route('our.app')" method="get" class="max-sm:mb-10">
+
+
+        <Link  :href="route('our.app')" method="get" class="max-lg:mb-10">
+
           <div class="app rounded-lg">
             <CardComponent 
-              customClass="h-[100px] w-[320px] sm:w-[200px] border"
-            >
+              customClass="lg:h-[100px] sm:h-[330px] sm:w-[720px] lg:w-[200px] max-sm:w-[320px] max-sm:h-[150px] border">
             </CardComponent>
           </div>
         </Link>

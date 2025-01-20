@@ -48,7 +48,7 @@
                         class="absolute right-0 top-10 bg-white border border-gray-200 rounded shadow z-10 w-40"
                       >
                         <Link
-                          :href="`/permissions/${permission.id}/edit`"
+                          :href="`/admin/permissions/${permission.id}/edit`"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                         >
                           <i class="mdi mdi-pencil-outline mr-2"></i> Edit

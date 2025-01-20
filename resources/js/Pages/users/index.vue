@@ -68,7 +68,7 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
 import dashboard from '../dashboard/dashboard.vue';
-import PaginateComponent from '../components/paginateComponent.vue';
+import PaginateComponent from '../components/PaginateComponent.vue';
 
 // Définir les props pour recevoir les utilisateurs
 const Props = defineProps({
