@@ -11,7 +11,7 @@
             </div>
             <div class="flex items-center justify-center">
                 <div class="w-[120px]">
-                    <img :src="`/icons/${weatherTime}.png`" alt="temps-icon" class="size-full object-cover">
+                    <img :src="weather" alt="temps-icon" class="size-full object-cover">
                 </div>
             </div>
             <div class="flex flex-col  items-center justify-center">
@@ -66,12 +66,17 @@ const props = defineProps(["city", "weatherData", "weatherTime"]);
 
 
 
+
 const form = useForm({
     city: "abidjan", // Par défaut, Abidjan est sélectionnée
 });
 
+const weather = `./icons/${props.weatherTime}.png`
+
+
 onMounted(() => {
     form.city = props.city; // Définit Abidjan par défaut lors du montage
+
 });
 
 
