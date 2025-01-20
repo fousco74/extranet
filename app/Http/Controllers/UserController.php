@@ -338,15 +338,9 @@ public function updateRoles(Request $request, $id)
 
     public function notificationDestroy($id)
     {
-        $notifications = DatabaseNotification::all();
+        $notification = DatabaseNotification::findOrFail($id);
 
- 
-        foreach($notifications as $notification){
-            $notification->delete();
-
-        }
-
-
+        $notification->delete();
 
        return redirect()->route('notifications.index')->with('message','Notification supprimée avec succès');
     }
