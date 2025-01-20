@@ -97,7 +97,7 @@ const showNotify = ref(false)
 
     <!-- Profile -->
     <div class="inline-flex items-center">
-      <div @click="menubar = !menubar" class="rounded-full w-8 sm:w-[40px]">
+      <div @click="menubar = !menubar" class="rounded-full cursor-pointer w-8 sm:w-[40px]">
         <img 
           :src="$page.props.auth.user.profile_link ? `/storage/${$page.props.auth.user.profile_link}` : '/icons/profile.png'" 
           alt="profile" 
