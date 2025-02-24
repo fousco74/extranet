@@ -44,7 +44,7 @@ COPY --from=laravel /var/www/html /var/www/html
 
 # Installer les dépendances Node.js via npm
 RUN npm install
-RUN npm install tailwindcss @tailwindcss/vite
+
 
 # Compiler les assets avec Vite
 RUN npm run build
