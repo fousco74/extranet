@@ -26,6 +26,9 @@ RUN git config --global --add safe.directory /var/www/html
 
 # Installer les dépendances PHP via Composer
 RUN composer install --no-dev --optimize-autoloader
+RUN composer require inertiajs/inertia-laravel
+RUN php artisan inertia:middleware
+
 
 # Définir les permissions pour les répertoires nécessaires
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -41,6 +44,9 @@ COPY --from=laravel /var/www/html /var/www/html
 
 # Installer les dépendances Node.js via npm
 RUN npm install
+RUN npm install @inertiajs/vue3
+RUN npm install tailwindcss @tailwindcss/vite
+
 
 # Compiler les assets avec Vite
 RUN npm run build
@@ -76,3 +82,5 @@ EXPOSE 80
 
 # Définir la commande par défaut pour démarrer Apache
 CMD ["apache2-foreground"]
+
+
