@@ -51,36 +51,40 @@ RUN npm install tailwindcss @tailwindcss/vite
 # Compiler les assets avec Vite
 RUN npm run build
 
-# Étape 3: Utiliser une image de base pour servir l'application avec Apache
 FROM php:8.2-apache
 
-# Installer les dépendances système nécessaires pour Apache et PHP
+# Installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    openssl \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
+    && a2enmod ssl rewrite
 
-# Activer le module Apache rewrite
-RUN a2enmod rewrite
+# Générer un certificat SSL auto-signé pour le développement
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
+    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/apache.key -out /etc/ssl/certs/apache.crt -days 365 -nodes -subj "/CN=localhost"
 
-# Ajouter la configuration pour le ServerName
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# Copier le fichier de configuration personnalisé d'Apache
+# Ajouter la configuration d'Apache
 COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./docker/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 
 # Copier les fichiers de l'application Laravel et les assets compilés
 COPY --from=laravel /var/www/html /var/www/html
 COPY --from=node /var/www/html/public/build /var/www/html/public/build
 
-# Définir les permissions pour le stockage Laravel
+# Définir les permissions pour Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Exposer le port 80
-EXPOSE 80
+# Activer les sites Apache
+RUN a2ensite default-ssl.conf
 
-# Définir la commande par défaut pour démarrer Apache
+# Exposer les ports HTTP et HTTPS
+EXPOSE 80 443
+
+# Démarrer Apache
 CMD ["apache2-foreground"]
+
 
 
