@@ -1,8 +1,8 @@
-# Étape 1: Utiliser une image de base avec PHP 8.2 et Composer
-FROM php:8.2-fpm as laravel
+# Étape 1: Utiliser une image de base avec PHP 8.2
+FROM php:8.2-fpm-alpine as laravel
 
-# Installer les dépendances système nécessaires pour PHP et Laravel
-RUN apt-get update && apt-get install -y \
+# Installer les dépendances nécessaires pour PHP et Laravel
+RUN apk update && apk add --no-cache \
     git \
     curl \
     libpng-dev \
@@ -50,20 +50,7 @@ RUN npm run build
 FROM nginx:alpine as final
 
 # Installer openssl pour générer un certificat SSL auto-signé
-RUN apk update && apk add --no-cache \
-    openssl \
-    php8-fpm \
-    php8-cli \
-    php8-mysqli \
-    php8-opcache \
-    php8-mbstring \
-    php8-xml \
-    php8-json \
-    php8-curl \
-    php8-pdo_mysql
-
-# Configurer PHP-FPM (écoute sur un socket UNIX)
-RUN sed -i 's|listen = 127.0.0.1:9000|listen = /var/run/php/php-fpm.sock|' /etc/php8/php-fpm.d/www.conf
+RUN apk update && apk add openssl
 
 # Générer un certificat SSL auto-signé pour Nginx
 RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
@@ -82,5 +69,5 @@ RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
 # Exposer les ports HTTP et HTTPS
 EXPOSE 80 443
 
-# Démarrer PHP-FPM et Nginx
-CMD ["sh", "-c", "php-fpm8 && nginx -g 'daemon off;'"]
+# Démarrer Nginx et PHP-FPM
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
