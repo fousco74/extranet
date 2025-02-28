@@ -50,7 +50,20 @@ RUN npm run build
 FROM nginx:alpine as final
 
 # Installer openssl pour générer un certificat SSL auto-signé
-RUN apk update && apk add openssl
+RUN apk update && apk add --no-cache \
+    openssl \
+    php8-fpm \
+    php8-cli \
+    php8-mysqli \
+    php8-opcache \
+    php8-mbstring \
+    php8-xml \
+    php8-json \
+    php8-curl \
+    php8-pdo_mysql
+
+# Configurer PHP-FPM (écoute sur un socket UNIX)
+RUN sed -i 's|listen = 127.0.0.1:9000|listen = /var/run/php/php-fpm.sock|' /etc/php8/php-fpm.d/www.conf
 
 # Générer un certificat SSL auto-signé pour Nginx
 RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
@@ -69,5 +82,5 @@ RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
 # Exposer les ports HTTP et HTTPS
 EXPOSE 80 443
 
-# Démarrer Nginx et PHP-FPM
-CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
+# Démarrer PHP-FPM et Nginx
+CMD ["sh", "-c", "php-fpm8 && nginx -g 'daemon off;'"]
