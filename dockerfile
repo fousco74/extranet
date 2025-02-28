@@ -23,11 +23,7 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock ./
 
 # Installer les dépendances PHP via Composer
-RUN composer install --no-dev --optimize-autoloader
-
-# Ajouter et configurer InertiaJS et son middleware
-RUN composer require inertiajs/inertia-laravel
-RUN php artisan inertia:middleware
+RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copier tous les autres fichiers de l'application Laravel
 COPY . .
@@ -49,10 +45,6 @@ COPY --from=laravel /var/www/html /var/www/html
 
 # Installer les dépendances Node.js via npm
 RUN npm install
-
-# Installer InertiaJS pour Vue 3 et TailwindCSS
-RUN npm install @inertiajs/vue3
-RUN npm install tailwindcss @tailwindcss/vite
 
 # Compiler les assets avec Vite
 RUN npm run build
