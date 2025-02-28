@@ -18,19 +18,23 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier les fichiers de l'application Laravel
+# Copier les fichiers composer.json et composer.lock pour que Docker puisse utiliser le cache
+COPY composer.json composer.lock ./
+
+# Installer les dépendances PHP via Composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Ajouter et configurer InertiaJS et son middleware
+RUN composer require inertiajs/inertia-laravel
+RUN php artisan inertia:middleware
+
+# Copier tous les autres fichiers de l'application Laravel
 COPY . .
 
 # Configurer Git pour accepter le répertoire comme sûr
 RUN git config --global --add safe.directory /var/www/html
 
-# Installer les dépendances PHP via Composer
-RUN composer install --no-dev --optimize-autoloader
-RUN composer require inertiajs/inertia-laravel
-RUN php artisan inertia:middleware
-
-
-# Définir les permissions pour les répertoires nécessaires
+# Définir les permissions pour les répertoires nécessaires à Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Étape 2: Utiliser une image de base avec Node.js pour le frontend
@@ -39,52 +43,34 @@ FROM node:20 as node
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier les fichiers de l'application Laravel (y compris les fichiers frontend)
+# Copier les fichiers package.json et package-lock.json avant d'installer les dépendances
 COPY --from=laravel /var/www/html /var/www/html
 
 # Installer les dépendances Node.js via npm
 RUN npm install
+
+# Installer InertiaJS pour Vue 3 et TailwindCSS
 RUN npm install @inertiajs/vue3
 RUN npm install tailwindcss @tailwindcss/vite
-
 
 # Compiler les assets avec Vite
 RUN npm run build
 
-FROM php:8.2-apache
+# Étape 3: Ajouter Nginx et configurer l'image finale
+FROM nginx:alpine as final
 
-# Installer les dépendances nécessaires
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    openssl \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
-    && a2enmod ssl rewrite
+# Copier la configuration Nginx
+COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Générer un certificat SSL auto-signé pour le développement
-RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
-    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/apache.key -out /etc/ssl/certs/apache.crt -days 365 -nodes -subj "/CN=localhost"
-
-# Ajouter la configuration d'Apache
-COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY ./docker/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
-
-# Copier les fichiers de l'application Laravel et les assets compilés
+# Copier les fichiers de l'application Laravel depuis l'étape précédente
 COPY --from=laravel /var/www/html /var/www/html
 COPY --from=node /var/www/html/public/build /var/www/html/public/build
 
-# Définir les permissions pour Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Activer les sites Apache
-RUN a2ensite default-ssl.conf
+# Définir les permissions pour les répertoires nécessaires
+RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exposer les ports HTTP et HTTPS
 EXPOSE 80 443
 
-# Démarrer Apache
-CMD ["apache2-foreground"]
-
-
-
+# Démarrer Nginx et PHP-FPM
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
