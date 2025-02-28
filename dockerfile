@@ -19,14 +19,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier les fichiers composer.json, composer.lock et artisan
-COPY composer.json composer.lock artisan ./
+# Copier tous les fichiers de l'application Laravel
+COPY . .
 
 # Installer les dépendances PHP via Composer
 RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --no-interaction
-
-# Copier tous les autres fichiers de l'application Laravel
-COPY . .
 
 # Configurer Git pour accepter le répertoire comme sûr
 RUN git config --global --add safe.directory /var/www/html
