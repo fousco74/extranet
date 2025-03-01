@@ -63,8 +63,8 @@ RUN apt-get update && apt-get install -y \
     && a2enmod ssl rewrite
 
 # Générer un certificat SSL auto-signé pour le développement
-RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
-    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/apache.key -out /etc/ssl/certs/apache.crt -days 365 -nodes -subj "/CN=localhost"
+#RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
+#    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/apache.key -out /etc/ssl/certs/apache.crt -days 365 -nodes -subj "/CN=localhost"
 
 # Ajouter la configuration d'Apache
 COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
