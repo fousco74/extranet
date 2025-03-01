@@ -78,7 +78,7 @@ COPY --from=node /var/www/html/public/build /var/www/html/public/build
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Activer les sites Apache
-RUN a2ensite default-ssl.conf
+RUN a2ensite
 
 # Exposer les ports HTTP et HTTPS
 EXPOSE 80
