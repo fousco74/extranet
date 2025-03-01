@@ -114,7 +114,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     openssl \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
-    && a2enmod ssl rewrite
+    && a2enmod ssl rewrite headers
 
 # Generate a self-signed SSL certificate for development
 RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
