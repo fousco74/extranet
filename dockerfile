@@ -1,14 +1,13 @@
-# Étape 1: Utiliser une image de base avec PHP 8.2
-FROM php:8.2-fpm-alpine as laravel
+# Étape 1: Utiliser une image de base avec PHP 8.2 et Composer
+FROM php:8.2-fpm as laravel
 
-# Installer les dépendances nécessaires pour PHP et Laravel
-RUN apk update && apk add --no-cache \
+# Installer les dépendances système nécessaires pour PHP et Laravel
+RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
-    oniguruma-dev \
+    libonig-dev \
     libxml2-dev \
-    libzip-dev \
     zip \
     unzip \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
@@ -19,16 +18,19 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier tous les fichiers de l'application Laravel
+# Copier les fichiers de l'application Laravel
 COPY . .
-
-# Installer les dépendances PHP via Composer
-RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --no-interaction
 
 # Configurer Git pour accepter le répertoire comme sûr
 RUN git config --global --add safe.directory /var/www/html
 
-# Définir les permissions pour les répertoires nécessaires à Laravel
+# Installer les dépendances PHP via Composer
+RUN composer install --no-dev --optimize-autoloader
+RUN composer require inertiajs/inertia-laravel
+RUN php artisan inertia:middleware
+
+
+# Définir les permissions pour les répertoires nécessaires
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Étape 2: Utiliser une image de base avec Node.js pour le frontend
@@ -37,37 +39,49 @@ FROM node:20 as node
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier les fichiers package.json et package-lock.json avant d'installer les dépendances
+# Copier les fichiers de l'application Laravel (y compris les fichiers frontend)
 COPY --from=laravel /var/www/html /var/www/html
 
 # Installer les dépendances Node.js via npm
 RUN npm install
+RUN npm install @inertiajs/vue3
+RUN npm install tailwindcss @tailwindcss/vite
+
 
 # Compiler les assets avec Vite
 RUN npm run build
 
-# Étape 3: Ajouter Nginx et configurer l'image finale
-FROM nginx:alpine as final
+FROM php:8.2-apache
 
-# Installer openssl pour générer un certificat SSL auto-signé
-RUN apk update && apk add openssl
+# Installer les dépendances nécessaires
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    openssl \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
+    && a2enmod ssl rewrite
 
-# Générer un certificat SSL auto-signé pour Nginx
+# Générer un certificat SSL auto-signé pour le développement
 RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
-    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt -days 365 -nodes -subj "/CN=localhost"
+    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/apache.key -out /etc/ssl/certs/apache.crt -days 365 -nodes -subj "/CN=localhost"
 
-# Copier la configuration Nginx
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Ajouter la configuration d'Apache
+COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+#COPY ./docker/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 
-# Copier les fichiers de l'application Laravel depuis l'étape précédente
+# Copier les fichiers de l'application Laravel et les assets compilés
 COPY --from=laravel /var/www/html /var/www/html
 COPY --from=node /var/www/html/public/build /var/www/html/public/build
 
-# Définir les permissions pour les répertoires nécessaires
-RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
+# Définir les permissions pour Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Activer les sites Apache
+RUN a2ensite default-ssl.conf
 
 # Exposer les ports HTTP et HTTPS
-EXPOSE 80 443
+EXPOSE 80
 
-# Démarrer Nginx et PHP-FPM
-CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
+# Démarrer Apache
+CMD ["apache2-foreground"]
