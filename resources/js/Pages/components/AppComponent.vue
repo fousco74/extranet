@@ -17,7 +17,7 @@
           class="bg-white  shadow-lg flex flex-col size-[250px] rounded-lg justify-center items-center overflow-hidden hover:shadow-xl transition-shadow"
         >
 
-          <div class="flex justify-center w-48  items-center">
+          <div class="flex justify-center w-28  items-center">
             <!-- Application Logo -->
             <img
                 :src="`storage/${app.logo}`"

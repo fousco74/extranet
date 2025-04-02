@@ -4,7 +4,7 @@
       <img
         class="absolute top-4 sm:top-6 right-4 sm:right-8 cursor-pointer w-6 sm:w-8"
         @click="$emit('close')"
-        src="../../../../public/icons/quick.png"
+        src="../../../../public/icons/quick.svg"
         alt="Fermer"
       />
       <div class="flex flex-col sm:flex-row text-center items-center mb-4 gap-2 sm:gap-1">
@@ -90,7 +90,7 @@
 <script setup>
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
-import reserverLogo from "../../../../public/icons/reserver.png";
+import reserverLogo from "../../../../public/icons/reserver.svg";
 import SelectHourComponent from "./SelectHourComponent.vue";
 
 const startClock = ref("09:00");

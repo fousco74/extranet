@@ -1,5 +1,5 @@
 <script setup>
-import logoUrl from '/public/icons/lineLogoutBlack.png';
+import logoUrl from '/public/icons/line-md_logout.svg';
 import InputComponent from '../../components/InputComponent.vue';
 import ButtonComponent from '../../components/ButtonComponent.vue';
 import PaginateComponent from '../../components/PaginateComponent.vue';
@@ -12,7 +12,7 @@ import NavBarComponent from '../../components/NavBarComponent.vue';
 
   <div class="p-8 bg-gray-50 min-h-screen">
     <h1 class="text-xl font-bold text-gray-700 mb-6">Vos dossiers</h1>
-    
+
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <div v-if="$page.props.oneDriveLinks.length === 0" class="text-center text-gray-500">
         <p>Aucun lien onedrive trouvé.</p>
@@ -25,7 +25,7 @@ import NavBarComponent from '../../components/NavBarComponent.vue';
 
       <a target="_blank" :href="oneDrive.link" >
         <div class="w-32 bg-blue-100 rounded-full flex justify-center items-center mb-4">
-          <img src="/public/icons/oneDriveIcon.png" alt="Folder Icon" class="w-16 h-16">
+          <img src="/public/icons/oneDriveIcon.webp" alt="Folder Icon" class="w-16 h-16">
         </div>
       </a>
 

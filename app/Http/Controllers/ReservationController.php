@@ -79,8 +79,8 @@ class ReservationController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string',
-            'description' => 'required|string',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
             'day' => 'required|integer',
             'month' => 'required|string',
             'monthNumber' => 'required|integer',

@@ -14,11 +14,11 @@
       </select>
     </div>
   </template>
-  
+
 
   <script setup>
   import { ref } from 'vue';
-  import timeLogo from  '../../../../public/icons/time.png'
+  import timeLogo from  '../../../../public/icons/time.svg'
 
   // Génération des heures et demi-heures entre 09:00 et 18:00
   const generateTimeOptions = () => {
@@ -29,7 +29,7 @@
     }
     return options;
   };
-  
+
   const modelValue = defineModel({
   type: [String, Number],
   default: null,
@@ -44,4 +44,3 @@ defineProps({
 });
   const timeOptions = ref(generateTimeOptions()); // Liste des heures disponibles
   </script>
-  

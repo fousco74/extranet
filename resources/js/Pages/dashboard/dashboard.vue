@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import InputComponent from '../components/InputComponent.vue';
 import ButtonComponent from '../components/ButtonComponent.vue';
-import logoUrl from '/public/icons/lineLogoutBlack.png';
 
 const openIndex = ref(null);
 
@@ -90,10 +89,10 @@ const toggleMenu = (index) => {
 const getLastWord = (str) => {
   // Supprimer les espaces en début et fin de chaîne
   str = str.trim();
-  
+
   // Diviser la chaîne en mots en utilisant les espaces comme séparateurs
   const words = str.split(' ');
-  
+
   // Renvoyer le dernier mot du tableau
   return words[words.length - 1];
 }
@@ -104,7 +103,7 @@ const showNotify = ref(false);
 
 <template>
   <div class="flex">
-   
+
 
     <!-- Sidebar -->
     <aside
@@ -121,7 +120,7 @@ const showNotify = ref(false);
       <div class="h-full px-4 py-4 overflow-hidden">
             <div class="flex flex-col items-center mb-6">
               <a :href="route('dashboard.analytics')">
-                <img src="/public/logos/amoaman.png" class="h-20 mb-3" alt="Logo" />
+                <img src="/public/logos/AMOAMANBLANC.webp" class="h-24 mb-3" alt="Logo" />
               </a>
            </div>
         <ul class="h-[500px] overflow-scroll scrollbar-hide">
