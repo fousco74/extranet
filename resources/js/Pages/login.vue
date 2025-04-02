@@ -45,7 +45,7 @@ const submit = ()=>{
                 <InputComponent v-model="form.password"  type="password" name="password" placeholder="*********" class="w-[250px]"></InputComponent>
 
 
-                <ButtonComponent content="connexion" customClass="w-[250px] mt-6 bg-gradient-to-custom text-white" :logoUrl="logoUrl" alt="login" />
+                <ButtonComponent content="connexion" customClass="w-[250px] mt-6 bg-gradient-to-custom text-white" alt="login" />
 
 
 
