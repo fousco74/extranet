@@ -1,5 +1,4 @@
 <script setup>
-import logoUrl from '/public/icons/lineLogoutBlack.png';
 import InputComponent from '../../components/InputComponent.vue';
 import ButtonComponent from '../../components/ButtonComponent.vue';
 
@@ -26,7 +25,7 @@ import PaginateComponent from '../../components/PaginateComponent.vue';
 
       <Link :href="route('folder.files',folder.id)" method="get">
         <div class="w-24 bg-blue-100 rounded-full flex justify-center items-center mb-4">
-          <img src="/public/icons/folders.png" alt="Folder Icon" class="w-16 h-16">
+          <img src="/public/icons/folders.webp" alt="Folder Icon" class="w-16 h-16">
         </div>
       </Link>
 

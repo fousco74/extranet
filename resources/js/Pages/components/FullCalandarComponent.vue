@@ -4,11 +4,11 @@
   <div class="flex flex-wrap lg:flex-nowrap items-center justify-between pb-0 mb-3 px-3 lg:px-5">
     <div class="flex justify-between gap-4 items-center text-center pt-3">
       <button @click="prevMonth" class="ml-2 lg:ml-5 w-auto">
-        <img src="/public/icons/arrow-left.png" alt="" class="h-6 w-6 object-cover">
+        <img src="/public/icons/arrow-left.svg" alt="" class="h-6 w-6 object-cover">
       </button>
       <h2 class="text-md lg:text-lg font-bold text-blue_black">{{ monthName }} {{ year }}</h2>
       <button @click="nextMonth" class="mr-2 lg:mr-5 w-auto">
-        <img src="/public/icons/arrow-right.png" alt="" class="h-6 w-6 object-cover">
+        <img src="/public/icons/arrow-right.svg" alt="" class="h-6 w-6 object-cover">
       </button>
     </div>
     <div class="flex justify-between gap-3 lg:gap-5 pt-3 items-center w-full lg:w-auto">
@@ -37,7 +37,7 @@
     <div
       v-for="(date, index) in calendarDays"
       :key="index"
-      :class="[ 
+      :class="[
         'h-[40px] lg:h-[54px] py-1 lg:py-[3px] px-1 lg:px-2 border shadow flex items-start justify-start',
         date.isCurrentMonth ? 'bg-white text-black' : 'bg-gray-100 text-gray-400',
         'hover:bg-lightGray cursor-pointer',
@@ -68,16 +68,16 @@
 </div>
 
   </template>
-  
+
   <script setup>
   import { router } from '@inertiajs/vue3';
   import { ref, computed } from 'vue';
   import dayjs from 'dayjs';
   import SelectCalandarComponent from './SelectCalandarComponent.vue';
-  import plusLogo from '../../../../public/icons/plus.png'
-  import calandarLogo from '../../../../public/icons/choiseCalandar.png'
+  import plusLogo from '../../../../public/icons/plus.svg'
+  import calandarLogo from '../../../../public/icons/choiseCalandar.svg'
 
- 
+
   const close = () => {
   isModalVisible.value = false;
   window.location.reload();  // This will reload the page after closing the modal
@@ -88,7 +88,7 @@
 import ButtonComponent from './ButtonComponent.vue';
 import ReservationModal from './ReservationModal.vue'
 
-  
+
 // Définir les props
 const props = defineProps([ "reservations", "daySelect", "monthSelect", "yearSelect", "monthNumber", "detailIsVisible"]);
 
@@ -115,7 +115,7 @@ const dayName = computed(() => {
     .month(month.value)  // Mois sélectionné (0-11)
     .year(year.value)    // Année sélectionnée
     .date(selectedDay.value);  // Jour sélectionné (le jour du mois)
-  
+
   // Vérification si la date est valide
   if (!day.isValid()) {
     console.error('Invalid date:', day.format());
@@ -127,13 +127,13 @@ const dayName = computed(() => {
 });
 
   const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  
+
   const calendarDays = computed(() => {
     const startOfMonth = currentDate.value.startOf('month').day();
     const daysInMonth = currentDate.value.daysInMonth(); // Nombre de jours dans le mois
     const days = [];
     const startOffset = startOfMonth === 0 ? 6 : startOfMonth - 1;
-  
+
     // Précédent mois
     const prevMonthDays = currentDate.value.subtract(1, 'month').daysInMonth();
     for (let i = startOffset; i > 0; i--) {
@@ -143,8 +143,8 @@ const dayName = computed(() => {
       });
     }
 
-   
-  
+
+
     // Mois courant
     for (let i = 1; i <= daysInMonth; i++) {
       days.push({
@@ -153,7 +153,7 @@ const dayName = computed(() => {
         isToday: currentDate.value.date() === i && currentDate.value.isSame(dayjs(), 'month'),
       });
     }
-  
+
     // Prochain mois
     const totalDays = days.length;
     for (let i = 1; i <= 42 - totalDays; i++) {
@@ -162,14 +162,14 @@ const dayName = computed(() => {
         isCurrentMonth: false,
       });
     }
-  
+
     return days;
   });
 
   const monthDays = computed(() => calendarDays.value.filter(day => day.isCurrentMonth));
 
-  
- 
+
+
   const nextMonth = () => {
   currentDate.value = currentDate.value.add(1, 'month');
   selectedDay.value = 1; // Mettre le jour sélectionné sur le 1er du mois
@@ -195,7 +195,7 @@ const updateSelectedDate = () => {
   router.get('/reservation/date', data);
 };
 
-  
+
   const selectDate = (date) => {
     if (date.isCurrentMonth) {
       selectedDate.value = date.date;
@@ -212,13 +212,12 @@ const updateSelectedDate = () => {
 
 
   const isModalVisible = ref(false);
-  
+
   const showReservationModal = () => {
     isModalVisible.value = true;
   };
   </script>
-  
+
   <style scoped>
   /* Ajout de styles spécifiques */
   </style>
-  
