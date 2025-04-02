@@ -49,6 +49,7 @@ const showNotify = ref(false)
 
 <template>
   <nav  class="w-full flex items-center  gap-4 sm:gap-10 lg:pl-10 border p-4 lg:py-3 lg:pr-3 sm:p-0">
+    
     <div v-if="$page.props.routeName !='home' && !$page.props.routePath.includes('admin') " @click="back" class="flex justify-center items-center">
       <span  class="iconify absolute text-3xl cursor-pointer" data-icon="mdi-arrow-left"></span>
     </div>

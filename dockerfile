@@ -1,67 +1,142 @@
-FROM wyveo/nginx-php-fpm:latest
+# Étape 1: Utiliser une image de base avec PHP 8.2 et Composer
+FROM php:8.2-fpm as laravel
 
-# Copie des fichiers du projet dans le répertoire Nginx
-COPY . /usr/share/nginx/html
-
-# Copie de la configuration Nginx personnalisée
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Définition du répertoire de travail
-WORKDIR /usr/share/nginx/html
-
-# Installation des dépendances PHP (Composer)
+# Installer les dépendances système nécessaires pour PHP et Laravel
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
     zip \
     unzip \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Installation des dépendances Node.js (pour Inertia.js et Vue.js)
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install --global npm
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Vérification de l'installation de npm
-RUN node -v && npm -v
+# Définir le répertoire de travail
+WORKDIR /var/www/html
 
-# Installation des dépendances de l'application Laravel (PHP)
-RUN composer install --no-dev --optimize-autoloader && \
-    npm install && \
-    npm run build && \
-    php artisan optimize:clear && \
-    php artisan storage:link
+# Copier les fichiers de l'application Laravel
+COPY . .
 
-RUN npm install    
+# Configurer Git pour accepter le répertoire comme sûr
+RUN git config --global --add safe.directory /var/www/html
 
-# Installation de Tailwind CSS et autres dépendances côté client
-RUN npm install -D tailwindcss postcss autoprefixer && npx tailwindcss init
-
-# Installation de Inertia.js côté serveur pour Laravel
+# Installer les dépendances PHP via Composer
+RUN composer install --no-dev --optimize-autoloader
 RUN composer require inertiajs/inertia-laravel
-
 RUN php artisan inertia:middleware
 
-RUN php artisan storage:link
 
+# Définir les permissions pour les répertoires nécessaires
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Étape 2: Utiliser une image de base avec Node.js pour le frontend
+FROM node:20 as node
 
-# Installation d'Inertia.js côté client pour Vue 3
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application Laravel (y compris les fichiers frontend)
+COPY --from=laravel /var/www/html /var/www/html
+
+# Installer les dépendances Node.js via npm
+RUN npm install
 RUN npm install @inertiajs/vue3
+RUN npm install tailwindcss @tailwindcss/vite
 
 
+# Compiler les assets avec Vite
+RUN npm run build
+
+# Étape 1: Utiliser une image de base avec PHP 8.2 et Composer
+FROM php:8.2-fpm as laravel
+
+# Installer les dépendances système nécessaires pour PHP et Laravel
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application Laravel
+COPY . .
+
+# Configurer Git pour accepter le répertoire comme sûr
+RUN git config --global --add safe.directory /var/www/html
+
+# Installer les dépendances PHP via Composer
+RUN composer install --no-dev --optimize-autoloader
+RUN composer require inertiajs/inertia-laravel
+RUN php artisan inertia:middleware
 
 
-# Lien symbolique pour le dossier public de Laravel
-RUN ln -s public html
+# Définir les permissions pour les répertoires nécessaires
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose le port 8080 pour Nginx
-EXPOSE 8080
+# Étape 2: Utiliser une image de base avec Node.js pour le frontend
+FROM node:20 as node
 
-# Commande par défaut pour exécuter l'application Laravel et Vue.js
-CMD ["sh", "-c", "php artisan storage:link && php artisan migrate --force && npm run dev & php artisan serve --host=0.0.0.0 --port=8080"]
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application Laravel (y compris les fichiers frontend)
+COPY --from=laravel /var/www/html /var/www/html
+
+# Installer les dépendances Node.js via npm
+RUN npm install
+RUN npm install @inertiajs/vue3
+RUN npm install tailwindcss @tailwindcss/vite
+
+
+# Compiler les assets avec Vite
+RUN npm run build
+
+# Use the official PHP 8.2 image with Apache
+FROM php:8.2-apache
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    openssl \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
+    && a2enmod ssl rewrite headers
+
+# Generate a self-signed SSL certificate for development
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private && \
+    openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/apache.key -out /etc/ssl/certs/apache.crt -days 365 -nodes -subj "/CN=localhost"
+
+# Add Apache configuration
+COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./docker/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+
+# Enable Apache sites
+RUN a2ensite 000-default.conf && a2ensite default-ssl.conf
+
+# Copy Laravel application files and compiled assets
+COPY --from=laravel /var/www/html /var/www/html
+COPY --from=node /var/www/html/public/build /var/www/html/public/build
+
+# Set permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Expose HTTP and HTTPS ports
+EXPOSE 80
+EXPOSE 443
+
+# Start Apache
+CMD ["apache2-foreground"]
