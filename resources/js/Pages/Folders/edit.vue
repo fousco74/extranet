@@ -40,6 +40,6 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.put(route('files.update',form.id));
+  form.put(route('folders.update',form.id));
 };
 </script>

@@ -41,7 +41,7 @@
         'h-[40px] lg:h-[54px] py-1 lg:py-[3px] px-1 lg:px-2 border shadow flex items-start justify-start',
         date.isCurrentMonth ? 'bg-white text-black' : 'bg-gray-100 text-gray-400',
         'hover:bg-lightGray cursor-pointer',
-        date.date == selectedDay && date.isCurrentMonth ? 'border-pink border text-pink' : ''
+        date.date == selectedDay && date.isCurrentMonth ? 'border-purple_custom border text-purple_custom' : ''
       ]"
       @click="selectDate(date)"
     >
@@ -63,6 +63,7 @@
     :dayName="dayName"
     :monthNumber="monthNumber"
     :year="year"
+    :reservations="reservations"
     @close="close"
   />
 </div>

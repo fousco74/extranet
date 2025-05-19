@@ -22,8 +22,12 @@ return new class extends Migration
             $table->string('poste');
             $table->string('phone_number')->nullable();
             $table->string('profile_link')->nullable(); // Path to profile photo
-            $table->string('linkedin_link')->nullable(); // LinkedIn profile link
-            $table->string('ordre_team')->nullable(); // LinkedIn profile link
+            $table->integer('ordre_team')->nullable(); // LinkedIn profile link
+            $table->string('birth_place');
+            $table->date('birth_date');
+            $table->string('nationality');
+            $table->string('marital_status');
+            $table->string('address');
             $table->rememberToken();
             $table->timestamps();
         });

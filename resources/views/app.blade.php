@@ -7,12 +7,14 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="//code.iconify.design/1/1.0.6/iconify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link favicon="apple-touch-icon" href="{{ asset('background/LogoAMOAMANnew.png') }}">
     @vite('resources/js/app.js')
     @inertiaHead
     @routes
-    @vite('resources/css/app.css') 
+    @vite('resources/css/app.css')
 </head>
-<body class="max-sm p-o m-0">
+<body class="max-sm bg-gray-50 p-o m-0 overflow-x-auto">
     @inertia
 </body>
 </html>

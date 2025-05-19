@@ -72,13 +72,13 @@ class PermissionController extends Controller
 
         $permission->update($request->all());
 
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission mise à jour avec succès.');
     }
 
     public function destroy(Permission $permission)
     {
         $permission->delete();
 
-        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission supprimée avec succès.');
     }
 }

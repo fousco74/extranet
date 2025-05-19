@@ -4,9 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+
 
 
 class User extends Authenticatable
@@ -18,12 +22,32 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'ordre_team', 'last_name', 'team', 'poste', 'email', 'phone_number', 'profile_link', 'linkedin_link', 'password'];
+    protected $fillable = ['first_name', 'ordre_team', 'last_name', 'team', 'poste', 'email', 'phone_number','nationality', 'address', 'profile_link','marital_status','birth_date' ,'birth_place', 'password'];
 
     public function oneDriveLinks()
     {
         return $this->belongsToMany(OneDriveLink::class, 'one_drive_link_user');
     }
+
+
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class)
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+
+
+    public function tasks(): belongsToMany
+    {
+        return $this->belongsToMany(Task::class);
+    }
+
+
+
+
+
 
     /**
      * The attributes that should be hidden for serialization.

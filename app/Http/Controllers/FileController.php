@@ -60,7 +60,7 @@ class FileController extends Controller implements HasMiddleware
 
         File::create($validated);
 
-        return redirect()->route('files.index')->with('message', 'File created successfully.');
+        return redirect()->route('files.index')->with('success', 'Fichier ajoutée avec succès.');
     }
 
     public function show(File $file)
@@ -100,12 +100,12 @@ class FileController extends Controller implements HasMiddleware
 
         $file->update($validated);
 
-        return redirect()->route('files.index')->with('message', 'File updated successfully.');
+        return redirect()->route('files.index')->with('success', 'Fichier mis à jour avec succès.');
     }
 
     public function destroy(File $file)
     {
         $file->delete();
-        return redirect()->route('files.index')->with('message', 'File deleted successfully.');
+        return redirect()->route('files.index')->with('success', 'Fichier supprimé avec succès.');
     }
 }

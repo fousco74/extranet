@@ -27,7 +27,7 @@ class UserController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            
+
             // Middleware pour les actions spécifiques
             new Middleware('permission:créer un utilisateur', only: ['create']),
             new Middleware('permission:envoyer une notification', only: ['sendNotification']),
@@ -77,7 +77,7 @@ class UserController extends Controller implements HasMiddleware
     // Sauvegarde d'un nouvel utilisateur
     public function store(Request $request)
     {
-
+        
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -88,22 +88,32 @@ class UserController extends Controller implements HasMiddleware
             'profile_link' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'linkedin_link' => 'nullable|url|max:255',
             'password' => 'required|string|min:8|confirmed',
-            'ordre_team' =>'nullable|numeric|unique:users,ordre_team'
+            'ordre_team' =>'nullable|numeric|unique:users,ordre_team',
+            'birth_place' => 'required|string|max:255',
+            'birth_date' => 'required',
+            'nationality' => 'required|string|max:255',
+            'marital_status' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
         ]);
 
-       
-
-
-        if($request->hasFile('profile_link')){
-            $validated['profile_link'] = Storage::disk('public')->put("profile",$request->profile_link);
+        // Gestion de l'image
+        if ($request->hasFile('profile_link')) {
+            $validated['profile_link'] = Storage::disk('public')->put("profile", $request->profile_link);
         }
 
+        // Test d'envoi d'email avant la création de l'utilisateur
+        try {
+            // Essai d'envoi d'email à l'adresse fournie
+            Mail::to($validated['email'])->send(new UserCreate($validated));
+        } catch (\Exception $e) {
+            // En cas d'erreur, retour avec un message sans créer l'utilisateur
+            return redirect()->back()->withInput()->withErrors(['email' => 'L\'email est invalide ou l\'envoi a échoué. Veuillez vérifier l\'adresse email.']);
+        }
+
+        // Si tout est bon, on crée l'utilisateur
         $user = User::create($validated);
 
-        // Envoyer l'email
-        Mail::to($user->email)->send(new UserCreate($validated));
-
-        return redirect()->route('users.index')->with('message', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
     // Affichage des détails d'un utilisateur
@@ -123,8 +133,7 @@ class UserController extends Controller implements HasMiddleware
 
     // Mise à jour des informations d'un utilisateur
     public function update(Request $request, User $user)
-    {
-       
+{
     // Validation
     $validated = $request->validate([
         'first_name' => 'required|string|max:255',
@@ -137,35 +146,42 @@ class UserController extends Controller implements HasMiddleware
         'linkedin_link' => 'nullable|url|max:255',
         'password' => 'nullable|string|min:8|confirmed',
         'ordre_team' => 'nullable|numeric|unique:users,ordre_team,' . $user->id,
+        'birth_place' => 'required|string|max:255',
+        'birth_date' => 'required',
+         'nationality' => 'required|string|max:255',
+        'marital_status' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
     ]);
-
 
     // Gestion du fichier de profil
     if ($request->hasFile('profile_link')) {
         if ($user->profile_link) {
             Storage::disk('public')->delete($user->profile_link);
         }
-        $validated['profile_link'] = Storage::disk('public')->put("profile",$request->profile_link);
+        $validated['profile_link'] = Storage::disk('public')->put("profile", $request->profile_link);
     }
 
-    // Hash du mot de passe
+    // Hash du mot de passe si fourni
     if (!empty($validated['password'])) {
         $validated['password'] = bcrypt($validated['password']);
     } else {
         unset($validated['password']);
     }
 
+    // Supprimer le champ profile_link s'il n'y a pas de nouveau fichier
     if (empty($validated['profile_link'])) {
         unset($validated['profile_link']);
-    } 
+    }
+
+
 
     // Mise à jour de l'utilisateur
     $user->update($validated);
 
-
-    return redirect()->route('users.index')->with('message', 'Utilisateur mis à jour avec succès.');
+    return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
 }
-    
+
+
 
 
     // Suppression d'un utilisateur
@@ -178,7 +194,7 @@ class UserController extends Controller implements HasMiddleware
         $user->oneDriveLinks()->detach(); // Supprimer les relations avec les OneDriveLinks
         $user->delete();
 
-        return redirect()->route('users.index')->with('message', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
 
     // Affichage du formulaire de connexion
@@ -194,13 +210,13 @@ class UserController extends Controller implements HasMiddleware
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
- 
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
- 
+
             return redirect()->intended('/');
         }
- 
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
@@ -210,11 +226,11 @@ class UserController extends Controller implements HasMiddleware
     public function logout(Request $request)
     {
         Auth::logout();
- 
+
         $request->session()->invalidate();
- 
+
         $request->session()->regenerateToken();
- 
+
         return redirect('/login');
     }
 
@@ -222,7 +238,7 @@ class UserController extends Controller implements HasMiddleware
 {
     $allLinks = OneDriveLink::all(); // Tous les liens disponibles
     $userLinks = $user->oneDriveLinks->pluck('id')->toArray(); // Liens associés à cet utilisateur
-     
+
     return inertia('users/userOneDrive', [
         'user' => $user,
         'allLinks' => $allLinks,
@@ -263,39 +279,47 @@ public function updateRoles(Request $request, $id)
 
      // Récupérer les rôles depuis la requête
      $roles = $request->input('roles', []);
- 
+
      // Retirer tous les rôles actuels de l'utilisateur
      foreach ($user->roles as $role) {
          $user->removeRole($role);
      }
- 
+
      // Attribuer les nouveaux rôles à l'utilisateur
      foreach ($roles as $roleId) {
          $role = Role::findOrFail($roleId);
          $user->assignRole($role);
      }
 
-   
- 
+
+
      // Rediriger avec un message de succès
      return redirect()->route('user.roles', $id)->with('success', 'Rôles mis à jour avec succès.');
 }
 
 
-    public function send(Request $request)
-    {
-        // Validation des données
-        $validated = $request->validate([
-            'objet' => 'required|string|max:255',
-            'message' => 'required|string',
-        ]);
+public function send(Request $request)
+{
+    // Validation des données
+    $validated = $request->validate([
+        'objet' => 'required|string|max:255',
+        'message' => 'required|string',
+    ]);
 
-        // Envoyer l'email
+    try {
+        // Tentative d'envoi de l'email
         Mail::to('nkakou@amoaman.com')->send(new SuggestionMail($validated));
-
-        // Retour avec un message de succès
-        return back()->with('message', 'Votre suggestion a été envoyée avec succès.');
+    } catch (\Exception $e) {
+        // Gestion de l'erreur et retour avec message d'erreur
+        return back()->withInput()->withErrors([
+            'email' => 'Une erreur est survenue lors de l\'envoi de votre suggestion. Veuillez réessayer plus tard.',
+        ]);
     }
+
+    // Retour avec un message de succès
+    return back()->with('success', 'Votre suggestion a été envoyée avec succès.');
+}
+
 
     public function notification(){
 

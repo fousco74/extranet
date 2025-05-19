@@ -43,7 +43,7 @@ class OneDriveLinkController extends Controller implements HasMiddleware
         
         $oneDriveLink = OneDriveLink::create($validated);
 
-        return redirect()->route('one-drive-links.index')->with('message', 'Link created successfully.');
+        return redirect()->route('one-drive-links.index')->with('success', 'Lien onedrive créer avec succès.');
     }
 
     public function show(OneDriveLink $oneDriveLink)
@@ -68,7 +68,7 @@ class OneDriveLinkController extends Controller implements HasMiddleware
 
         $oneDriveLink->update($validated);
 
-        return redirect()->route('one-drive-links.index')->with('message', 'Link updated successfully.');
+        return redirect()->route('one-drive-links.index')->with('success', 'Lien onedrive mis à jour avec succès.');
     }
 
     public function destroy(OneDriveLink $oneDriveLink)
@@ -76,6 +76,6 @@ class OneDriveLinkController extends Controller implements HasMiddleware
         $oneDriveLink->users()->detach(); // Supprimer les relations avec les utilisateurs
         $oneDriveLink->delete();
 
-        return redirect()->route('one-drive-links.index')->with('message', 'Link deleted successfully.');
+        return redirect()->route('one-drive-links.index')->with('success', 'Lien onedrive supprimé avec succès.');
     }
 }

@@ -6,8 +6,8 @@
         <a href="/admin/folders/create" class="bg-blue text-white px-4 py-2 rounded text-sm sm:text-base">Ajouter un Dossier</a>
       </div>
       <div class="flex justify-center items-center mb-4">
-        <span v-if="$page.props.flash.message" class="text-center bg-green-100 text-green-800 px-4 py-2 rounded">
-          {{ $page.props.flash.message }}
+        <span v-if="$page.props.flash.success" class="text-center bg-green-100 text-green-800 px-4 py-2 rounded">
+          {{ $page.props.flash.success }}
         </span>
       </div>
       <div v-if="folders.length === 0" class="text-center text-gray-500">

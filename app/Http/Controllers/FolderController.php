@@ -45,7 +45,7 @@ class FolderController extends Controller implements HasMiddleware
 
         Folder::create($request->all());
 
-        return redirect()->route('folders.index')->with('message', 'Folder created successfully.');
+        return redirect()->route('folders.index')->with('success', 'Dossier créer avec succès.');
     }
 
     public function show(Folder $folder)
@@ -67,12 +67,12 @@ class FolderController extends Controller implements HasMiddleware
 
         $folder->update($request->all());
 
-        return redirect()->route('folders.index')->with('message', 'Folder updated successfully.');
+        return redirect()->route('folders.index')->with('success', 'Dossier mis à jour avec succès.');
     }
 
     public function destroy(Folder $folder)
     {
         $folder->delete();
-        return redirect()->route('folders.index')->with('message', 'Folder deleted successfully.');
+        return redirect()->route('folders.index')->with('success', 'Dossier supprimé avec succès.');
     }
 }

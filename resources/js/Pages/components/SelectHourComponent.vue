@@ -4,13 +4,17 @@
             <img :src="timeLogo" alt="icon" class="w-full object-cover">
         </div>
       <select
-        v-model="modelValue"
+        v-model="options[0].time"
         @change="$emit('update:modelValue', $event.target.value)"
         class="w-full  py-2 overflow-auto border-none rounded focus:outline-none"
       >
-        <option v-for="time in timeOptions" :key="time" :value="time">
-          {{ time }}
-        </option>
+      <option
+        v-for="option in options"
+        :key="option.time"
+        :value="option.time"
+      >
+    {{ option.time }}
+  </option>
       </select>
     </div>
   </template>
@@ -41,6 +45,10 @@ defineProps({
     type: String,
     default: null,
   },
+  options: {
+    type: Object,
+    default: null,
+  },
 });
-  const timeOptions = ref(generateTimeOptions()); // Liste des heures disponibles
+// Liste des heures disponibles
   </script>

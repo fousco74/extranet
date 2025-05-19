@@ -27,13 +27,13 @@
             id="profile_link"
             class="hidden"
           />
-          
+
           <!-- Affichage des erreurs -->
           <span v-if="$page.props.errors.profile_link" class="text-red-500 text-sm mt-2">
             {{ $page.props.errors.profile_link }}
           </span>
         </div>
-        
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4">
           <InputComponent
             name="first_name"
@@ -82,7 +82,7 @@
                   {{ $page.props.errors.team }}
                 </div>
             </div>
-        
+
           <InputComponent
             name="phone_number"
             type="tel"
@@ -93,11 +93,59 @@
             inputClass="w-full"
           />
           <InputComponent
-            name="linkedin_link"
-            type="url"
-            :errors="$page.props.errors.linkedin_link"
-            placeholder="Lien LinkedIn"
-            v-model="form.linkedin_link"
+            name="birth_place"
+            type="text"
+            :errors="$page.props.errors.birth_place"
+            placeholder="Lieu de naissance"
+            v-model="form.birth_place"
+            divClass="mb-4 w-full"
+            inputClass="w-full"
+          />
+
+          <InputComponent
+            name="birth_date"
+            type="date"
+            :errors="$page.props.errors.birth_date"
+            placeholder="Date de naissance"
+            label="Date de naissance"
+            v-model="form.birth_date"
+            divClass="mb-4 w-full"
+            inputClass="w-full"
+          />
+
+          <InputComponent
+            name="nationality"
+            type="text"
+            :errors="$page.props.errors.nationality"
+            placeholder="nationalité"
+            v-model="form.nationality"
+            divClass="mb-4 w-full"
+            inputClass="w-full"
+          />
+
+          <div class="mb-4">
+                <select name="marital_status" v-model="form.marital_status" class="border rounded w-full p-2" required>
+                    <option value="">Situation matrimoniale</option>
+                    <option value="Célibataire sans enfant">Célibataire sans enfant</option>
+                    <option value="Célibataire avec enfant">Célibataire avec enfant</option>
+                    <option value="Marié(e) sans enfant">Marié(e) sans enfant</option>
+                    <option value="Marié(e) avec enfant">Marié(e) avec enfant</option>
+                    <option value="Divorcé(e) sans enfant">Divorcé(e) sans enfant</option>
+                    <option value="Divorcé(e) avec enfant">Divorcé(e) avec enfant</option>
+                    <option value="Veuf(ve) sans enfant">Veuf(ve) sans enfant</option>
+                    <option value="Veuf(ve) avec enfant">Veuf(ve) avec enfant</option>
+                </select>
+                <div v-if="$page.props.errors.marital_status" class="text-red-500">
+                    {{ $page.props.errors.marital_status }}
+                </div>
+            </div>
+
+          <InputComponent
+            name="address"
+            type="text"
+            :errors="$page.props.errors.address"
+            placeholder="addresse"
+            v-model="form.address"
             divClass="mb-4 w-full"
             inputClass="w-full"
           />
@@ -129,7 +177,7 @@
             inputClass="w-full"
           />
         </div>
-        
+
         <ButtonComponent
             content="Mettre à jour"
             customClass="bg-blue text-white px-4 mt-6"
@@ -149,16 +197,20 @@ import Dashboard from '../dashboard/dashboard.vue';
 const props = defineProps(["user"]);
 
 const form = ref({
-  first_name: props.user.first_name,
-  last_name: props.user.last_name,
-  email: props.user.email,
-  poste: props.user.poste,
-  team: props.user.team,
-  phone_number: props.user.phone_number,
+  first_name: props.user.first_name || '',
+  last_name: props.user.last_name || '',
+  email: props.user.email || '',
+  poste: props.user.poste || '',
+  team: props.user.team || '',
+  phone_number: props.user.phone_number || '',
   profile_link: null,
-  linkedin_link: props.user.linkedin_link,
   password: null,
-  ordre_team: props.user.ordre_team
+  ordre_team: props.user.ordre_team || '',
+  birth_place : props.user.birth_place || '',
+  birth_date: props.user.birth_date || '',
+  nationality : props.user.nationality || '',
+  marital_status : props.user.marital_status || '',
+  address: props.user.address|| ''
 });
 
 const imagePreview = ref(`/storage/${props.user.profile_link}`)

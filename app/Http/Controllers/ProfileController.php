@@ -31,9 +31,14 @@ class ProfileController extends Controller
             'linkedin_link' => 'nullable|url|max:255',
             'password' => 'nullable|string|min:8|confirmed',
             'ordre_team' => 'nullable|numeric|unique:users,ordre_team,' . $user->id,
+            'birth_place' => 'required|string|max:255',
+            'birth_date' => 'required',
+            'nationality' => 'required|string|max:255',
+            'marital_status' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
         ]);
 
-    
+
         // Gestion du fichier de profil
         if ($request->hasFile('profile_link')) {
             if ($user->profile_link) {
@@ -41,7 +46,7 @@ class ProfileController extends Controller
             }
             $validated['profile_link'] = $request->file('profile_link')->store('profile', 'public');
         }
-    
+
         // Hash du mot de passe
         if (!empty($validated['password'])) {
             $validated['password'] = bcrypt($validated['password']);
@@ -51,11 +56,12 @@ class ProfileController extends Controller
 
         if (empty($validated['profile_link'])) {
             unset($validated['profile_link']);
-        } 
-    
+        }
+
         // Mise à jour de l'utilisateur
         $user->update($validated);
-    
-        return redirect()->route('home')->with('message', 'Utilisateur mis à jour avec succès.');
+
+
+        return redirect()->route('home')->with('success', 'Utilisateur mis à jour avec succès.');
     }
 }

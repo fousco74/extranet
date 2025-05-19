@@ -27,7 +27,7 @@ class ApplicationController extends Controller implements HasMiddleware
         $applications = Application::when($request->search, function ($query) use ($request) {
             $query->where('name', 'like', "%{$request->search}%");
         })
-        ->paginate(10);
+        ->paginate(5);
         return inertia('applications/index', compact('applications'));
     }
 
@@ -57,7 +57,7 @@ class ApplicationController extends Controller implements HasMiddleware
         Application::create($validated);
 
 
-        return redirect()->route('applications.index')->with('message', 'Application ajoutée avec succès.');
+        return redirect()->route('applications.index')->with('success', 'Application ajoutée avec succès.');
     }
 
     // Afficher un formulaire d'édition d'une application
@@ -88,7 +88,7 @@ class ApplicationController extends Controller implements HasMiddleware
 
         $application->update($validated);
 
-        return redirect()->route('applications.index')->with('message', 'Application mise à jour avec succès.');
+        return redirect()->route('applications.index')->with('success', 'Application mise à jour avec succès.');
     }
 
     // Supprimer une application
@@ -100,6 +100,6 @@ class ApplicationController extends Controller implements HasMiddleware
         }
 
         $application->delete();
-        return redirect()->route('applications.index')->with('message', 'Application supprimée avec succès.');
+        return redirect()->route('applications.index')->with('success', 'Application supprimée avec succès.');
     }
 }

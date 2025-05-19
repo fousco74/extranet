@@ -16,7 +16,7 @@ return new class  extends Migration
             $table->string('file_link');
             $table->string('size')->nullable();
             $table->string('extention')->nullable();
-            $table->foreignIdFor(Folder::class)->constrained()->nullable()->onDelete('cascade'); // File belongs to a folder
+            $table->foreignIdFor(Folder::class)->constrained()->nullable()->onDelete('cascade');
             $table->timestamps();
         });
     }

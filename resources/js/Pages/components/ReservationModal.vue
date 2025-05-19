@@ -44,15 +44,17 @@
           <div
             class="w-full sm:w-auto sm:w-42 h-12 rounded border text-center py-3 px-2 bg-white shadow text-sm sm:text-base"
           >
-            {{ dayName }} {{ day }} {{ monthNumber }} {{ year }}
+            {{ dayName }} {{ day }}/{{ monthNumber }}{{ year }}
           </div>
           <SelectHourComponent
             :error="$page.props.errors.startClock"
             v-model="startClock"
+            :options="timeSlots"
           />
           <SelectHourComponent
             :error="$page.props.errors.endClock"
             v-model="endClock"
+            :options="timeSlots"
           />
         </div>
         <!-- Champ Description -->
@@ -88,15 +90,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref , computed} from "vue";
 import { router } from "@inertiajs/vue3";
 import reserverLogo from "../../../../public/icons/reserver.svg";
 import SelectHourComponent from "./SelectHourComponent.vue";
 
-const startClock = ref("09:00");
-const endClock = ref("09:00");
-const title = ref("");
-const description = ref("");
+
+
+
 
 const props = defineProps([
   "day",
@@ -105,7 +106,18 @@ const props = defineProps([
   "message",
   "monthNumber",
   "dayName",
+  "reservations"
 ]);
+
+  // Initialisation de la date actuelle
+  const today = new Date();
+
+const currentDay = ref(today.getDate()); // Jour actuel
+const currentMonth = ref(today.getMonth() + 1); // Mois actuel (0-indexé, donc +1)
+const currentYear = ref(today.getFullYear()); // Année actuelle
+const currentHour = ref(today.getHours()); // Heure actuelle
+const currentMinute = ref(today.getMinutes()); // Minute actuelle
+
 
 const submitReservation = () => {
   router.post("/reservations", {
@@ -120,4 +132,53 @@ const submitReservation = () => {
     endClock: endClock.value,
   });
 };
+
+
+const timeSlots = computed(() => {
+  const times = [];
+  
+  // Créer les créneaux horaires de 9h à 18h, avec les demis
+  for (let h = 9; h <= 18; h++) {
+    times.push({ time: `${h}:00`, isReserved: false, isPast: false });
+    if (h !== 18) times.push({ time: `${h}:30`, isReserved: false, isPast: false });
+  }
+  
+  // Marquer les heures réservées
+  props.reservations.forEach(res => {
+    const start = parseFloat(res.startClock.replace(':', '.'));
+    const end = parseFloat(res.endClock.replace(':', '.'));
+    times.forEach(slot => {
+      const slotTime = parseFloat(slot.time.replace(':', '.'));
+      if (slotTime >= start && slotTime <= end) slot.isReserved = true;
+    });
+  });
+  
+  // Marquer les créneaux passés
+  times.forEach(slot => {
+    const [slotHour, slotMinute] = slot.time.split(":").map(Number);
+
+    // Créer un objet Date pour le créneau horaire
+    const slotDate = new Date(props.year, props.monthNumber, props.day, slotHour, slotMinute);
+
+    // Créer un objet Date pour l'heure actuelle
+    const currentDate = new Date(
+      currentYear.value,
+      currentMonth.value - 1, // Soustraction de 1 car le mois est indexé à partir de 0
+      currentDay.value,
+      currentHour.value,
+      currentMinute.value
+    );
+
+    // Comparer la date actuelle avec le créneau horaire
+    if (slotDate.getTime() < currentDate.getTime()) {
+      slot.isPast = true; // Marque comme passé si la date du créneau est avant l'heure actuelle
+    }
+  });
+
+  return times.filter(slot => !slot.isReserved && !slot.isPast);
+});
+
+console.log("time :",timeSlots.value);
+const title = ref("");
+const description = ref("");
 </script>

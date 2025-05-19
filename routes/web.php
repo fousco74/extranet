@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\TwilioSMSController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserController;
@@ -19,6 +21,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 
 Route::middleware(['web'])->group(function () {
 
@@ -36,6 +40,7 @@ Route::get('/notifications',[UserController::class,'notificationList'])->name('n
 //notification
 Route::get('/users/notification',[UserController::class, 'notification'])->name('vue.notification');
 Route::post('/users/notification',[UserController::class, 'sendNotification'])->name('send.notification');
+Route::get('user/{user}/stats', [DashboardAnalyticsController::class,'showUserStats'])->name('user.stats');
 
 
 
@@ -69,7 +74,25 @@ route::resource('permissions', PermissionController::class);
 
 Route::middleware(['auth'])->group(function () {
 
-//Frontend 
+//projects
+Route::resource('projects',ProjectController::class);
+Route::post('/projects/${projectId}/assign-users', [ProjectController::class, 'assignUsers'])->name('projects.assign-users');
+Route::get('/projects/{projectId}/tasks/create', [TaskController::class, 'create'])->name('projects.tasks.create');
+//tasks
+Route::resource('tasks',TaskController::class);
+Route::post('/tasks/update-status', [TaskController::class, 'updateStatus'])->name('tasks.update-status');
+
+Route::get('/stats', [DashboardAnalyticsController::class, 'show'])->name('stats');
+
+//contracts
+//Route::resource('contracts',ContractController::class);
+//Route::post('contracts/sign', [ContractController::class,'sign'])->name('contracts.sign');
+//Route::get('contracts/{id}/download', [ContractController::class,'download'])->name('contracts.download');
+
+
+
+
+//Frontend
 Route::post('/logout',[UserController::class,'logout'])->name('logout');
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
@@ -86,7 +109,7 @@ route::resource('reservations', ReservationController::class);
 Route::resource('applications', ApplicationController::class);
 Route::get('/reservation/date', [ReservationController::class, 'dateReservation'])->name('reservation.date');
 Route::get('/notifications', function () {
-    
+
     return inertia('Notifications/index');
 })->name('notification.index');
 
@@ -94,16 +117,18 @@ Route::get('/notifications/read/{id}', function (string $id) {
     $notification = Auth::user()->notifications->find($id);
     $notifications = Auth::user()->notifications;
     $notification->markAsRead();
-     
+
     return inertia('Notifications/index', ['selectedNotificationId' => $notification->id, 'notifications' => $notifications]);
 })->name('notifications.read');
+
+
 
 Route::get('/', function (Request $request) {
 
     $city = $request->input('city', "abidjan");
     $weatherApiKey = env('WEATHER_API_KEY'); // La clé API
     $weatherBaseUrl = env('WEATHER_BASE_URL'); // L'URL de base de l'API
-        
+
     // Effectuer la requête API pour récupérer les données météo
     $response = Http::get($weatherBaseUrl, [
         "q" => $city,
@@ -115,7 +140,7 @@ Route::get('/', function (Request $request) {
     $weatherData = $response->json();
 
     $weatherTime = strtolower($weatherData["weather"][0]["main"]);
-    
+
     return Inertia::render('home', ["weatherData","weatherTime" => $weatherTime , $weatherData, "city" => $city]);
 })->name('home');
 
@@ -130,6 +155,8 @@ Route::post('/login',[UserController::class,'authenticate'])->name('authenticate
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
 });
+
+
 
 
 });

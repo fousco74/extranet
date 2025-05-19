@@ -44,10 +44,12 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success')
             ],
             'auth.user' => fn () => $request->user()
-                ? $request->user()->only('id', 'first_name', 'last_name', 'team', 'poste', 'email', 'phone_number', 'profile_link')
-                : null,
+            ? $request->user()->only('id', 'first_name', 'last_name', 'team', 'poste', 'email', 'phone_number', 'profile_link')
+                + ['roles' => $request->user()->getRoleNames()] // Récupérer les rôles de l'utilisateur
+            : null,
+
             'auth.user.notifications' => fn () => $request->user() ? $request->user()->notifications->take(5) : [],
-            'auth.user.unreadNotifications' => fn () => $request->user() ? $request->user()->unreadNotifications : [], 
+            'auth.user.unreadNotifications' => fn () => $request->user() ? $request->user()->unreadNotifications : [],
             'auth.user.permissions' => fn () => $request->user() ? $request->user()->getAllPermissions()->pluck('name') : [],
             'auth.user.permissionsVoir' => fn () => $request->user()
             ? $request->user()
@@ -55,7 +57,7 @@ class HandleInertiaRequests extends Middleware
                 ->filter(fn($permission) => stripos($permission->name, 'voir') !== false)
                 ->pluck('name')
             : [],
-            'routeName' => request()->route()->getName(), 
+            'routeName' => request()->route()->getName(),
             'routePath' => request()->route()->uri(),
 
             'app' => [

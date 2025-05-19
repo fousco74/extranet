@@ -2,6 +2,11 @@ import './bootstrap';
 import { createApp, h } from 'vue'
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy'
+import vClickOutside from 'v-click-outside'
+import '@vueform/multiselect/themes/default.css'
+
+
+
 
 createInertiaApp({
   resolve: name => {
@@ -14,6 +19,7 @@ createInertiaApp({
       .use(Link)
       .use(Head)
       .use(ZiggyVue)
+      .use(vClickOutside)
       .mount(el)
   }
 })

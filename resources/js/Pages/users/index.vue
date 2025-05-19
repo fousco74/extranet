@@ -9,7 +9,7 @@
           {{ $page.props.flash.message }}
         </span>
       </div>
-      
+
       <!-- Vérification si la liste des utilisateurs est vide -->
       <div v-if="users.length === 0" class="text-center text-gray-500">
         <p>Aucun utilisateur trouvé.</p>

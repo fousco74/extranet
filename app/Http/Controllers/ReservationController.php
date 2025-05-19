@@ -78,48 +78,63 @@ class ReservationController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'day' => 'required|integer',
-            'month' => 'required|string',
-            'monthNumber' => 'required|integer',
-            'dayName' => 'required|string',
-            'year' => 'required|integer',
-            'startClock' => 'required|string',
-            'endClock' => 'required|string',
-            'user_id' => 'nullable|string',
-        ]);
-
-        $monthNumber = $validated['monthNumber'] + 1;
-        $currentDate = new \DateTime();
-        $reservationEndDate = new \DateTime("{$validated['year']}-{$monthNumber}-{$validated['day']} {$validated['endClock']}");
-
-        if ($currentDate > $reservationEndDate) {
-            return redirect()->back()->with('message', "La réservation ne peut pas être effectuée pour une date déjà passée.");
+        try {
+            // Validation des données
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'day' => 'required|integer',
+                'month' => 'required|string',
+                'monthNumber' => 'required|integer',
+                'dayName' => 'required|string',
+                'year' => 'required|integer',
+                'startClock' => 'required|string',
+                'endClock' => 'required|string',
+                'user_id' => 'nullable|string',
+            ]);
+    
+            // Calcul de la date de fin
+            $monthNumber = $validated['monthNumber'] + 1;
+            $currentDate = new \DateTime();
+            $reservationEndDate = new \DateTime("{$validated['year']}-{$monthNumber}-{$validated['day']} {$validated['endClock']}");
+    
+            if ($currentDate > $reservationEndDate) {
+                return redirect()->back()->withInput()->with('message', "La réservation ne peut pas être effectuée pour une date déjà passée.");
+            }
+    
+            if ($validated['startClock'] >= $validated['endClock']) {
+                return redirect()->back()->withInput()->with('message', "L'heure de début doit être antérieure à celle de fin.");
+            }
+    
+            $validated['user_id'] = Auth::id();
+    
+            // Vérifie les chevauchements
+            $existingReservation = Reservation::where('day', $validated['day'])
+                ->where('monthNumber', $validated['monthNumber'])
+                ->where('year', $validated['year'])
+                ->where(function ($query) use ($validated) {
+                    $query->whereBetween('startClock', [$validated['startClock'], $validated['endClock']])
+                          ->orWhereBetween('endClock', [$validated['startClock'], $validated['endClock']]);
+                })
+                ->exists();
+    
+            if ($existingReservation) {
+                return redirect()->back()->withInput()->with('message', 'Ce créneau est déjà réservé.');
+            }
+    
+            // Création de la réservation
+            Reservation::create($validated);
+    
+            return redirect()->back()->with('success', 'Réservation effectuée avec succès.');
+    
+        } catch (\Exception $e) {
+            // Log optionnel (à activer si besoin)
+            // Log::error("Erreur de réservation : " . $e->getMessage());
+    
+            return redirect()->back()->withInput()->withErrors([
+                'general' => 'Une erreur est survenue lors de la réservation. Veuillez réessayer.',
+            ]);
         }
-
-        if ($validated['startClock'] >= $validated['endClock']) {
-            return redirect()->back()->with("message", "Le début de l'heure doit être inférieur à la fin.");
-        }
-
-        $validated['user_id'] = Auth::user()->id;
-
-        $existingReservation = Reservation::where('day', $request->day)
-            ->where('monthNumber', $request->monthNumber)
-            ->where('year', $request->year)
-            ->where(function ($query) use ($request) {
-                $query->whereBetween('startClock', [$request->startClock, $request->endClock])
-                      ->orWhereBetween('endClock', [$request->startClock, $request->endClock]);
-            })
-            ->exists();
-
-        if ($existingReservation) {
-            return redirect()->back()->with('message', 'Ce créneau est déjà réservé.');
-        }
-
-        Reservation::create($validated);
-        return redirect()->back()->with('success', 'Réservation effectuée avec succès.');
     }
 
     /**
@@ -145,49 +160,67 @@ class ReservationController extends Controller implements HasMiddleware
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'day' => 'required|integer',
-            'month' => 'required|string',
-            'monthNumber' => 'required|integer',
-            'dayName' => 'required|string',
-            'year' => 'required|integer',
-            'startClock' => 'required|string',
-            'endClock' => 'required|string',
-        ]);
-
-        $reservation = Reservation::findOrFail($id);
-
-        $monthNumber = $validated['monthNumber'] + 1;
-        $currentDate = new \DateTime();
-        $reservationEndDate = new \DateTime("{$validated['year']}-{$monthNumber}-{$validated['day']} {$validated['endClock']}");
-
-        if ($currentDate > $reservationEndDate) {
-            return redirect()->back()->with('message', "La réservation ne peut pas être effectuée pour une date déjà passée.");
+        try {
+            // Validation avec des longueurs maximales
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'day' => 'required|integer',
+                'month' => 'required|string',
+                'monthNumber' => 'required|integer',
+                'dayName' => 'required|string',
+                'year' => 'required|integer',
+                'startClock' => 'required|string',
+                'endClock' => 'required|string',
+            ]);
+    
+            $reservation = Reservation::findOrFail($id);
+    
+            // Vérification de la date
+            $monthNumber = $validated['monthNumber'] + 1;
+            $currentDate = new \DateTime();
+            $reservationEndDate = new \DateTime("{$validated['year']}-{$monthNumber}-{$validated['day']} {$validated['endClock']}");
+    
+            if ($currentDate > $reservationEndDate) {
+                return redirect()->back()->withInput()->with('message', "La réservation ne peut pas être effectuée pour une date déjà passée.");
+            }
+    
+            if ($validated['startClock'] >= $validated['endClock']) {
+                return redirect()->back()->withInput()->with("message", "L'heure de début doit être antérieure à l'heure de fin.");
+            }
+    
+            // Vérifie les chevauchements (hors cette réservation)
+            $existingReservation = Reservation::where('day', $validated['day'])
+                ->where('monthNumber', $validated['monthNumber'])
+                ->where('year', $validated['year'])
+                ->where(function ($query) use ($validated) {
+                    $query->whereBetween('startClock', [$validated['startClock'], $validated['endClock']])
+                          ->orWhereBetween('endClock', [$validated['startClock'], $validated['endClock']]);
+                })
+                ->where('id', '!=', $id)
+                ->exists();
+    
+            if ($existingReservation) {
+                return redirect()->back()->withInput()->with('message', 'Ce créneau est déjà réservé.');
+            }
+    
+            // Mise à jour
+            $reservation->update($validated);
+    
+            return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Gestion des erreurs de validation (retourne automatiquement avec les erreurs)
+            return redirect()->back()->withErrors($e->validator)->withInput();
+    
+        } catch (\Exception $e) {
+            // Autres erreurs imprévues
+            return redirect()->back()->withInput()->withErrors([
+                'general' => 'Une erreur est survenue lors de la mise à jour. Veuillez réessayer.',
+            ]);
         }
-
-        if ($validated['startClock'] >= $validated['endClock']) {
-            return redirect()->back()->with("message", "Le début de l'heure doit être inférieur à la fin.");
-        }
-
-        $existingReservation = Reservation::where('day', $request->day)
-            ->where('monthNumber', $request->monthNumber)
-            ->where('year', $request->year)
-            ->where(function ($query) use ($request) {
-                $query->whereBetween('startClock', [$request->startClock, $request->endClock])
-                      ->orWhereBetween('endClock', [$request->startClock, $request->endClock]);
-            })
-            ->where('id', '!=', $id)
-            ->exists();
-
-        if ($existingReservation) {
-            return redirect()->back()->with('message', 'Ce créneau est déjà réservé.');
-        }
-
-        $reservation->update($validated);
-        return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
     }
+    
 
     /**
      * Remove the specified resource from storage.

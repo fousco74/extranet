@@ -20,12 +20,13 @@ import CardComponent from './components/CardComponent.vue';
 import CalandarComponent from './components/CalandarComponent.vue';
 import { Link } from '@inertiajs/vue3';
 import NavBarComponent from './components/NavBarComponent.vue';
+import FrontendContent from './dashboard/frontendContent.vue';
 </script>
 
 <template>
-    <NavBarComponent></NavBarComponent>
-    <div class="w-full flex justify-center   md:mt-5">
-  <div class="space-x-4 flex mt-8 flex-wrap lg:flex-nowrap">
+  <FrontendContent>
+    <div class="w-full flex justify-center">
+  <div class="space-x-4 flex flex-wrap lg:flex-nowrap">
     <!-- Colonne de gauche -->
     <div class="flex  flex-col  w-full lg:w-[350px] space-y-4  sm:items-center sm:justify-center">
       <!-- Première ligne -->
@@ -34,7 +35,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
           <CardComponent
             imgWiddth="lg:w-[100px]"
             content="Organigramme"
-            customClass="h-[150px] w-[180px] max-sm:h-[150px] max-sm:w-[180px] max-lg:w-[380px] max-lg:h-[350px] border"
+            customClass="h-[150px] w-[180px] bg-white max-sm:h-[150px] max-sm:w-[180px] max-lg:w-[380px] max-lg:h-[350px] border"
             :logoUrl="logoUrlOrganigramme"
           >
           </CardComponent>
@@ -47,7 +48,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
       </div>
 
       <!-- Calendrier -->
-      <div class="w-full text-center max-lg:w-[90%] sm:w-[720px] lg:w-full   max-lg:mx-4 border">
+      <div class="w-full  bg-white text-center max-lg:w-[90%] sm:w-[720px] lg:w-full   max-lg:mx-4 border">
         <h1 class="text-blue_white font-semibold py-1">Reservation de la salle</h1>
         <CalandarComponent></CalandarComponent>
       </div>
@@ -62,7 +63,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
           <Link :href="route('membersList')" method="get">
             <CardComponent
               content="Tronbinoscope"
-              customClass="lg:size-[150px] sm:size-[350px] w-full border"
+              customClass="lg:size-[150px]  bg-white sm:size-[350px] w-full border"
               :logoUrl="logoUrlTeam"
             >
             </CardComponent>
@@ -71,7 +72,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
             <CardComponent
               imgWiddth="w-[100px]"
               content="Réglement interieur"
-              customClass="lg:size-[150px] sm:size-[350px] w-full border"
+              customClass="lg:size-[150px]  bg-white sm:size-[350px] w-full border"
               :logoUrl="logoUrlReglement"
             >
             </CardComponent>
@@ -93,7 +94,7 @@ import NavBarComponent from './components/NavBarComponent.vue';
           <Link :href="route('suggestion')" method="get" class="abosolute sm:justify-center sm:flex lg:block">
             <CardComponent
               imgWiddth="w-[100px] "
-              customClass="lg:h-[320px] sm:h-[250px] sm:w-[720px] lg:w-[150px] border w-[100%] border"
+              customClass="lg:h-[320px]  bg-white sm:h-[250px] sm:w-[720px] lg:w-[150px] border w-[100%] border"
               content="Suggestion"
               :logoUrl="logoUrluseFullBox"
             >
@@ -127,6 +128,8 @@ import NavBarComponent from './components/NavBarComponent.vue';
     </div>
   </div>
 </div>
+
+</FrontendContent>
 
 </template>
 

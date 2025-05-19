@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenue chez AMOAMAN et ASSOCIE</title>
+    <title>Bienvenue chez AMOAMAN et ASSOCIES</title>
 </head>
 <body class="bg-gray-100 font-sans">
     <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg mt-10 p-6">
         {{-- En-tête avec le logo et le nom de l’entreprise --}}
         <div class="text-center mb-5">
             <img src="{{ asset('logos/LogoAMOAMANnew.png') }}" alt="AMOAMAN et ASSOCIE" class="mx-auto w-36">
-            <h1 class="text-2xl font-bold text-gray-800 mt-2">AMOAMAN et ASSOCIE</h1>
+            <h1 class="text-2xl font-bold text-gray-800 mt-2">AMOAMAN et ASSOCIES</h1>
         </div>
 
         {{-- Objet du mail --}}
         <h2 class="text-xl font-bold text-gray-600 mb-5">
-            Bienvenue chez AMOAMAN et ASSOCIE !
+            Bienvenue chez AMOAMAN et ASSOCIES !
         </h2>
 
         {{-- Contenu du message --}}
@@ -37,8 +37,8 @@
             </p>
 
             <p class="mb-4">
-                Pour vous connecter, veuillez cliquer sur le lien suivant : 
-                <a href="https://extranet-production.up.railway.app" class="text-blue-600 underline">Accéder à mon espace</a>.
+                Pour vous connecter, veuillez cliquer sur le lien suivant :
+                <a href="https://extranet.amoaman.com" class="text-blue-600 underline">Accéder à mon espace</a>.
             </p>
 
             <p class="mb-4">
@@ -52,7 +52,7 @@
         {{-- Pied de page --}}
         <div class="text-center text-sm text-gray-600">
             Merci pour votre confiance,<br>
-            <strong>AMOAMAN et ASSOCIE</strong>
+            <strong>AMOAMAN et ASSOCIES</strong>
         </div>
 
         {{-- Note de sécurité --}}

@@ -120,7 +120,7 @@ const showNotify = ref(false);
       <div class="h-full px-4 py-4 overflow-hidden">
             <div class="flex flex-col items-center mb-6">
               <a :href="route('dashboard.analytics')">
-                <img src="/public/logos/AMOAMANBLANC.webp" class="h-24 mb-3" alt="Logo" />
+                <img src="/public/logos/amoaman.webp" class="h-24 mb-3" alt="Logo" />
               </a>
            </div>
         <ul class="h-[500px] overflow-scroll scrollbar-hide">

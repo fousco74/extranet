@@ -75,11 +75,61 @@
             inputClass="w-full"
           />
           <InputComponent
-            name="linkedin_link"
-            type="url"
-            :errors="$page.props.errors.linkedin_link"
-            placeholder="Lien LinkedIn"
-            v-model="form.linkedin_link"
+            name="birth_place"
+            label="Date de naissance"
+            type="text"
+            :errors="$page.props.errors.birth_place"
+            placeholder="Lieu de naissance"
+            v-model="form.birth_place"
+            divClass="mb-4 w-full"
+            inputClass="w-full"
+          />
+
+          <InputComponent
+            name="birth_date"
+            label="Date de naissance"
+            type="date"
+            :errors="$page.props.errors.birth_date"
+            placeholder="Date de naissance"
+            v-model="form.birth_date"
+            divClass="mb-4 w-full"
+            inputClass="w-full"
+          />
+
+          <InputComponent
+            name="nationality"
+            type="text"
+            :errors="$page.props.errors.nationality"
+            placeholder="nationalité"
+            v-model="form.nationality"
+            divClass="mb-4 w-full"
+            inputClass="w-full"
+          />
+
+          <div class="mb-4">
+                <select name="marital_status" v-model="form.marital_status" class="border rounded w-full p-2" required>
+                    <option value="">Situation matrimoniale</option>
+                    <option value="Célibataire sans enfant">Célibataire sans enfant</option>
+                    <option value="Célibataire avec enfant">Célibataire avec enfant</option>
+                    <option value="Marié(e) sans enfant">Marié(e) sans enfant</option>
+                    <option value="Marié(e) avec enfant">Marié(e) avec enfant</option>
+                    <option value="Divorcé(e) sans enfant">Divorcé(e) sans enfant</option>
+                    <option value="Divorcé(e) avec enfant">Divorcé(e) avec enfant</option>
+                    <option value="Veuf(ve) sans enfant">Veuf(ve) sans enfant</option>
+                    <option value="Veuf(ve) avec enfant">Veuf(ve) avec enfant</option>
+                </select>
+                <div v-if="$page.props.errors.marital_status" class="text-red-500">
+                    {{ $page.props.errors.marital_status }}
+                </div>
+            </div>
+
+
+          <InputComponent
+            name="address"
+            type="text"
+            :errors="$page.props.errors.address"
+            placeholder="addresse"
+            v-model="form.address"
             divClass="mb-4 w-full"
             inputClass="w-full"
           />
@@ -136,10 +186,14 @@ const form = useForm({
   team: "",
   phone_number: null,
   profile_link: null,
-  linkedin_link: null,
   password: null,
   password_confirmation: null,
-  ordre_team: null
+  ordre_team: null,
+  birth_place : null,
+  birth_date: null,
+  nationality : null,
+  marital_status : null,
+  address: null
 });
 
 const fileChange = (file) => {

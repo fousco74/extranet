@@ -1,0 +1,118 @@
+<div className="task-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row md:items-center justify-between ${isToday ? 'today-highlight' : ''} priority-${task.priority} status-${task.status}">
+    <div class="task-info mb-3 md:mb-0 md:mr-4 flex-1">
+        <div class="flex items-start">
+            <button class="status-toggle mr-3 mt-1 ${statusColor}" data-id="${task.id}">
+                <i class="${statusIcon} text-lg"></i>
+            </button>
+            <div>
+                <h3 class="font-semibold text-gray-800">${task.title}</h3>
+                <p class="text-gray-600 text-sm">${task.description}</p>
+                <div class="flex flex-wrap items-center mt-2 gap-2">
+                    <span class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700">${task.category}</span>
+                    ${isOverdue ? '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700">En retard</span>' : ''}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="task-meta flex items-center space-x-4">
+        <div class="text-center">
+            <p class="text-xs text-gray-500">Échéance</p>
+            <p class="text-sm font-medium ${isOverdue ? 'text-red-500' : 'text-gray-700'}">${formattedDate}</p>
+        </div>
+
+        <div class="text-center hidden sm:block">
+            <p class="text-xs text-gray-500">Priorité</p>
+            <p class="text-sm font-medium ${priorityColor}"><i class="${priorityIcon} mr-1"></i>${priorityText}</p>
+        </div>
+
+        <div class="text-center hidden sm:block">
+            <p class="text-xs text-gray-500">Statut</p>
+            <p class="text-sm font-medium ${statusColor}">${statusText}</p>
+        </div>
+
+        <button class="task-actions p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+    </div>
+</div>
+
+
+<script>
+    const getTodayDate = computed(
+    () => {
+    const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+}
+)
+
+     let priorityIcon, priorityText, priorityColor;
+            if (task.priority === 'high') {
+                priorityIcon = 'fas fa-exclamation-circle';
+                priorityText = 'Haute';
+                priorityColor = 'text-red-500';
+            } else if (task.priority === 'medium') {
+                priorityIcon = 'fas fa-exclamation';
+                priorityText = 'Moyenne';
+                priorityColor = 'text-yellow-500';
+            } else {
+                priorityIcon = 'fas fa-arrow-down';
+                priorityText = 'Basse';
+                priorityColor = 'text-green-500';
+            }
+
+            // Icône de statut
+            let statusIcon, statusText, statusColor;
+            if (task.status === 'todo') {
+                statusIcon = 'far fa-circle';
+                statusText = 'À faire';
+                statusColor = 'text-gray-500';
+            } else if (task.status === 'inprogress') {
+                statusIcon = 'fas fa-spinner';
+                statusText = 'En cours';
+                statusColor = 'text-blue-500';
+            } else {
+                statusIcon = 'fas fa-check-circle';
+                statusText = 'Terminée';
+                statusColor = 'text-green-500';
+            }
+
+            // Formatage de la date
+            const dueDate = new Date(task.dueDate);
+            const formattedDate = dueDate.toLocaleDateString('fr-FR', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short'
+            });
+
+            // Déterminer si la tâche est en retard
+            const today = new Date(getTodayDate());
+            const isOverdue = dueDate < today && task.status !== 'done';
+
+
+
+ // Gestion du basculement du statut
+ document.addEventListener('click', function(e) {
+                if (e.target.closest('.status-toggle')) {
+                    const taskId = parseInt(e.target.closest('.status-toggle').getAttribute('data-id'));
+                    const task = tasks.find(t => t.id === taskId);
+
+                    // Changer le statut
+                    if (task.status === 'todo') {
+                        task.status = 'inprogress';
+                    } else if (task.status === 'inprogress') {
+                        task.status = 'done';
+                    } else {
+                        task.status = 'todo';
+                    }
+
+                    // Réafficher les tâches
+                    const activeFilter = document.querySelector('.filter-active');
+                    displayTasks(activeFilter ? activeFilter.getAttribute('data-filter') : 'all');
+                }
+            });
+
+</script>
