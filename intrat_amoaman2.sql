@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 27 mai 2025 à 17:58
--- Version du serveur : 9.1.0
--- Version de PHP : 8.3.14
+-- Généré le : lun. 20 jan. 2025 à 11:06
+-- Version du serveur : 8.3.0
+-- Version de PHP : 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,14 +30,14 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `applications`;
 CREATE TABLE IF NOT EXISTS `applications` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `logo` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `link` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(191) NOT NULL,
+  `logo` varchar(191) NOT NULL,
+  `description` text,
+  `link` varchar(191) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `applications`
@@ -55,11 +55,11 @@ INSERT INTO `applications` (`id`, `name`, `logo`, `description`, `link`, `create
 
 DROP TABLE IF EXISTS `cache`;
 CREATE TABLE IF NOT EXISTS `cache` (
-  `key` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `key` varchar(191) NOT NULL,
+  `value` mediumtext NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `cache`
@@ -76,11 +76,11 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE IF NOT EXISTS `cache_locks` (
-  `key` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `owner` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `key` varchar(191) NOT NULL,
+  `owner` varchar(191) NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -91,15 +91,15 @@ CREATE TABLE IF NOT EXISTS `cache_locks` (
 DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_general_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_general_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `uuid` varchar(191) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -110,16 +110,16 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE IF NOT EXISTS `files` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `file_link` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `size` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `extention` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(191) DEFAULT NULL,
+  `file_link` varchar(191) NOT NULL,
+  `size` varchar(191) DEFAULT NULL,
+  `extention` varchar(191) DEFAULT NULL,
   `folder_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `files_folder_id_foreign` (`folder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `files`
@@ -140,11 +140,11 @@ INSERT INTO `files` (`id`, `name`, `file_link`, `size`, `extention`, `folder_id`
 DROP TABLE IF EXISTS `folders`;
 CREATE TABLE IF NOT EXISTS `folders` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(191) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `folders`
@@ -164,15 +164,15 @@ INSERT INTO `folders` (`id`, `name`, `created_at`, `updated_at`) VALUES
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE IF NOT EXISTS `jobs` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `queue` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `queue` varchar(191) NOT NULL,
+  `payload` longtext NOT NULL,
   `attempts` tinyint UNSIGNED NOT NULL,
   `reserved_at` int UNSIGNED DEFAULT NULL,
   `available_at` int UNSIGNED NOT NULL,
   `created_at` int UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   KEY `jobs_queue_index` (`queue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -182,18 +182,18 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 DROP TABLE IF EXISTS `job_batches`;
 CREATE TABLE IF NOT EXISTS `job_batches` (
-  `id` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(191) NOT NULL,
+  `name` varchar(191) NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `options` mediumtext COLLATE utf8mb4_general_ci,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -204,10 +204,10 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `migration` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `migration` varchar(191) NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `migrations`
@@ -218,19 +218,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '0001_01_01_000001_create_cache_table', 1),
 (3, '0001_01_01_000002_create_jobs_table', 1),
 (4, '2024_11_20_095420_create_one_drive_links_table', 1),
-(5, '2024_11_20_095422_create_folders_table', 1),
-(6, '2024_11_20_095423_create_files_table', 1),
-(7, '2024_11_27_123247_create_reservations_table', 1),
-(8, '2024_12_02_131045_create_applications_table', 1),
-(9, '2024_12_06_122006_create_permission_tables', 1),
-(10, '2024_12_08_124125_create_notifications_table', 1),
-(11, '2025_04_16_101055_create_projects_table', 1),
-(12, '2025_04_16_120501_create_project_user_table', 1),
-(13, '2025_04_16_124643_create_tasks_table', 1),
-(14, '2025_04_16_154652_add_nature_to_projects_table', 1),
-(15, '2025_04_18_113543_task_user', 1),
-(16, '2025_05_09_110042_create_contracts_table', 1),
-(17, '2025_05_09_111517_create_articles_table', 1);
+(5, '2024_11_20_095421_create_files_table', 1),
+(6, '2024_11_20_095422_create_folders_table', 1),
+(7, '2024_11_27_123247_create_reservations_table', 2),
+(8, '2024_12_02_131045_create_applications_table', 3),
+(9, '2024_12_06_122006_create_permission_tables', 4),
+(10, '2024_12_08_124125_create_notifications_table', 5);
 
 -- --------------------------------------------------------
 
@@ -241,11 +234,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 DROP TABLE IF EXISTS `model_has_permissions`;
 CREATE TABLE IF NOT EXISTS `model_has_permissions` (
   `permission_id` bigint UNSIGNED NOT NULL,
-  `model_type` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `model_type` varchar(191) NOT NULL,
   `model_id` bigint UNSIGNED NOT NULL,
   PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
   KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -256,11 +249,11 @@ CREATE TABLE IF NOT EXISTS `model_has_permissions` (
 DROP TABLE IF EXISTS `model_has_roles`;
 CREATE TABLE IF NOT EXISTS `model_has_roles` (
   `role_id` bigint UNSIGNED NOT NULL,
-  `model_type` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `model_type` varchar(191) NOT NULL,
   `model_id` bigint UNSIGNED NOT NULL,
   PRIMARY KEY (`role_id`,`model_id`,`model_type`),
   KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 --
 -- Déchargement des données de la table `model_has_roles`
@@ -280,17 +273,17 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 
 DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE IF NOT EXISTS `notifications` (
-  `id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `type` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `notifiable_type` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` char(36) NOT NULL,
+  `type` varchar(191) NOT NULL,
+  `notifiable_type` varchar(191) NOT NULL,
   `notifiable_id` bigint UNSIGNED NOT NULL,
-  `data` text COLLATE utf8mb4_general_ci NOT NULL,
+  `data` text NOT NULL,
   `read_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -301,21 +294,21 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 DROP TABLE IF EXISTS `one_drive_links`;
 CREATE TABLE IF NOT EXISTS `one_drive_links` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `link` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `link` varchar(191) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `one_drive_links`
 --
 
 INSERT INTO `one_drive_links` (`id`, `name`, `link`, `created_at`, `updated_at`) VALUES
-(4, 'ADMINISTRATION PROD SENEGA', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120401&cid=5392990CC5E6BBD0', '2025-01-10 17:45:55', '2025-01-10 17:45:55'),
-(5, 'COMPTABILITE', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120368&cid=5392990CC5E6BBD0', '2025-01-10 17:47:05', '2025-01-10 17:47:05'),
 (6, 'POLE ERP', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120353&cid=5392990CC5E6BBD0', '2025-01-10 17:48:06', '2025-01-10 17:48:06'),
+(5, 'COMPTABILITE', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120368&cid=5392990CC5E6BBD0', '2025-01-10 17:47:05', '2025-01-10 17:47:05'),
+(4, 'ADMINISTRATION PROD SENEGA', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120401&cid=5392990CC5E6BBD0', '2025-01-10 17:45:55', '2025-01-10 17:45:55'),
 (7, 'FACTURATION', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120359&cid=5392990CC5E6BBD0', '2025-01-10 17:48:23', '2025-01-10 17:48:23'),
 (8, 'POLE AGENCE WEB', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120360&cid=5392990CC5E6BBD0', '2025-01-10 17:48:46', '2025-01-10 17:48:46'),
 (9, 'POLE PROJET', 'https://onedrive.live.com/?id=5392990CC5E6BBD0%2120370&cid=5392990CC5E6BBD0', '2025-01-10 17:49:09', '2025-01-10 17:49:09'),
@@ -337,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `one_drive_link_user` (
   PRIMARY KEY (`id`),
   KEY `one_drive_link_user_user_id_foreign` (`user_id`),
   KEY `one_drive_link_user_one_drive_link_id_foreign` (`one_drive_link_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -347,11 +340,11 @@ CREATE TABLE IF NOT EXISTS `one_drive_link_user` (
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
-  `email` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `token` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(191) NOT NULL,
+  `token` varchar(191) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -362,13 +355,13 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE IF NOT EXISTS `permissions` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `guard_name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `guard_name` varchar(191) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 --
 -- Déchargement des données de la table `permissions`
@@ -413,82 +406,27 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 -- --------------------------------------------------------
 
 --
--- Structure de la table `projects`
---
-
-DROP TABLE IF EXISTS `projects`;
-CREATE TABLE IF NOT EXISTS `projects` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `status` varchar(191) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'planned',
-  `type` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `nature` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `priority` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `start_date` date NOT NULL,
-  `costumer_name` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `end_date` date NOT NULL,
-  `completed_at` date DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
-
---
--- Déchargement des données de la table `projects`
---
-
-INSERT INTO `projects` (`id`, `title`, `description`, `status`, `type`, `nature`, `priority`, `start_date`, `costumer_name`, `end_date`, `completed_at`, `created_at`, `updated_at`) VALUES
-(5, 'Projet 1', 'Desc Projet 1', 'planned', 'development', 'interne', 'medium', '2025-05-20', NULL, '2025-06-20', NULL, '2025-05-19 18:08:06', '2025-05-19 18:08:06');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `project_user`
---
-
-DROP TABLE IF EXISTS `project_user`;
-CREATE TABLE IF NOT EXISTS `project_user` (
-  `project_id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `role` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`project_id`,`user_id`),
-  KEY `project_user_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
-
---
--- Déchargement des données de la table `project_user`
---
-
-INSERT INTO `project_user` (`project_id`, `user_id`, `role`, `created_at`, `updated_at`) VALUES
-(5, 5, 'Développeur Fullstack', '2025-05-19 18:08:06', '2025-05-19 18:08:06');
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `reservations`
 --
 
 DROP TABLE IF EXISTS `reservations`;
 CREATE TABLE IF NOT EXISTS `reservations` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `monthNumber` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `dayName` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `day` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `month` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `year` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `startClock` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `endClock` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `day` varchar(191) NOT NULL,
+  `month` varchar(191) NOT NULL,
+  `year` varchar(191) NOT NULL,
+  `startClock` varchar(191) NOT NULL,
+  `endClock` varchar(191) NOT NULL,
   `user_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `description` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `monthNumber` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `dayName` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `reservations_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -499,13 +437,13 @@ CREATE TABLE IF NOT EXISTS `reservations` (
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `guard_name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `guard_name` varchar(191) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 --
 -- Déchargement des données de la table `roles`
@@ -528,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `role_has_permissions` (
   `role_id` bigint UNSIGNED NOT NULL,
   PRIMARY KEY (`permission_id`,`role_id`),
   KEY `role_has_permissions_role_id_foreign` (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 --
 -- Déchargement des données de la table `role_has_permissions`
@@ -602,62 +540,23 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(191) NOT NULL,
   `user_id` bigint UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_general_ci,
-  `payload` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text,
+  `payload` longtext NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
   KEY `sessions_last_activity_index` (`last_activity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `sessions`
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('GVCIv85UEaolbTdpwz2Ec7sO13MYZ1HSNMCi13do', 5, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiYlo5d1JhYmFoM2o0QUlib0VIQU5pTkR2S3ZWdzBaUnF4UW9CV1BmcyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM3OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvcHJvamVjdHMvY3JlYXRlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6NTtzOjIyOiJQSFBERUJVR0JBUl9TVEFDS19EQVRBIjthOjA6e319', 1747678175);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `tasks`
---
-
-DROP TABLE IF EXISTS `tasks`;
-CREATE TABLE IF NOT EXISTS `tasks` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `project_id` bigint UNSIGNED NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `status` varchar(191) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'todo',
-  `priority` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `step_project` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `done_at` date DEFAULT NULL,
-  `delais` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `tasks_project_id_foreign` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `task_user`
---
-
-DROP TABLE IF EXISTS `task_user`;
-CREATE TABLE IF NOT EXISTS `task_user` (
-  `task_id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`task_id`,`user_id`),
-  KEY `task_user_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+('vAUDRaGSXdhGZgPqnae7S8m3llAq2CBu0kec4yrf', 5, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoieWc4V3FWNXY0TXhOY2lrejJOZjQ2U3hJQVh5WEdWRWpUd3NreElYeCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjIxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo1O30=', 1737371161);
 
 -- --------------------------------------------------------
 
@@ -668,59 +567,49 @@ CREATE TABLE IF NOT EXISTS `task_user` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
+  `first_name` varchar(191) NOT NULL,
+  `last_name` varchar(191) NOT NULL,
+  `email` varchar(191) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `team` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `poste` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `phone_number` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `profile_link` varchar(191) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ordre_team` int DEFAULT NULL,
-  `birth_place` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `birth_date` date NOT NULL,
-  `nationality` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `marital_status` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `address` varchar(191) COLLATE utf8mb4_general_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(191) NOT NULL,
+  `team` varchar(191) NOT NULL,
+  `poste` varchar(191) NOT NULL,
+  `phone_number` varchar(191) DEFAULT NULL,
+  `profile_link` varchar(191) DEFAULT NULL,
+  `linkedin_link` varchar(191) DEFAULT NULL,
+  `ordre_team` varchar(191) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `email_verified_at`, `password`, `team`, `poste`, `phone_number`, `profile_link`, `ordre_team`, `birth_place`, `birth_date`, `nationality`, `marital_status`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
-(5, 'Fousseni', 'KONE', 'fkone@amoaman.com', NULL, '$2y$12$UHDLFUpXa7xBKDs5hvBiKuZecHyUfZaeoLnesyG0onkRCEsi6/FxK', 'interne', 'Developeur Backend', '0574179718', 'profile/bUaDS1i0uyXrKp2YzKwBWsWbk6MVv1SMphk9S3DX.png', 15, 'abobo', '2001-10-06', 'ivoirienne', 'Célibataire sans enfant', 'ABIDJAN', NULL, '2024-11-25 11:24:05', '2025-05-09 14:49:33'),
-(6, 'Ousman', 'SOW A.', 'asow@amoaman.com', NULL, '$2y$12$tL3gtluCswzff7a1Ta256.NHiWAF7WIS6oxxHBN9uMwrxIB9OWGCC', 'interne', 'Directeur Associé', '0574179718', NULL, 1, '', '0000-00-00', '', '', '', NULL, '2024-11-25 11:51:16', '2025-01-10 13:51:17'),
-(7, 'Amoakon', 'DIHYÉ', 'damoakon@amoaman.com', NULL, '$2y$12$v2QZIufSsaB4q1BvBR./RuEYiWG6qhz8H69GqM..tqZiijVt3fzkG', 'interne', 'Fondateur', '0788652585', 'profile/IyOTouqqFgPpSpVQkpbhY6eSj5M4P678P52f0hox.png', 2, '', '0000-00-00', '', '', '', NULL, '2024-11-25 11:53:19', '2025-01-10 15:38:36'),
-(8, 'Mamadou', 'SOW', 'msow@amoaman.com', NULL, '$2y$12$7RBmZ8ZM6jF.6F4jKbxMA.OhIWnSGHMj1ybCt4K/1V4WucsPIACVK', 'interne', 'Directeur Associé', NULL, NULL, 3, '', '0000-00-00', '', '', '', NULL, '2024-11-25 11:57:42', '2024-11-25 11:57:42'),
-(9, 'Natacha', 'KAKOU', 'nkakou@amoaman.com', NULL, '$2y$12$rxtfBVjTTlcH3adOOdZJBePF4WnflxeyHdJraRrMIaXvuCiTMNrDW', 'interne', 'Resp. Ressources Humaines', '0707326644', 'profile/zz0jwxYNnhfilpn2R9gguEI3B2BOdHQe2VNZXBdr.png', 4, '', '0000-00-00', '', '', '', NULL, '2024-11-25 11:59:00', '2024-11-25 11:59:00'),
-(10, 'Hariette', 'GHON-TAY', 'hghariette@amoaman.com', NULL, '$2y$12$0rFhbLkazvs9yoKZ4vSGie3hfM3l7fmSJN7ysV2sMpKg.5ITwQr6W', 'interne', 'Talent Acquisition Specialist', '0711211104', 'profile/CHDTBVMZjIVaJRA8E4nj7WpvoRJaFYKocgd7TXfq.png', 5, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:00:36', '2024-11-25 12:00:36'),
-(11, 'Seraïa', 'ANOMA', 'eanoma@amoaman.com', NULL, '$2y$12$qrDvFcfxwCk0ncNOmsTQrusLqZI1crSRoL18uJIRYBLbgJ7BoSuey', 'interne', 'Chargé d\'Ac', '0141916817', 'profile/DEInJDhVAoxWU4ciaO8YayBZrmc1LN5pEXecJeTS.png', 6, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:02:31', '2024-11-25 12:02:31'),
-(12, 'Solange', 'KOUAKOU', 'skouakou@amaoman.com', NULL, '$2y$12$cWVYgMzYBHyxjdj.EuOd0uE0.HI2azo94MWqwJp64Su9grykTe70K', 'interne', 'Resp. Facturation (ADV)', '0574887280', 'profile/F61wMQNc3Xj2vyybggVurydAyB7BhaSjyIKoBFjj.png', 7, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:04:06', '2024-11-25 12:04:06'),
-(13, 'Michel', 'KOBRI', 'mkobri@amoaman.com', NULL, '$2y$12$1j.biADvdxZl2msY7VIobuKhfNK4VtpQdhVIi6kP13x6y7qx95MQW', 'interne', 'Resp. Comptable & Fiscal', '0758561358', 'profile/mf23faU7Cn2jFN43Z1ig3FRBdhg9CMfcogxUhMoy.png', 8, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:06:09', '2024-11-25 12:06:09'),
-(14, 'Nouho', 'DIABAGATE', 'ndiabagate@amoaman.com', NULL, '$2y$12$n1Loy5ThdaMFCGZPm3xNx.iZixOfJyfWxb38cx1yn0b.7MJTNNSBi', 'interne', 'Assistant Comptable', '0102390244', 'profile/T6YdcocZmcWvaAHOnaYa6k0DlLHoQSVeSPAocShv.png', 9, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:10:05', '2024-11-25 12:10:05'),
-(15, 'Karel', 'KONAN', 'kkonan@amoaman.com', NULL, '$2y$12$XjO1gE.dmRKF5myytV/2TOOSRzUc4.Na/WeQ7PvTjWNWMDCOmbx5O', 'interne', 'Assistante cheffe de projet IT', '0759784335', 'profile/NZgh9ovDFVKkjsXDHSTuShKKY4HdTqHxceAoco2d.png', 10, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:12:44', '2024-11-25 12:12:44'),
-(16, 'Boris Dassiji', 'Siewe', 'bsiewe@amoaman.com', NULL, '$2y$12$47YZ0a5kw16vdZMVpNdI7.noi2D8kYQ4DVDo8HYWm6l8cbT.iOY2q', 'interne', 'Designer UI', '237 699 621 132', 'profile/kC1In1TcNIcFMhB99HTab1ypLUdCXUAjWAG6RhZm.png', 11, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:15:23', '2024-11-25 12:15:23'),
-(17, 'Laurie-anne', 'GRANT', 'lgrant@amoaman.com', NULL, '$2y$12$bAcA9j0TlK4zD5lXvqshqeFFM4FXuGYoiaPqKEHTpcUO1axJCFRce', 'interne', 'UX/UI Designer', '0707182904', 'profile/pWN6jDT9LA5AqDlAjfxuvXeXdjqu09mN3d7tVADn.png', 12, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:17:16', '2024-11-27 10:33:49'),
-(18, 'Francklin', 'KONAN', 'fkonan@amoaman.com', NULL, '$2y$12$8ElPC.QFQ5gNUL8ORiIdp.L2kPGy0CfOFHSpBcwFqxrvOYd76ZqIu', 'interne', 'Admin Réseaux & Sécurité', '0709813123', 'profile/aCdnR44ZV4Y1ZuXAcTMm81tp6L6csOVLduFZXbhR.png', 13, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:18:55', '2024-11-25 12:18:55'),
-(19, 'Ange Cedrick', 'N\'ZI', 'acnzi2@amoaman.com', NULL, '$2y$12$25Be5QxtuNkLchF0tgZuOOgzuCpXP//aDVXKB/l7Viy8fdI4EGsRe', 'interne', 'Consultant DataViz', '0173304687', 'profile/4DQfy7zFo1RVXiNJkry37ZoVnMtEYX6A05CVNxTw.png', 14, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:20:32', '2024-11-25 12:20:32'),
-(20, 'Micheal', 'ADOPO', 'Jadopo@amoaman.com', NULL, '$2y$12$akfww6L4GEgObkHPolToPebqMtVwUWw4OyUhhoFl/TZHrxzDaBpdq', 'interne', 'Consultant ERP', '0153858288', 'profile/XrScSKJIi0V88nB0lPLTwh6jsdQW0VChgfGelRfR.png', 16, '', '0000-00-00', '', '', '', NULL, '2024-11-25 12:22:15', '2024-11-25 12:22:15');
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `email_verified_at`, `password`, `team`, `poste`, `phone_number`, `profile_link`, `linkedin_link`, `ordre_team`, `remember_token`, `created_at`, `updated_at`) VALUES
+(6, 'Ousman', 'SOW A.', 'asow@amoaman.com', NULL, '$2y$12$tL3gtluCswzff7a1Ta256.NHiWAF7WIS6oxxHBN9uMwrxIB9OWGCC', 'interne', 'Directeur Associé', '0574179718', NULL, NULL, '1', NULL, '2024-11-25 11:51:16', '2025-01-10 13:51:17'),
+(5, 'Fousseni', 'KONE', 'fkone@amoaman.com', NULL, '$2y$12$UHDLFUpXa7xBKDs5hvBiKuZecHyUfZaeoLnesyG0onkRCEsi6/FxK', 'interne', 'Developeur Backend', '0574179718', 'profile/JlJTecxuiaSvIXj8RZPJV9GE0mK0AQZv9FAug5oN.png', NULL, '15', NULL, '2024-11-25 11:24:05', '2025-01-16 17:45:54'),
+(7, 'Amoakon', 'DIHYÉ', 'damoakon@amoaman.com', NULL, '$2y$12$v2QZIufSsaB4q1BvBR./RuEYiWG6qhz8H69GqM..tqZiijVt3fzkG', 'interne', 'Fondateur', '0788652585', 'profile/IyOTouqqFgPpSpVQkpbhY6eSj5M4P678P52f0hox.png', NULL, '2', NULL, '2024-11-25 11:53:19', '2025-01-10 15:38:36'),
+(8, 'Mamadou', 'SOW', 'msow@amoaman.com', NULL, '$2y$12$7RBmZ8ZM6jF.6F4jKbxMA.OhIWnSGHMj1ybCt4K/1V4WucsPIACVK', 'interne', 'Directeur Associé', NULL, NULL, NULL, '3', NULL, '2024-11-25 11:57:42', '2024-11-25 11:57:42'),
+(9, 'Natacha', 'KAKOU', 'nkakou@amoaman.com', NULL, '$2y$12$rxtfBVjTTlcH3adOOdZJBePF4WnflxeyHdJraRrMIaXvuCiTMNrDW', 'interne', 'Resp. Ressources Humaines', '0707326644', 'profile/zz0jwxYNnhfilpn2R9gguEI3B2BOdHQe2VNZXBdr.png', NULL, '4', NULL, '2024-11-25 11:59:00', '2024-11-25 11:59:00'),
+(10, 'Hariette', 'GHON-TAY', 'hghariette@amoaman.com', NULL, '$2y$12$0rFhbLkazvs9yoKZ4vSGie3hfM3l7fmSJN7ysV2sMpKg.5ITwQr6W', 'interne', 'Talent Acquisition Specialist', '0711211104', 'profile/CHDTBVMZjIVaJRA8E4nj7WpvoRJaFYKocgd7TXfq.png', NULL, '5', NULL, '2024-11-25 12:00:36', '2024-11-25 12:00:36'),
+(11, 'Seraïa', 'ANOMA', 'eanoma@amoaman.com', NULL, '$2y$12$qrDvFcfxwCk0ncNOmsTQrusLqZI1crSRoL18uJIRYBLbgJ7BoSuey', 'interne', 'Chargé d\'Ac', '0141916817', 'profile/DEInJDhVAoxWU4ciaO8YayBZrmc1LN5pEXecJeTS.png', NULL, '6', NULL, '2024-11-25 12:02:31', '2024-11-25 12:02:31'),
+(12, 'Solange', 'KOUAKOU', 'skouakou@amaoman.com', NULL, '$2y$12$cWVYgMzYBHyxjdj.EuOd0uE0.HI2azo94MWqwJp64Su9grykTe70K', 'interne', 'Resp. Facturation (ADV)', '0574887280', 'profile/F61wMQNc3Xj2vyybggVurydAyB7BhaSjyIKoBFjj.png', NULL, '7', NULL, '2024-11-25 12:04:06', '2024-11-25 12:04:06'),
+(13, 'Michel', 'KOBRI', 'mkobri@amoaman.com', NULL, '$2y$12$1j.biADvdxZl2msY7VIobuKhfNK4VtpQdhVIi6kP13x6y7qx95MQW', 'interne', 'Resp. Comptable & Fiscal', '0758561358', 'profile/mf23faU7Cn2jFN43Z1ig3FRBdhg9CMfcogxUhMoy.png', NULL, '8', NULL, '2024-11-25 12:06:09', '2024-11-25 12:06:09'),
+(14, 'Nouho', 'DIABAGATE', 'ndiabagate@amoaman.com', NULL, '$2y$12$n1Loy5ThdaMFCGZPm3xNx.iZixOfJyfWxb38cx1yn0b.7MJTNNSBi', 'interne', 'Assistant Comptable', '0102390244', 'profile/T6YdcocZmcWvaAHOnaYa6k0DlLHoQSVeSPAocShv.png', NULL, '9', NULL, '2024-11-25 12:10:05', '2024-11-25 12:10:05'),
+(15, 'Karel', 'KONAN', 'kkonan@amoaman.com', NULL, '$2y$12$XjO1gE.dmRKF5myytV/2TOOSRzUc4.Na/WeQ7PvTjWNWMDCOmbx5O', 'interne', 'Assistante cheffe de projet IT', '0759784335', 'profile/NZgh9ovDFVKkjsXDHSTuShKKY4HdTqHxceAoco2d.png', NULL, '10', NULL, '2024-11-25 12:12:44', '2024-11-25 12:12:44'),
+(16, 'Boris Dassiji', 'Siewe', 'bsiewe@amoaman.com', NULL, '$2y$12$47YZ0a5kw16vdZMVpNdI7.noi2D8kYQ4DVDo8HYWm6l8cbT.iOY2q', 'interne', 'Designer UI', '237 699 621 132', 'profile/kC1In1TcNIcFMhB99HTab1ypLUdCXUAjWAG6RhZm.png', NULL, '11', NULL, '2024-11-25 12:15:23', '2024-11-25 12:15:23'),
+(17, 'Laurie-anne', 'GRANT', 'lgrant@amoaman.com', NULL, '$2y$12$bAcA9j0TlK4zD5lXvqshqeFFM4FXuGYoiaPqKEHTpcUO1axJCFRce', 'interne', 'UX/UI Designer', '0707182904', 'profile/pWN6jDT9LA5AqDlAjfxuvXeXdjqu09mN3d7tVADn.png', NULL, '12', NULL, '2024-11-25 12:17:16', '2024-11-27 10:33:49'),
+(18, 'Francklin', 'KONAN', 'fkonan@amoaman.com', NULL, '$2y$12$8ElPC.QFQ5gNUL8ORiIdp.L2kPGy0CfOFHSpBcwFqxrvOYd76ZqIu', 'interne', 'Admin Réseaux & Sécurité', '0709813123', 'profile/aCdnR44ZV4Y1ZuXAcTMm81tp6L6csOVLduFZXbhR.png', NULL, '13', NULL, '2024-11-25 12:18:55', '2024-11-25 12:18:55'),
+(19, 'Ange Cedrick', 'N\'ZI', 'acnzi2@amoaman.com', NULL, '$2y$12$25Be5QxtuNkLchF0tgZuOOgzuCpXP//aDVXKB/l7Viy8fdI4EGsRe', 'interne', 'Consultant DataViz', '0173304687', 'profile/4DQfy7zFo1RVXiNJkry37ZoVnMtEYX6A05CVNxTw.png', NULL, '14', NULL, '2024-11-25 12:20:32', '2024-11-25 12:20:32'),
+(20, 'Micheal', 'ADOPO', 'Jadopo@amoaman.com', NULL, '$2y$12$akfww6L4GEgObkHPolToPebqMtVwUWw4OyUhhoFl/TZHrxzDaBpdq', 'interne', 'Consultant ERP', '0153858288', 'profile/XrScSKJIi0V88nB0lPLTwh6jsdQW0VChgfGelRfR.png', NULL, '16', NULL, '2024-11-25 12:22:15', '2024-11-25 12:22:15');
 
 --
 -- Contraintes pour les tables déchargées
 --
-
---
--- Contraintes pour la table `files`
---
-ALTER TABLE `files`
-  ADD CONSTRAINT `files_folder_id_foreign` FOREIGN KEY (`folder_id`) REFERENCES `folders` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `model_has_permissions`
@@ -735,44 +624,11 @@ ALTER TABLE `model_has_roles`
   ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `one_drive_link_user`
---
-ALTER TABLE `one_drive_link_user`
-  ADD CONSTRAINT `one_drive_link_user_one_drive_link_id_foreign` FOREIGN KEY (`one_drive_link_id`) REFERENCES `one_drive_links` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `one_drive_link_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `project_user`
---
-ALTER TABLE `project_user`
-  ADD CONSTRAINT `project_user_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `project_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `reservations`
---
-ALTER TABLE `reservations`
-  ADD CONSTRAINT `reservations_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
 -- Contraintes pour la table `role_has_permissions`
 --
 ALTER TABLE `role_has_permissions`
   ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `tasks`
---
-ALTER TABLE `tasks`
-  ADD CONSTRAINT `tasks_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `task_user`
---
-ALTER TABLE `task_user`
-  ADD CONSTRAINT `task_user_task_id_foreign` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `task_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
