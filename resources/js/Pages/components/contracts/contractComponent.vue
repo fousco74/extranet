@@ -134,9 +134,11 @@
   <script setup>
   import { computed } from 'vue';
 
+
   // Imports des assets
   import logoAmoaman from '/public/logos/LogoAMOAMANnew.webp';
   import tamponSvg from '/public/icons/tampom.svg';
+
 
   // Props passées depuis Blade/Laravel
   const props = defineProps({
@@ -146,6 +148,9 @@
       default: () => ({ articles: [] }),
     },
   });
+
+
+  console.log(props.contract)
 
   const today = new Date().toLocaleDateString('fr-FR', {
     day: '2-digit',

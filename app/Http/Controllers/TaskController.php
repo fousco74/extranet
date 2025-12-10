@@ -16,38 +16,31 @@ class TaskController extends Controller
      */
     public function index()
 {
-    // Récupération de l'utilisateur connecté
     $user = Auth::user();
         $authorizedRoles = ['Chef de projet', 'direction', 'Directeur', 'RH'];
 
         $canSeeAll = $user->hasAnyRole($authorizedRoles);
 
-    // Si l'utilisateur est un Chef de projet, on récupère toutes les tâches et les projets
     if ($canSeeAll) {
-        // Récupération de toutes les tâches, projets et utilisateurs
         $tasks = Task::with(['project', 'users'])->get();
         $projects = Project::all();
         $users = User::all();
     }
     // Si l'utilisateur a un autre rôle, par exemple un membre, on filtre les tâches liées à lui
     else {
-        // Récupération des tâches auxquelles l'utilisateur est assigné
         $tasks = Task::with(['project', 'users'])
             ->whereHas('users', function($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->get();
 
-        // Récupération des projets auxquels l'utilisateur appartient
         $projects = Project::whereHas('members', function($query) use ($user) {
             $query->where('user_id', $user->id);
         })->get();
 
-        // Récupération de l'utilisateur connecté
         $users = User::where('id', $user->id)->get();
     }
 
-    // Retourner la vue avec les données filtrées
     return inertia('Tasks/index', [
         'tasks' => $tasks,
         'projects' => $projects,
@@ -74,39 +67,42 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255|unique:tasks,title',
+        'description' => 'nullable|string|max:1000',
+        'priority' => 'required|string|in:high,low,medium',
+        'status' => 'required|string|in:todo,inprogress,done',
+        'step_project' => 'required|string',
+        'delais' => 'required|date',
+        'project_id' => 'required|integer|exists:projects,id',
+        'assigned_users' => 'required|array',
+        'assigned_users.*' => 'integer|exists:users,id', // Validation de chaque user ID
+    ]);
 
+    $project = Project::find($validated['project_id']);
 
-        $validated  = $request->validate([
-            'title' => 'string|max:255',
-            'description'=> 'string|nullable|max:1000',
-            'priority' => 'string|required|in:high,low,medium',
-            'status' => 'string|required|in:todo,inprogress,done',
-            'step_project' => 'string|required',
-            'delais' => 'date|required',
-            'project_id' => 'integer|required|exists:projects,id',
-            'assigned_users' => 'array|required|exists:users,id'
-        ]);
-
-        $project = Project::find($validated['project_id']);
-
-
-        if( $validated['delais'] > $project->end_date) {
-            return redirect()->back()->with('error', 'La date de la tâche ne doit pas dépasser la date de fin du projet.');
-        }
-
-
-        $task = Task::create($validated);
-
-        // Attach users to the task
-        $task->users()->attach($validated['assigned_users']);
-
-
-        $task->save();
-        // Redirect to the task index page with a success message
-        return redirect()->back()->with('success', 'Tâche créée avec succès !');
-
+    if ($validated['delais'] > $project->end_date) {
+        return redirect()->back()
+            ->withInput()
+            ->with('error', 'La date de la tâche ne doit pas dépasser la date de fin du projet.');
     }
+
+    $task = Task::create([
+        'title' => $validated['title'],
+        'description' => $validated['description'] ?? null,
+        'priority' => $validated['priority'],
+        'status' => $validated['status'],
+        'step_project' => $validated['step_project'],
+        'delais' => $validated['delais'],
+        'project_id' => $validated['project_id'],
+    ]);
+
+    $task->users()->attach($validated['assigned_users']);
+
+
+    return redirect()->back()->with('success', 'Tâche créée avec succès !');
+}
 
 
 
@@ -129,10 +125,39 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, Task $task)
+{
+    // Validation
+    $validated = $request->validate([
+        'title' => [
+            'string',
+            'max:255',
+            Rule::unique('tasks', 'title')->ignore($task->id), // Ignore current task
+        ],
+        'description' => 'string|nullable|max:1000',
+        'priority' => 'string|required|in:high,low,medium',
+        'status' => 'string|required|in:todo,inprogress,done',
+        'step_project' => 'string|required',
+        'delais' => 'date|required',
+        'project_id' => 'integer|required|exists:projects,id',
+        'assigned_users' => 'array|required',
+        'assigned_users.*' => 'integer|exists:users,id', // Validate each user ID
+    ]);
+
+    // Check if deadline exceeds project end date
+    $project = Project::find($validated['project_id']);
+    if ($validated['delais'] > $project->end_date) {
+        return redirect()->back()->with('error', 'La date de la tâche ne doit pas dépasser la date de fin du projet.');
     }
+
+    // Update the task
+    $task->update($validated);
+
+    // Sync users (replace old relationships with new ones)
+    $task->users()->sync($validated['assigned_users']);
+
+    return redirect()->back()->with('success', 'Tâche mise à jour avec succès !');
+}
 
     /**
      * Remove the specified resource from storage.

@@ -19,7 +19,7 @@
         </aside>
 
         <!-- Slot pour les pages Inertia -->
-        <main class="flex flex-col w-full px-2 md:px-0">
+        <main class="flex  flex-col w-full px-2 md:px-0">
           <slot />
         </main>
       </div>
@@ -36,6 +36,6 @@
     { name: 'Projects', url: '/projects', icon: 'projects' },
     { name: 'taches', url: '/tasks', icon: 'tasks' },
     { name: 'Statistiques', url: '/stats', icon: 'stats' },
-    { name: 'Paramètres', url: '/parametres', icon: 'settings' },
+    { name: 'Contrats', url: '/contracts', icon: 'contract' },
   ]
   </script>

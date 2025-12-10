@@ -21,10 +21,7 @@
                         <i class="fas fa-print mr-1"></i>
                         Imprimer le contrat
                     </button>
-                    <button class="px-4 py-2 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700 text-sm">
-                        <i class="fas fa-trash-alt mr-1"></i>
-                        Archiver le contrat
-                    </button>
+
                 </div>
             </div>
 
@@ -208,13 +205,17 @@
         if (!signaturePadInstance.isEmpty() || signatureImage.value) {
             const signatureData = signatureImage.value || signaturePadInstance.toDataURL();
 
-            props.contract.value.signature = signatureData;
-            props.contract.value.signe = true;
+            console.log(props.contract)
+
+            props.contract.signature = signatureData;
+            props.contract.signe = true;
+
+            console.log("okk ok")
 
 
             router.post(route('contracts.sign'), {
                 signature: signatureData,
-                contract_id: props.contract.value.id
+                contract_id: props.contract.id
             },
             {
                 onSuccess: () => {

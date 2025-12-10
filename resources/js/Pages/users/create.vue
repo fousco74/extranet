@@ -1,6 +1,6 @@
 <template>
   <Dashboard>
-    <div class="border shadow-md w-full md:w-[80%] p-6 md:p-10 bg-white">
+    <div class="border shadow-md w-full md:w-[80%] h-screen p-6 md:p-10 bg-white">
       <div class="flex justify-center mb-6 md:mb-10">
         <h1 class="text-blue text-2xl md:text-3xl font-semibold">Ajouter un Utilisateur</h1>
       </div>
@@ -165,7 +165,7 @@
 
         <ButtonComponent
           content="Créer l'Utilisateur"
-          customClass="bg-blue text-white px-4 py-2 mt-4"
+          customClass="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 mt-4"
         />
       </form>
     </div>

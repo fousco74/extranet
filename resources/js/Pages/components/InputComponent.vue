@@ -26,7 +26,7 @@ const props = defineProps({
     type: String,
     default: '', // Classe CSS personnalisée pour le conteneur div
   },
- 
+
   errors: {
     type: Array,
     default: () => [], // Liste des erreurs associées au champ

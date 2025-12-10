@@ -49,7 +49,7 @@ const showNotify = ref(false)
 
 <template>
   <nav  class="w-full flex items-center  gap-4 sm:gap-10 lg:pl-10 border p-4 lg:py-3 lg:pr-3 sm:p-0">
-    
+
     <div v-if="$page.props.routeName !='home' && !$page.props.routePath.includes('admin') " @click="back" class="flex justify-center items-center">
       <span  class="iconify absolute text-3xl cursor-pointer" data-icon="mdi-arrow-left"></span>
     </div>
@@ -100,7 +100,7 @@ const showNotify = ref(false)
     <div class="inline-flex items-center">
       <div @click="menubar = !menubar" class="rounded-full cursor-pointer w-8 sm:w-[40px]">
         <img
-          :src="$page.props.auth.user.profile_link ? `/storage/${$page.props.auth.user.profile_link}` : '/icons/profile.png'"
+          src="/public//img/fousco.png"
           alt="profile"
           class="size object-cover rounded-full"
         >

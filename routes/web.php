@@ -84,10 +84,11 @@ Route::post('/tasks/update-status', [TaskController::class, 'updateStatus'])->na
 
 Route::get('/stats', [DashboardAnalyticsController::class, 'show'])->name('stats');
 
-//contracts
-//Route::resource('contracts',ContractController::class);
-//Route::post('contracts/sign', [ContractController::class,'sign'])->name('contracts.sign');
-//Route::get('contracts/{id}/download', [ContractController::class,'download'])->name('contracts.download');
+
+
+Route::resource('contracts',ContractController::class);
+Route::post('contracts/sign', [ContractController::class,'sign'])->name('contracts.sign');
+Route::get('contracts/{id}/download', [ContractController::class,'download'])->name('contracts.download');
 
 
 
@@ -130,7 +131,9 @@ Route::get('/', function (Request $request) {
     $weatherBaseUrl = env('WEATHER_BASE_URL'); // L'URL de base de l'API
 
     // Effectuer la requête API pour récupérer les données météo
-    $response = Http::get($weatherBaseUrl, [
+    $response = Http::withOptions([
+        'verify' => false,
+    ])->get($weatherBaseUrl, [
         "q" => $city,
         "appid" => $weatherApiKey, // Utiliser la clé API ici
         "lang" => "fr",

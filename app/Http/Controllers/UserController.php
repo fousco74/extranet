@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 use App\Mail\SuggestionMail;
 use App\Mail\UserCreate;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\OneDriveLink;
 use App\Notifications\InformationNotification;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -77,7 +82,7 @@ class UserController extends Controller implements HasMiddleware
     // Sauvegarde d'un nouvel utilisateur
     public function store(Request $request)
     {
-        
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -132,53 +137,62 @@ class UserController extends Controller implements HasMiddleware
     }
 
     // Mise à jour des informations d'un utilisateur
-    public function update(Request $request, User $user)
+public function update(Request $request, User $user)
 {
-    // Validation
+
     $validated = $request->validate([
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'poste' => 'required|string|max:255',
-        'team' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email,' . $user->id,
-        'phone_number' => 'nullable|string|max:20',
-        'profile_link' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'linkedin_link' => 'nullable|url|max:255',
-        'password' => 'nullable|string|min:8|confirmed',
-        'ordre_team' => 'nullable|numeric|unique:users,ordre_team,' . $user->id,
-        'birth_place' => 'required|string|max:255',
-        'birth_date' => 'required',
-         'nationality' => 'required|string|max:255',
-        'marital_status' => 'required|string|max:255',
-        'address' => 'required|string|max:255',
+        'first_name'      => 'required|string|max:255',
+        'last_name'       => 'required|string|max:255',
+        'poste'           => 'required|string|max:255',
+        'team'            => 'required|string|max:255',
+        'email'           => 'required|email|unique:users,email,' . $user->id,
+        'phone_number'    => 'nullable|string|max:20',
+        'profile_link'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'linkedin_link'   => 'nullable|url|max:255',
+        'password'        => 'nullable|string|min:8|confirmed',
+        'ordre_team'      => 'nullable|numeric|unique:users,ordre_team,' . $user->id,
+        'birth_place'     => 'required|string|max:255',
+        'birth_date'      => 'required|date',              // 👈 ajoute "date"
+        'nationality'     => 'required|string|max:255',
+        'marital_status'  => 'required|string|max:255',
+        'address'         => 'required|string|max:255',
     ]);
 
-    // Gestion du fichier de profil
+
+
+    // Upload image correctement
     if ($request->hasFile('profile_link')) {
-        if ($user->profile_link) {
+        // supprime l’ancienne si elle existe (et qu’elle est bien relative au disk 'public')
+        if ($user->profile_link && Storage::disk('public')->exists($user->profile_link)) {
             Storage::disk('public')->delete($user->profile_link);
         }
-        $validated['profile_link'] = Storage::disk('public')->put("profile", $request->profile_link);
+
+        // stocke dans storage/app/public/profile et retourne un chemin RELATIF: "profile/xxx.png"
+        $validated['profile_link'] = $request->file('profile_link')->store('profile', 'public');
+
+        // Variante nommage custom:
+        // $validated['profile_link'] = Storage::disk('public')->putFile('profile', $request->file('profile_link'));
+        // ou putFileAs(...) avec un nom déterministe/UUID
+
     }
 
-    // Hash du mot de passe si fourni
+    // Hash password si fourni
     if (!empty($validated['password'])) {
-        $validated['password'] = bcrypt($validated['password']);
+        $validated['password'] = Hash::make($validated['password']); // bcrypt() ok aussi
     } else {
         unset($validated['password']);
     }
 
-    // Supprimer le champ profile_link s'il n'y a pas de nouveau fichier
+    // si pas de nouvelle image, ne pas écraser l’ancienne valeur
     if (empty($validated['profile_link'])) {
         unset($validated['profile_link']);
     }
 
 
-
-    // Mise à jour de l'utilisateur
     $user->update($validated);
 
-    return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+
+    return to_route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
 }
 
 
@@ -203,23 +217,46 @@ class UserController extends Controller implements HasMiddleware
         return inertia('login');
     }
 
-    // Soumission du formulaire de connexion
     public function authenticate(Request $request)
     {
+        // Validation de base (ne pas faire "exists:users" pour éviter l’énumération)
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email'    => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
+            'remember' => ['nullable', 'boolean'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        // Normalise l'email (trim + lowercase)
+        $email = Str::of($credentials['email'])->trim()->lower()->value();
+        $remember = $request->boolean('remember');
 
-            return redirect()->intended('/');
+        // Throttle anti-bruteforce (5 tentatives / 60s)
+        $throttleKey = $email.'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            throw ValidationException::withMessages([
+                'email' => __('Trop de tentatives. Réessayez dans :seconds s.', ['seconds' => $seconds]),
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        if (! Auth::attempt(['email' => $email, 'password' => $credentials['password']], $remember)) {
+            // compte une tentative échouée
+            RateLimiter::hit($throttleKey, 60);
+
+            // Message générique (ni email ni mdp précisé)
+            throw ValidationException::withMessages([
+                'email' => __('Identifiants invalides.'),
+            ]);
+        }
+
+        // Succès : clear throttle + sécurise la session
+        RateLimiter::clear($throttleKey);
+        $request->session()->regenerate();
+
+        // Redirection fiable pour Inertia
+        $target = redirect()->intended(route('home'))->getTargetUrl();
+        return Inertia::location($target);
     }
 
     // Déconnexion de l'utilisateur
@@ -231,7 +268,7 @@ class UserController extends Controller implements HasMiddleware
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return Inertia::location(route('login'));
     }
 
     public function editOneDriveLinks(User $user)

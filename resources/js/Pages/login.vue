@@ -42,7 +42,14 @@ const submit = ()=>{
                     <h3 class="font-thin text-[14px] text-opacity-60 text-nowrap max-lg:text-[8px]">Connectez-vous pour avoir accès aux données internes de l'entreprise <br><strong> AMOAMAN & ASSOCIES. </strong> </h3>
                 </div>
                 <InputComponent v-model="form.email" :errors="$page.props.errors.email" type="email" name="email" divClass="mt-10 mb-7" placeholder="xxxxx@amoaman.com" class="w-[250px]"></InputComponent>
-                <InputComponent v-model="form.password"  type="password" name="password" placeholder="*********" class="w-[250px]"></InputComponent>
+<InputComponent
+    v-model="form.password"
+    :errors="$page.props.errors.password"
+    type="password"
+    name="password"
+    placeholder="*********"
+    class="w-[250px]"
+></InputComponent>
 
 
                 <ButtonComponent content="connexion" customClass="w-[250px] mt-6 bg-gradient-to-custom text-white" alt="login" />

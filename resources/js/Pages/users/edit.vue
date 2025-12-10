@@ -1,6 +1,6 @@
 <template>
   <Dashboard>
-    <div class="border shadow-md w-full md:w-[80%] p-6 bg-white">
+    <div class="border shadow-md w-full md:w-[80%] h-screen p-6 bg-white">
       <div class="flex justify-center mb-5">
         <h1 class="text-blue text-3xl">Modifier un Utilisateur</h1>
       </div>
@@ -10,6 +10,7 @@
           <div
             class="relative w-32 h-32 rounded-full border-2 border-gray-300 flex justify-center items-center cursor-pointer overflow-hidden hover:border-blue-500"
           >
+
             <label for="profile_link" class="absolute w-full h-full flex justify-center items-center cursor-pointer">
               <template v-if="imagePreview">
                 <img :src="imagePreview" alt="Profile Preview" class="w-full h-full object-cover" />
@@ -19,6 +20,9 @@
               </template>
             </label>
           </div>
+
+                    {{ imagePreview }}
+
 
           <!-- Input pour choisir un fichier -->
           <input
@@ -180,7 +184,7 @@
 
         <ButtonComponent
             content="Mettre à jour"
-            customClass="bg-blue text-white px-4 mt-6"
+            customClass="text-white bg-blue-600 hover:bg-blue-700 px-4 mt-6"
         />
       </form>
     </div>
@@ -213,7 +217,7 @@ const form = ref({
   address: props.user.address|| ''
 });
 
-const imagePreview = ref(`/storage/${props.user.profile_link}`)
+const imagePreview = ref(`public/storage/${props.user.profile_link}`)
 console.log(imagePreview.value)
 
 const fileChange = (e) => {

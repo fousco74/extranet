@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Contracts;
 
 
 
@@ -42,6 +43,11 @@ class User extends Authenticatable
     public function tasks(): belongsToMany
     {
         return $this->belongsToMany(Task::class);
+    }
+
+    public function contracts(): belongsToMany
+    {
+        return $this->belongsToMany(Contracts::class);
     }
 
 
