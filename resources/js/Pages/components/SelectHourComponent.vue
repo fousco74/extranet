@@ -1,54 +1,40 @@
 <template>
-    <div class="mb-4 flex items-center border px-2 py-[3px] gap-0 shadow rounded">
-        <div class="w-fit">
-            <img :src="timeLogo" alt="icon" class="w-full object-cover">
-        </div>
-      <select
-        v-model="options[0].time"
-        @change="$emit('update:modelValue', $event.target.value)"
-        class="w-full  py-2 overflow-auto border-none rounded focus:outline-none"
-      >
+  <div class="mb-4 flex items-center border px-2 py-[3px] gap-0 shadow rounded">
+
+    <div class="w-fit">
+      <img :src="timeLogo" alt="icon" class="w-full object-cover" />
+    </div>
+
+    <select
+      class="w-full py-2 border-none rounded outline-none"
+      :value="modelValue"
+      @change="$emit('update:modelValue', $event.target.value)"
+    >
+      <option value="">Choisir une heure</option>
+
       <option
         v-for="option in options"
         :key="option.time"
         :value="option.time"
       >
-    {{ option.time }}
-  </option>
-      </select>
-    </div>
-  </template>
+        {{ option.time }}
+      </option>
+    </select>
 
+    <span v-if="error" class="text-red-500 text-xs ml-2">
+      {{ error }}
+    </span>
+  </div>
+</template>
 
-  <script setup>
-  import { ref } from 'vue';
-  import timeLogo from  '../../../../public/icons/time.svg'
+<script setup>
+import timeLogo from "../../../../public/icons/time.svg";
 
-  // Génération des heures et demi-heures entre 09:00 et 18:00
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 9; hour <= 18; hour++) {
-      options.push(`${String(hour).padStart(2, '0')}:00`);
-      if (hour < 18) options.push(`${String(hour).padStart(2, '0')}:30`);
-    }
-    return options;
-  };
-
-  const modelValue = defineModel({
-  type: [String, Number],
-  default: null,
-});
-
-// Ajout de la prop `error` pour gérer les messages d'erreur
 defineProps({
-  error: {
-    type: String,
-    default: null,
-  },
-  options: {
-    type: Object,
-    default: null,
-  },
+  modelValue: String,   // ← LA BONNE VALEUR LIÉE AU v-model
+  error: String,
+  options: Array,
 });
-// Liste des heures disponibles
-  </script>
+
+defineEmits(["update:modelValue"]);
+</script>

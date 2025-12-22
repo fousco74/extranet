@@ -27,20 +27,20 @@ class ReservationController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         $query = Reservation::with('user');
-    
+
         // Filtres dynamiques
         if ($request->filled('day')) {
             $query->where('day', $request->day);
         }
-    
+
         if ($request->filled('monthNumber')) {
             $query->where('monthNumber', $request->monthNumber);
         }
-    
+
         if ($request->filled('year')) {
             $query->where('year', $request->year);
         }
-    
+
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
@@ -50,20 +50,20 @@ class ReservationController extends Controller implements HasMiddleware
                   ->orWhere('year', 'like', "%{$searchTerm}%");
             });
         }
-    
+
         // Ordre et pagination
         $reservations = $query->orderBy('year')
                               ->orderBy('monthNumber')
                               ->orderBy('day')
                               ->paginate(6);
-    
+
         // Retour des données vers la vue
         return inertia('Reservations/index', [
             'reservations' => $reservations,
             'filters' => $request->only(['day', 'monthNumber', 'year', 'search']), // Pour persister les filtres
         ]);
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -78,6 +78,7 @@ class ReservationController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+
         try {
             // Validation des données
             $validated = $request->validate([
@@ -92,22 +93,22 @@ class ReservationController extends Controller implements HasMiddleware
                 'endClock' => 'required|string',
                 'user_id' => 'nullable|string',
             ]);
-    
+
             // Calcul de la date de fin
             $monthNumber = $validated['monthNumber'] + 1;
             $currentDate = new \DateTime();
             $reservationEndDate = new \DateTime("{$validated['year']}-{$monthNumber}-{$validated['day']} {$validated['endClock']}");
-    
+
             if ($currentDate > $reservationEndDate) {
                 return redirect()->back()->withInput()->with('message', "La réservation ne peut pas être effectuée pour une date déjà passée.");
             }
-    
+
             if ($validated['startClock'] >= $validated['endClock']) {
                 return redirect()->back()->withInput()->with('message', "L'heure de début doit être antérieure à celle de fin.");
             }
-    
+
             $validated['user_id'] = Auth::id();
-    
+
             // Vérifie les chevauchements
             $existingReservation = Reservation::where('day', $validated['day'])
                 ->where('monthNumber', $validated['monthNumber'])
@@ -117,20 +118,20 @@ class ReservationController extends Controller implements HasMiddleware
                           ->orWhereBetween('endClock', [$validated['startClock'], $validated['endClock']]);
                 })
                 ->exists();
-    
+
             if ($existingReservation) {
                 return redirect()->back()->withInput()->with('message', 'Ce créneau est déjà réservé.');
             }
-    
+
             // Création de la réservation
             Reservation::create($validated);
-    
+
             return redirect()->back()->with('success', 'Réservation effectuée avec succès.');
-    
+
         } catch (\Exception $e) {
             // Log optionnel (à activer si besoin)
             // Log::error("Erreur de réservation : " . $e->getMessage());
-    
+
             return redirect()->back()->withInput()->withErrors([
                 'general' => 'Une erreur est survenue lors de la réservation. Veuillez réessayer.',
             ]);
@@ -173,22 +174,22 @@ class ReservationController extends Controller implements HasMiddleware
                 'startClock' => 'required|string',
                 'endClock' => 'required|string',
             ]);
-    
+
             $reservation = Reservation::findOrFail($id);
-    
+
             // Vérification de la date
             $monthNumber = $validated['monthNumber'] + 1;
             $currentDate = new \DateTime();
             $reservationEndDate = new \DateTime("{$validated['year']}-{$monthNumber}-{$validated['day']} {$validated['endClock']}");
-    
+
             if ($currentDate > $reservationEndDate) {
                 return redirect()->back()->withInput()->with('message', "La réservation ne peut pas être effectuée pour une date déjà passée.");
             }
-    
+
             if ($validated['startClock'] >= $validated['endClock']) {
                 return redirect()->back()->withInput()->with("message", "L'heure de début doit être antérieure à l'heure de fin.");
             }
-    
+
             // Vérifie les chevauchements (hors cette réservation)
             $existingReservation = Reservation::where('day', $validated['day'])
                 ->where('monthNumber', $validated['monthNumber'])
@@ -199,20 +200,20 @@ class ReservationController extends Controller implements HasMiddleware
                 })
                 ->where('id', '!=', $id)
                 ->exists();
-    
+
             if ($existingReservation) {
                 return redirect()->back()->withInput()->with('message', 'Ce créneau est déjà réservé.');
             }
-    
+
             // Mise à jour
             $reservation->update($validated);
-    
+
             return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
-    
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gestion des erreurs de validation (retourne automatiquement avec les erreurs)
             return redirect()->back()->withErrors($e->validator)->withInput();
-    
+
         } catch (\Exception $e) {
             // Autres erreurs imprévues
             return redirect()->back()->withInput()->withErrors([
@@ -220,7 +221,7 @@ class ReservationController extends Controller implements HasMiddleware
             ]);
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.

@@ -84,7 +84,6 @@
 
           <p class="mt-3 text-xs text-gray-500 text-center">
             PNG/JPG jusqu’à 2&nbsp;Mo. Carré recommandé (1:1).
-            {{ imagePreview }}
           </p>
 
           <p v-if="$page.props.errors.profile_link" class="text-red-600 text-sm mt-3 text-center">

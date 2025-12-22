@@ -39,10 +39,11 @@ class HandleInertiaRequests extends Middleware
     {
         Inertia::share('appName', config('app.name'));
         return array_merge(parent::share($request), [
-            'flash' => [
-                'message' => fn () => $request->session()->get('message'),
-                'success' => fn () => $request->session()->get('success')
-            ],
+             'flash' => [
+            'success' => fn () => $request->session()->get('success'),
+            'error'   => fn () => $request->session()->get('error'),
+            'message' => fn () => $request->session()->get('message'), // <- tu utilises 'message' dans ReservationsController
+        ],
             'auth.user' => fn () => $request->user()
             ? $request->user()->only('id', 'first_name', 'last_name', 'team', 'poste', 'email', 'phone_number', 'profile_link')
                 + ['roles' => $request->user()->getRoleNames()] // Récupérer les rôles de l'utilisateur

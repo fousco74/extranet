@@ -3,14 +3,30 @@ import ButtonComponent from './components/ButtonComponent.vue';
 import InputComponent from './components/InputComponent.vue';
 import logoUrl from '/public/icons/login.svg';
 import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
 
 const form = useForm({
-    email: null,
-    password: null
-})
-const submit = ()=>{
-    form.post(route('authenticate'))
-}
+  email: '',
+  password: '',
+  remember: false,
+});
+
+
+const isLoading = ref(false);
+
+const submit = async () => {
+  isLoading.value = true;
+  form.post(route('authenticate'), {
+    onSuccess: () => {
+      isLoading.value = false;
+      // Redirection automatique via Inertia
+    },
+    onError: () => {
+      isLoading.value = false;
+    },
+  });
+};
 
 
 </script>
@@ -42,18 +58,16 @@ const submit = ()=>{
                     <h3 class="font-thin text-[14px] text-opacity-60 text-nowrap max-lg:text-[8px]">Connectez-vous pour avoir accès aux données internes de l'entreprise <br><strong> AMOAMAN & ASSOCIES. </strong> </h3>
                 </div>
                 <InputComponent v-model="form.email" :errors="$page.props.errors.email" type="email" name="email" divClass="mt-10 mb-7" placeholder="xxxxx@amoaman.com" class="w-[250px]"></InputComponent>
-<InputComponent
-    v-model="form.password"
-    :errors="$page.props.errors.password"
-    type="password"
-    name="password"
-    placeholder="*********"
-    class="w-[250px]"
-></InputComponent>
+                <InputComponent v-model="form.password"  type="password" name="password" placeholder="*********" class="w-[250px]"></InputComponent>
 
 
-                <ButtonComponent content="connexion" customClass="w-[250px] mt-6 bg-gradient-to-custom text-white" alt="login" />
-
+<!-- Bouton de connexion -->
+        <ButtonComponent
+          :disabled="form.processing || isLoading"
+          content="Connexion"
+          custom-class="w-[250px] mt-6 bg-gradient-to-custom text-white hover:opacity-90 transition disabled:opacity-50"
+          alt="login"
+        />
 
 
             </form>

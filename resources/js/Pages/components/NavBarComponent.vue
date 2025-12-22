@@ -98,12 +98,14 @@ const showNotify = ref(false)
 
     <!-- Profile -->
     <div class="inline-flex items-center">
-      <div @click="menubar = !menubar" class="rounded-full cursor-pointer w-8 sm:w-[40px]">
-        <img
-          src="/public//img/fousco.png"
-          alt="profile"
-          class="size object-cover rounded-full"
-        >
+      <div @click="menubar = !menubar" class="rounded-full cursor-pointer w-8 sm:w-[50px]">
+       <img
+      :src="`/storage/${$page.props.auth.user.profile_link}`"
+      alt="profile"
+      class="size object-cover rounded-full"
+    />
+
+
       </div>
       <div   class="hidden sm:flex flex-col justify-center space-x-0 ml-2">
         <span class="text-[13px] text-nowrap text-blue font-sans">

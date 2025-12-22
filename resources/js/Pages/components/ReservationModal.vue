@@ -120,6 +120,19 @@ const currentMinute = ref(today.getMinutes()); // Minute actuelle
 
 
 const submitReservation = () => {
+    const data =  {
+    day: props.day,
+    month: props.month,
+    dayName: props.dayName,
+    title: title.value,
+    description: description.value,
+    year: props.year,
+    monthNumber: props.monthNumber,
+    startClock: startClock.value,
+    endClock: endClock.value,
+  }
+
+  console.log(data)
   router.post("/reservations", {
     day: props.day,
     month: props.month,
@@ -136,13 +149,13 @@ const submitReservation = () => {
 
 const timeSlots = computed(() => {
   const times = [];
-  
+
   // Créer les créneaux horaires de 9h à 18h, avec les demis
   for (let h = 9; h <= 18; h++) {
     times.push({ time: `${h}:00`, isReserved: false, isPast: false });
     if (h !== 18) times.push({ time: `${h}:30`, isReserved: false, isPast: false });
   }
-  
+
   // Marquer les heures réservées
   props.reservations.forEach(res => {
     const start = parseFloat(res.startClock.replace(':', '.'));
@@ -152,7 +165,7 @@ const timeSlots = computed(() => {
       if (slotTime >= start && slotTime <= end) slot.isReserved = true;
     });
   });
-  
+
   // Marquer les créneaux passés
   times.forEach(slot => {
     const [slotHour, slotMinute] = slot.time.split(":").map(Number);
@@ -181,4 +194,6 @@ const timeSlots = computed(() => {
 console.log("time :",timeSlots.value);
 const title = ref("");
 const description = ref("");
+const startClock = ref("");
+const endClock = ref("");
 </script>

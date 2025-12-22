@@ -8,81 +8,71 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Mail\SuggestionMail;
 use App\Mail\UserCreate;
-use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\OneDriveLink;
 use App\Notifications\InformationNotification;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-
-
-
 class UserController extends Controller implements HasMiddleware
-
 {
     public static function middleware(): array
     {
         return [
-
-            // Middleware pour les actions spécifiques
             new Middleware('permission:créer un utilisateur', only: ['create']),
             new Middleware('permission:envoyer une notification', only: ['sendNotification']),
             new Middleware('permission:liste des utilisateurs', only: ['index']),
             new Middleware('permission:liens onedrives utilisateur', only: ['editOneDriveLinks']),
             new Middleware('permission:supprimer utilisateur', only: ['destroy']),
-            new Middleware('permission:modifier utilisateur', only: ['edit']),
+            new Middleware('permission:modifier utilisateur', only: ['edit', 'update']),
         ];
     }
 
-    public function index(Request $request)
-{
-    $query = User::query();
+    /* ----------------------------- USERS CRUD ----------------------------- */
 
-    // Filtrage global
-    if ($request->filled('search')) {
-        $searchTerm = $request->search;
-        $query->where(function ($q) use ($searchTerm) {
-            $q->where('first_name', 'like', "%{$searchTerm}%")
-              ->orWhere('last_name', 'like', "%{$searchTerm}%")
-              ->orWhere('ordre_team', 'like', "%{$searchTerm}%")
-              ->orWhere('team', 'like', "%{$searchTerm}%")
-              ->orWhere('poste', 'like', "%{$searchTerm}%")
-              ->orWhere('email', 'like', "%{$searchTerm}%")
-              ->orWhere('phone_number', 'like', "%{$searchTerm}%");
-        });
+    public function index(Request $request)
+    {
+        $query = User::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('ordre_team', 'like', "%{$search}%")
+                  ->orWhere('team', 'like', "%{$search}%")
+                  ->orWhere('poste', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone_number', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate(6);
+
+        return inertia('users/index', [
+            'users' => $users,
+            'filters' => $request->only('search'),
+        ]);
     }
 
-    // Pagination
-    $users = $query->paginate(6);
-
-    // Retourner les utilisateurs vers la vue
-    return inertia('users/index', [
-        'users' => $users,
-        'filters' => $request->only('search'), // Persister le filtre pour le formulaire
-    ]);
-}
-
-
-    // Affichage du formulaire de création d'utilisateur
     public function create()
     {
-        $oneDriveLinks = OneDriveLink::all();
-        return inertia('users/create', ['oneDriveLinks' => $oneDriveLinks]);
+        return inertia('users/create', [
+            'oneDriveLinks' => OneDriveLink::all(),
+        ]);
     }
 
-    // Sauvegarde d'un nouvel utilisateur
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -93,125 +83,93 @@ class UserController extends Controller implements HasMiddleware
             'profile_link' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'linkedin_link' => 'nullable|url|max:255',
             'password' => 'required|string|min:8|confirmed',
-            'ordre_team' =>'nullable|numeric|unique:users,ordre_team',
+            'ordre_team' => 'nullable|numeric|unique:users,ordre_team',
             'birth_place' => 'required|string|max:255',
-            'birth_date' => 'required',
+            'birth_date' => 'required|date',
             'nationality' => 'required|string|max:255',
             'marital_status' => 'required|string|max:255',
             'address' => 'required|string|max:255',
         ]);
 
-        // Gestion de l'image
         if ($request->hasFile('profile_link')) {
-            $validated['profile_link'] = Storage::disk('public')->put("profile", $request->profile_link);
+            $validated['profile_link'] = $request->file('profile_link')->store('profile', 'public');
         }
 
-        // Test d'envoi d'email avant la création de l'utilisateur
         try {
-            // Essai d'envoi d'email à l'adresse fournie
             Mail::to($validated['email'])->send(new UserCreate($validated));
         } catch (\Exception $e) {
-            // En cas d'erreur, retour avec un message sans créer l'utilisateur
-            return redirect()->back()->withInput()->withErrors(['email' => 'L\'email est invalide ou l\'envoi a échoué. Veuillez vérifier l\'adresse email.']);
+            return back()->withInput()->withErrors([
+                'email' => 'L\'envoi d\'email a échoué. Veuillez vérifier l\'adresse.',
+            ]);
         }
 
-        // Si tout est bon, on crée l'utilisateur
-        $user = User::create($validated);
+        $validated['password'] = Hash::make($validated['password']);
+        User::create($validated);
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
+        return to_route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
-    // Affichage des détails d'un utilisateur
-    public function show(User $user)
-    {
-        $user->load('oneDriveLinks');
-        return inertia('Users/show', ['user' => $user]);
-    }
-
-    // Affichage du formulaire d'édition d'utilisateur
     public function edit(User $user)
     {
-        return inertia('users/edit', [
-            'user' => $user,
-        ]);
+        return inertia('users/edit', ['user' => $user]);
     }
 
-    // Mise à jour des informations d'un utilisateur
-public function update(Request $request, User $user)
-{
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'poste' => 'required|string|max:255',
+            'team' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string|max:20',
+            'profile_link' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'linkedin_link' => 'nullable|url|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+            'ordre_team' => 'nullable|numeric|unique:users,ordre_team,' . $user->id,
+            'birth_place' => 'required|string|max:255',
+            'birth_date' => 'required|date',
+            'nationality' => 'required|string|max:255',
+            'marital_status' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ]);
 
-    $validated = $request->validate([
-        'first_name'      => 'required|string|max:255',
-        'last_name'       => 'required|string|max:255',
-        'poste'           => 'required|string|max:255',
-        'team'            => 'required|string|max:255',
-        'email'           => 'required|email|unique:users,email,' . $user->id,
-        'phone_number'    => 'nullable|string|max:20',
-        'profile_link'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'linkedin_link'   => 'nullable|url|max:255',
-        'password'        => 'nullable|string|min:8|confirmed',
-        'ordre_team'      => 'nullable|numeric|unique:users,ordre_team,' . $user->id,
-        'birth_place'     => 'required|string|max:255',
-        'birth_date'      => 'required|date',              // 👈 ajoute "date"
-        'nationality'     => 'required|string|max:255',
-        'marital_status'  => 'required|string|max:255',
-        'address'         => 'required|string|max:255',
-    ]);
+        if ($request->hasFile('profile_link')) {
+            if ($user->profile_link && Storage::disk('public')->exists($user->profile_link)) {
+                Storage::disk('public')->delete($user->profile_link);
+            }
+            $validated['profile_link'] = $request->file('profile_link')->store('profile', 'public');
+        }
 
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
+        if (empty($validated['profile_link'])) {
+            unset($validated['profile_link']);
+        }
 
-    // Upload image correctement
-    if ($request->hasFile('profile_link')) {
-        // supprime l’ancienne si elle existe (et qu’elle est bien relative au disk 'public')
+        $user->update($validated);
+
+        return to_route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+    }
+
+    public function destroy(User $user)
+    {
         if ($user->profile_link && Storage::disk('public')->exists($user->profile_link)) {
             Storage::disk('public')->delete($user->profile_link);
         }
 
-        // stocke dans storage/app/public/profile et retourne un chemin RELATIF: "profile/xxx.png"
-        $validated['profile_link'] = $request->file('profile_link')->store('profile', 'public');
-
-        // Variante nommage custom:
-        // $validated['profile_link'] = Storage::disk('public')->putFile('profile', $request->file('profile_link'));
-        // ou putFileAs(...) avec un nom déterministe/UUID
-
-    }
-
-    // Hash password si fourni
-    if (!empty($validated['password'])) {
-        $validated['password'] = Hash::make($validated['password']); // bcrypt() ok aussi
-    } else {
-        unset($validated['password']);
-    }
-
-    // si pas de nouvelle image, ne pas écraser l’ancienne valeur
-    if (empty($validated['profile_link'])) {
-        unset($validated['profile_link']);
-    }
-
-
-    $user->update($validated);
-
-
-    return to_route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
-}
-
-
-
-
-    // Suppression d'un utilisateur
-    public function destroy(User $user)
-    {
-
-        if($user->profile_link){
-            Storage::delete($user->profile_link);
-        }
-        $user->oneDriveLinks()->detach(); // Supprimer les relations avec les OneDriveLinks
+        $user->oneDriveLinks()->detach();
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
+        return to_route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
 
-    // Affichage du formulaire de connexion
+    /* ----------------------------- AUTH ----------------------------- */
+
     public function login()
     {
         return inertia('login');
@@ -219,199 +177,148 @@ public function update(Request $request, User $user)
 
     public function authenticate(Request $request)
     {
-        // Validation de base (ne pas faire "exists:users" pour éviter l’énumération)
         $credentials = $request->validate([
-            'email'    => ['required', 'string', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
             'remember' => ['nullable', 'boolean'],
         ]);
 
-        // Normalise l'email (trim + lowercase)
         $email = Str::of($credentials['email'])->trim()->lower()->value();
         $remember = $request->boolean('remember');
+        $throttleKey = $email . '|' . $request->ip();
 
-        // Throttle anti-bruteforce (5 tentatives / 60s)
-        $throttleKey = $email.'|'.$request->ip();
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            $seconds = RateLimiter::availableIn($throttleKey);
-
             throw ValidationException::withMessages([
-                'email' => __('Trop de tentatives. Réessayez dans :seconds s.', ['seconds' => $seconds]),
+                'email' => __('Trop de tentatives. Réessayez dans :seconds secondes.', [
+                    'seconds' => RateLimiter::availableIn($throttleKey)
+                ]),
             ]);
         }
 
-        if (! Auth::attempt(['email' => $email, 'password' => $credentials['password']], $remember)) {
-            // compte une tentative échouée
+        if (!Auth::attempt(['email' => $email, 'password' => $credentials['password']], $remember)) {
             RateLimiter::hit($throttleKey, 60);
-
-            // Message générique (ni email ni mdp précisé)
             throw ValidationException::withMessages([
                 'email' => __('Identifiants invalides.'),
             ]);
         }
 
-        // Succès : clear throttle + sécurise la session
         RateLimiter::clear($throttleKey);
         $request->session()->regenerate();
 
-        // Redirection fiable pour Inertia
-        $target = redirect()->intended(route('home'))->getTargetUrl();
-        return Inertia::location($target);
+        return Inertia::location(route('home'));
     }
 
-    // Déconnexion de l'utilisateur
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return Inertia::location(route('login'));
     }
 
+    /* ------------------------- ONEDRIVE LINKS ------------------------- */
+
     public function editOneDriveLinks(User $user)
-{
-    $allLinks = OneDriveLink::all(); // Tous les liens disponibles
-    $userLinks = $user->oneDriveLinks->pluck('id')->toArray(); // Liens associés à cet utilisateur
-
-    return inertia('users/userOneDrive', [
-        'user' => $user,
-        'allLinks' => $allLinks,
-        'userLinks' => $userLinks,
-    ]);
-}
-
-public function updateOneDriveLinks(Request $request, User $user)
-{
-    // Validation des liens OneDrive envoyés
-    $validated = $request->validate([
-        'links' => 'nullable|array',
-        'links.*' => 'exists:one_drive_links,id', // Vérifie que chaque ID de lien existe dans la table one_drive_links
-    ]);
-
-
-    // Synchronisation des liens OneDrive avec l'utilisateur
-    $user->oneDriveLinks()->sync($validated['links'] ?? []); // On met à jour la relation
-
-    // Redirection avec un message de succès
-    return redirect()->route('users.index')->with('success', 'Liens OneDrive mis à jour avec succès.');
-}
-
-
-public function showRoles($user)
-{
-    $user = User::with('roles')->findOrFail($user);
-    $roles = Role::all();
-
-    return inertia('users/roles', compact('user', 'roles'));
-}
-
-public function updateRoles(Request $request, $id)
-{
-
-     // Récupérer l'utilisateur
-     $user = User::findOrFail($id);
-
-     // Récupérer les rôles depuis la requête
-     $roles = $request->input('roles', []);
-
-     // Retirer tous les rôles actuels de l'utilisateur
-     foreach ($user->roles as $role) {
-         $user->removeRole($role);
-     }
-
-     // Attribuer les nouveaux rôles à l'utilisateur
-     foreach ($roles as $roleId) {
-         $role = Role::findOrFail($roleId);
-         $user->assignRole($role);
-     }
-
-
-
-     // Rediriger avec un message de succès
-     return redirect()->route('user.roles', $id)->with('success', 'Rôles mis à jour avec succès.');
-}
-
-
-public function send(Request $request)
-{
-    // Validation des données
-    $validated = $request->validate([
-        'objet' => 'required|string|max:255',
-        'message' => 'required|string',
-    ]);
-
-    try {
-        // Tentative d'envoi de l'email
-        Mail::to('nkakou@amoaman.com')->send(new SuggestionMail($validated));
-    } catch (\Exception $e) {
-        // Gestion de l'erreur et retour avec message d'erreur
-        return back()->withInput()->withErrors([
-            'email' => 'Une erreur est survenue lors de l\'envoi de votre suggestion. Veuillez réessayer plus tard.',
+    {
+        return inertia('users/userOneDrive', [
+            'user' => $user,
+            'allLinks' => OneDriveLink::all(),
+            'userLinks' => $user->oneDriveLinks->pluck('id')->toArray(),
         ]);
     }
 
-    // Retour avec un message de succès
-    return back()->with('success', 'Votre suggestion a été envoyée avec succès.');
-}
+    public function updateOneDriveLinks(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'links' => 'nullable|array',
+            'links.*' => 'exists:one_drive_links,id',
+        ]);
 
+        $user->oneDriveLinks()->sync($validated['links'] ?? []);
 
-    public function notification(){
+        return to_route('users.index')->with('success', 'Liens OneDrive mis à jour avec succès.');
+    }
 
+    /* ---------------------------- ROLES ---------------------------- */
+
+    public function showRoles($user)
+    {
+        $user = User::with('roles')->findOrFail($user);
+        return inertia('users/roles', [
+            'user' => $user,
+            'roles' => Role::all(),
+        ]);
+    }
+
+    public function updateRoles(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $roles = $request->input('roles', []);
+
+        $user->syncRoles($roles);
+
+        return to_route('user.roles', $id)->with('success', 'Rôles mis à jour avec succès.');
+    }
+
+    /* ---------------------------- NOTIFS & MAIL ---------------------------- */
+
+    public function send(Request $request)
+    {
+        $validated = $request->validate([
+            'objet' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        try {
+            Mail::to('nkakou@amoaman.com')->send(new SuggestionMail($validated));
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'Erreur lors de l\'envoi du message.']);
+        }
+
+        return back()->with('success', 'Suggestion envoyée avec succès.');
+    }
+
+    public function notification()
+    {
         return inertia('users/notification');
     }
 
-    public function sendNotification(Request $request){
-
-        $equipe = $request->input('equipe');
+    public function sendNotification(Request $request)
+    {
         $validated = $request->validate([
             'title' => 'required|string',
-            'message' => 'required|string'
-
+            'message' => 'required|string',
+            'equipe' => 'nullable|string',
         ]);
 
         $user = Auth::user();
+        $equipe = $validated['equipe'] ?? null;
 
-        if($equipe =='interne'){
-            $users = User::where('id', '!=', Auth::user()->id)->where('team',$equipe)->whereNotIn('ordre_team', [1, 2, 3])->get();
-        }else if($equipe =='externe'){
-            $users = User::where('id', '!=', Auth::user()->id)->where('team',$equipe)->whereNotIn('ordre_team', [1, 2, 3])->get();
-        }else{
-            $users = User::where('id', '!=', Auth::user()->id)->whereNotIn('ordre_team', [1, 2, 3])->get();
+        $query = User::where('id', '!=', $user->id)
+            ->whereNotIn('ordre_team', [1, 2, 3]);
+
+        if ($equipe) {
+            $query->where('team', $equipe);
         }
 
-
-
+        $users = $query->get();
         Notification::sendNow($users, new InformationNotification($user, $validated));
-        return redirect()->back()->with('success', 'la notification a été envoyé avec succès');
+
+        return back()->with('success', 'Notification envoyée avec succès.');
     }
 
     public function notificationList()
     {
-        $notifications = DatabaseNotification::Paginate(10);
-
         return inertia('Notifications/NotificationList', [
-            'notifications' => $notifications
+            'notifications' => DatabaseNotification::paginate(10),
         ]);
     }
 
     public function notificationDestroy($id)
     {
-        $notification = DatabaseNotification::findOrFail($id);
+        $notif = DatabaseNotification::findOrFail($id);
+        $notif->delete();
 
-        $notification->delete();
-
-       return redirect()->route('notifications.index')->with('message','Notification supprimée avec succès');
+        return to_route('notifications.index')->with('success', 'Notification supprimée avec succès.');
     }
-
 }
-
-
-
-
-
-
-
-

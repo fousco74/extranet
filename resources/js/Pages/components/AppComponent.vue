@@ -7,8 +7,8 @@
           Explorez notre gamme d'applications conçues pour simplifier votre quotidien et répondre à vos besoins.
         </p>
       </div>
-  
-   
+
+
       <!-- Applications Grid -->
       <div class="grid sm:grid-cols-3 lg:grid-cols-4 gap-4 max-sm:gap-5 place-self-center ">
         <div
@@ -25,7 +25,7 @@
                 class="w-full object-cover"
             />
           </div>
-  
+
           <!-- Application Info -->
           <div class="p-4 flex flex-col">
             <h2 class="text-xl font-semibold text-gray-800">{{ app.name }}</h2>
@@ -34,7 +34,7 @@
               @click="goToApp(app.link)"
               class="mt-2 bg-blue text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              Découvrir
+              accéder
             </button>
           </div>
         </div>
@@ -54,4 +54,3 @@ const goToApp = (link) => {
   window.open(link, '_blank');  // Ouvre le lien dans un nouvel onglet
 };
 </script>
-  
